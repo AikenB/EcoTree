@@ -14,6 +14,8 @@ public class Animal extends Organism {
     private double foodCapacity;
     private double thirstCapacity;
 
+    
+
 
     public static enum AnimalSpecies {
         RABBIT,
@@ -93,12 +95,29 @@ public class Animal extends Organism {
     }
 
 
-    public Animal reproduce() {
-        Animal newAnimal = new Animal(this.species);
-        for (Mutation mutation : this.mutations) {
-            newAnimal.addMutation(mutation);
+    public static Animal reproduce(Animal parent1, Animal parent2) {
+        // Create offspring of the same species as parent1
+        Animal offspring = new Animal(parent1.species);
+        
+        // Combine mutations from both parents into a gene pool
+        ArrayList<Mutation> genePool = new ArrayList<>();
+        genePool.addAll(parent1.getMutations());
+        genePool.addAll(parent2.getMutations());
+        
+        // Randomly inherit half of the mutations from the gene pool
+        int inheritCount = genePool.size() / 2;
+        for (int i = 0; i < inheritCount; i++) {
+            int randomIndex = (int) (Math.random() * genePool.size());
+            Mutation inheritedMutation = genePool.get(randomIndex);
+            offspring.addMutation(inheritedMutation);
+            genePool.remove(randomIndex);  // Remove to avoid inheriting twice
         }
-        return newAnimal;
+        
+        return offspring;
+    }
+
+
+
 }
 
 

@@ -13,6 +13,9 @@ public class Organism {
 
     protected int energy;
 
+    protected int x;
+    protected int y;
+
 
 
     public Organism() {
