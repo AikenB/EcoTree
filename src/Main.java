@@ -1,7 +1,12 @@
-
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+
+        JFrame frame = new JFrame("Menu");
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setSize(1280,720);
+        frame.setVisible(true);
+        
     }
 }
