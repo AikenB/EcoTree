@@ -1,5 +1,6 @@
 package gameobjects;
 
+import gui.Grid;
 import java.util.ArrayList;
 
 
@@ -87,11 +88,58 @@ public class Animal extends Organism {
     }
 
     public void move() {
-        int[][] grid = new int[48][48];
+        Organism[][] viewField = new Organism[51][51];
+        WeightVector v = new WeightVector(0, 0, 0);
 
+
+        for (int i = 0; i < viewField.length; i++) {
+            for (int j = 0; j < viewField[i].length; j++) {
+                Organism o = viewField[i][j];
+                WeightVector w = new WeightVector(0,0,0);
+                if (o != null) {
+                    int x =  j - 24;
+                    int y = i - 24;
+                    double d = Math.sqrt(x*x + y*y);
+                    
+                    if (predators.contains(o)) {
+                        double weight = (double) 250 / d;
+                        w.orient(x, y, weight);
+                        
+                    }
+                    else if (prey.contains(o)) {
+                        double weight = (double) o.energy / d;
+                        w.orient(x, y, weight);
+                    }
+                    v = v.add(w);
+
+                
+                }
+            }   
+        }
 
         
 
+    }
+
+    public Grid.Direction getDirection(WeightVector v){
+        double angle = v.getTheta();
+        if (angle >= -Math.PI/8 && angle < Math.PI/8) {
+            return Grid.Direction.RIGHT;
+        } else if (angle >= Math.PI/8 && angle < 3*Math.PI/8) {
+            return Grid.Direction.DOWN_RIGHT;
+        } else if (angle >= 3*Math.PI/8 && angle < 5*Math.PI/8) {
+            return Grid.Direction.DOWN;
+        } else if (angle >= 5*Math.PI/8 && angle < 7*Math.PI/8) {
+            return Grid.Direction.DOWN_LEFT;
+        } else if (angle >= 7*Math.PI/8 || angle < -7*Math.PI/8) {
+            return Grid.Direction.LEFT;
+        } else if (angle >= -7*Math.PI/8 && angle < -5*Math.PI/8) {
+            return Grid.Direction.UP_LEFT;
+        } else if (angle >= -5*Math.PI/8 && angle < -3*Math.PI/8) {
+            return Grid.Direction.UP;
+        } else {
+            return Grid.Direction.UP_RIGHT;
+        }
     }
 
 

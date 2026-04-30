@@ -15,6 +15,8 @@ public class Organism {
 
     protected int x;
     protected int y;
+    
+    
 
 
 
@@ -48,6 +50,13 @@ public class Organism {
 
     public int getEnergy() {
         return energy;
+    }
+
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
     }
 
     

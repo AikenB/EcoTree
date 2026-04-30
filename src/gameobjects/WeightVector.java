@@ -1,3 +1,4 @@
+package gameobjects;
 public class WeightVector {
 
     private double x;
@@ -40,9 +41,26 @@ public class WeightVector {
     public double getWeight() {
         return weight;
     }
+    public double getTheta() {
+        return theta;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+        orient(x, y, weight);
+    }
 
     public WeightVector add(WeightVector other) {
         return new WeightVector(x + other.getX(), y + other.getY(), weight + other.getWeight());
+    }
+    
+    /**
+     * turns the vector 180 degrees
+     */
+    public void flip(){
+        x *= -1;
+        y *= -1;
+        orient(x, y, weight);
     }
 
     
