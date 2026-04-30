@@ -8,7 +8,6 @@ public class Mutation {
 
     public static enum Type {
 
-
         //plant mutations
         PHOTOSYNTHESIS_EFFICIENCY_BOOST,
 
@@ -22,12 +21,11 @@ public class Mutation {
         FOOD_CAPACITY_BOOST,
         THIRST_CAPACITY_BOOST
         
-        
-        
     }
 
 
     //yes I know I made these public so that I dont have to make a ton of getter methods
+    //mutation boosts will be a multiplier from 0.75 to 1.25
     public double healthBoost;
     public double speedBoost;
     public double foodCapacityBoost;

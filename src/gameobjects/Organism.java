@@ -11,7 +11,7 @@ public class Organism {
     public double coldToleranceBoost;
 
 
-    protected double energy;
+    protected int energy;
 
 
 
@@ -39,7 +39,13 @@ public class Organism {
         return mutations;
     }
 
-    
+    public double getHealth() {
+        return health;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
 
     
 
