@@ -87,7 +87,7 @@ public class Animal extends Organism {
         
     }
 
-    public void move() {
+    private void move() {
         Organism[][] viewField = new Organism[51][51];
         WeightVector v = new WeightVector(0, 0, 0);
 
@@ -96,7 +96,7 @@ public class Animal extends Organism {
             for (int j = 0; j < viewField[i].length; j++) {
                 Organism o = viewField[i][j];
                 WeightVector w = new WeightVector(0,0,0);
-                if (o != null) {
+                if (o != null || o != this) {
                     int x =  j - 24;
                     int y = i - 24;
                     double d = Math.sqrt(x*x + y*y);
@@ -112,15 +112,143 @@ public class Animal extends Organism {
                     }
                     v = v.add(w);
 
-                
                 }
             }   
         }
+        Grid.Direction direction = getDirection(v);
+        if (v.getWeight() != 0) {
+            safeMove(direction);
+        } else {
+            Grid.Direction randomD = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
+            safeMove(randomD);
+        }
+    }
+    /**
+     * Ensures the animal moves in a direction if possible. If the animal can't move in the intended direction, it will iterate through the possible directions until it finds a direction that it can move in. If no direction is possible, the animal will not move.
+     * @param direction The intended direction of movement
+     */
+    private void safeMove(Grid.Direction direction) {
+        Grid.Direction d = direction;
 
         
+        int newX = x;
+        int newY = y;
+        switch (d) {
+            case UP:
+                newY -= 1;
+                break;
+            case DOWN:
+                newY += 1;
+                break;
+            case LEFT:
+                newX -= 1;
+                break;
+            case RIGHT:
+                newX += 1;
+                break;
+            case UP_LEFT:
+                newX -= 1;
+                newY -= 1;
+                break;
+            case UP_RIGHT:
+                newX += 1;
+                newY -= 1;
+                break;
+            case DOWN_LEFT:
+                newX -= 1;
+                newY += 1;
+                break;
+            case DOWN_RIGHT:
+                newX += 1;
+                newY += 1;
+                break;
+        }
+        /*if the animal can't move in the specific direction, iterate through 
+        each possible direction until it finds one that is available*/
+        if (!canMove(d)) {
+            //if the animal can move in A direction:
+            if (canMove()){
+                for (int i = (d.ordinal() + 1) % 8; i != d.ordinal() + 8; i++) {
+                    Grid.Direction newDirection = Grid.Direction.values()[i % 8];
+                    if (canMove(newDirection)) {
+                        safeMove(newDirection);
+                        return;
+                    }
+                }
+            }
+            //if it can't then it won't move at all
+            
+        }
+        else {
+            Grid.removeOrganism(x,y);
+            x = newX;
+            y = newY;
+            Grid.addOrganism(this);
+        }
+    }
+    /**
+     * checks if the animal can move in any direction at all
+     * 
+     */
+    private boolean canMove(){
+        for (int i = 0; i < Grid.Direction.values().length; i++) {
+            if (canMove(Grid.Direction.values()[i])) {
+                return true;
+            }
+        }
+        return false;
 
     }
+    /**
+     * checks if the animal can move in a specific given direction
+     *
+     */
+    private boolean canMove(Grid.Direction direction) {
+        int newX = x;
+        int newY = y;
+        switch (direction) {
+            case UP:
+                newY -= 1;
+                break;
+            case DOWN:
+                newY += 1;
+                break;
+            case LEFT:
+                newX -= 1;
+                break;
+            case RIGHT:
+                newX += 1;
+                break;
+            case UP_LEFT:
+                newX -= 1;
+                newY -= 1;
+                break;
+            case UP_RIGHT:
+                newX += 1;
+                newY -= 1;
+                break;
+            case DOWN_LEFT:
+                newX -= 1;
+                newY += 1;
+                break;
+            case DOWN_RIGHT:
+                newX += 1;
+                newY += 1;
+                break;
+        }
+        return (
+            newX >= 0 
+            && newX < Grid.grid.length
+            && newY >= 0 
+            && newY < Grid.grid[0].length 
+            && Grid.grid[newX][newY] == null);
+    }
 
+    /**
+     * converts a weight vector into a valid direction that can be used
+     * @param v The weight vector
+     * @return The corresponding direction
+     */
     public Grid.Direction getDirection(WeightVector v){
         double angle = v.getTheta();
         if (angle >= -Math.PI/8 && angle < Math.PI/8) {
@@ -141,7 +269,7 @@ public class Animal extends Organism {
             return Grid.Direction.UP_RIGHT;
         }
     }
-
+    
 
     public static Animal reproduce(Animal parent1, Animal parent2) {
         // Create offspring of the same species as parent1

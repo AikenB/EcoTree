@@ -21,4 +21,9 @@ public class Grid {
         int y = organism.getY();
         grid[x][y] = organism;
     }
+
+    public static void removeOrganism(int x, int y) {
+        grid[x][y] = null;
+
+    }
 }
