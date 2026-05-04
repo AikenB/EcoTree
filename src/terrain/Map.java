@@ -11,14 +11,13 @@ public class Map extends JPanel {
         super.paintComponent(g);
         // draw rectangles for terrain
         g.setColor(Color.BLUE);
-        for (int i = 0; i < 192; i ++)
+        for (int i = 0; i < 48; i ++)
         {
-            for (int j= 0; j < 108; j ++)
+            for (int j= 0; j < 27; j ++)
             {
-                
+                g.drawRect(0+(40*i), 0+(40*j), 40, 40);       
             }
         }
-        g.fillRect(0, 0, 100, 100);
 
     }
     public static void loadMap()
