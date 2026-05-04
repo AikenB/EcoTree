@@ -2,8 +2,12 @@ package terrain;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Map extends JPanel {
+
+    public static boolean pressed = false;
+    // boolean used later on for tracking if the mouse is pressed
 
     @Override
     protected void paintComponent(Graphics g)
@@ -11,11 +15,14 @@ public class Map extends JPanel {
         super.paintComponent(g);
         // draw rectangles for terrain
         g.setColor(Color.BLUE);
-        for (int i = 0; i < 48; i ++)
+        // width
+        for (int i = 0; i < 96; i ++)
         {
-            for (int j= 0; j < 27; j ++)
+            // height
+            for (int j= 0; j < 54; j ++)
             {
-                g.drawRect(0+(40*i), 0+(40*j), 40, 40);       
+                // draw each square in the grid
+                g.drawRect(0+(20*i), 0+(20*j), 20, 20);       
             }
         }
 
@@ -30,7 +37,28 @@ public class Map extends JPanel {
         frame.getContentPane().setBackground(backgroundColor);
         // add rectangles
         frame.add(new Map());
-        //
+
+        // detect mouse press for screen scrolling
+
+        frame.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mousePressed(MouseEvent e)
+            {       
+                pressed = true;
+                System.out.println(pressed);
+            }
+        });
+        // detect when mouse is released
+        frame.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseReleased(MouseEvent e)
+            {       
+                pressed = false;
+                System.out.println(pressed);
+            }
+        });
 
         frame.setVisible(true);
     }
