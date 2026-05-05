@@ -9,13 +9,14 @@ public class Map extends JPanel {
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g);
+        System.out.println("doing thing");
         // draw rectangles for terrain
         g.setColor(Color.BLUE);
-        for (int i = 0; i < 48; i ++)
+        for (int i = 0; i < 96; i ++)
         {
-            for (int j= 0; j < 27; j ++)
+            for (int j= 0; j < 54; j ++)
             {
-                g.drawRect(0+(40*i), 0+(40*j), 40, 40);       
+                g.drawRect(0+(20*i), 0+(20*j), 40, 40);       
             }
         }
 
@@ -26,8 +27,7 @@ public class Map extends JPanel {
         JFrame frame = new JFrame("EcoTree");
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setSize(1920,1080);
-        Color backgroundColor = new Color(170, 240, 130); // Dark green
-        frame.getContentPane().setBackground(backgroundColor);
+        
         // add rectangles
         frame.add(new Map());
         //

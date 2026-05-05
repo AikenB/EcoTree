@@ -8,7 +8,6 @@ public class Mutation {
     public double foodCapacityBoost;
     public double thirstCapacityBoost;
     public double stormResistanceBoost;
-    public double 
 
     
 
