@@ -1,47 +1,89 @@
 package gameobjects;
 
+import gameobjects.Organism.Species;
 import gui.Grid;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.*;
+import javax.swing.Timer;
+import utilities.Hitbox;
+import utilities.WeightVector;
 
 
 public class Animal extends Organism {
     
     private double photosynthesisEfficiency;
-    private AnimalSpecies species;
-    private ArrayList<Organism> predators;
-    private ArrayList<Organism> prey;
+    
+    private ArrayList<Species> predators;
+    private ArrayList<Species> prey;
 
     private double speed;
     private double foodCapacity;
     private double thirstCapacity;
+    // private Timer moveTimer;
+
+    private ExecutorService executor;
 
     
 
 
-    public static enum AnimalSpecies {
-        RABBIT,
-        DEER,
-        WOLF,
-        BEAR,
-        COW,
-        SNAKE,
-        TARDIGRADE,
-        ANT,
-        WORM,
-        MOUSE,
-
-    }
+    
 
 
-    public Animal(AnimalSpecies species) {
-        super();
-        this.species = species;
+    public Animal(Species species) {
+        super(species);
+        
         
         generateMutation();
         switch(species){
+            case ANT:
+                speed = 2.0;
+                foodCapacity = 5.0;
+                thirstCapacity = 5.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER));
+                prey = new ArrayList<>();
+                break;
+            case SPIDER:
+                speed = 1.5;
+                foodCapacity = 10.0;
+                thirstCapacity = 10.0;
+                predators = new ArrayList<>();
+                prey = new ArrayList<Species>(Arrays.asList(Species.ANT));
+                prey.add(Species.ANT);
+                break;
 
         }
 
+        // moveTimer = new Timer((int) (4000/speed), e -> move());
+        // moveTimer.start();
+        startBackgroundMovement();
+    }
+
+    private void startBackgroundMovement() {
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    int dt = (int)(4000/speed);
+                    Thread.sleep(dt);
+                    move();
+                    
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (Exception e) {
+                    System.err.println("Error in move() for " + species + ": " + e.getMessage());
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        });
+    }
+
+    public void stopMovement() {
+        if (executor != null) {
+            executor.shutdown();
+        }
     }
     /**
      * adds a mutation to the animal and applies its effects
@@ -87,39 +129,86 @@ public class Animal extends Organism {
         
     }
 
+    /**
+     * used for move() method
+     * 
+     */
+    private boolean isNewOrganism(ArrayList<Organism> organisms, Organism o) {
+        for (Organism organism : organisms) {
+            if (organism == o) {
+                return false;
+            }
+        }
+        if (o == null) {
+            return false;
+        } else {
+            return true;
+        }
+        
+    }
+    private Hitbox[][] getViewField() {
+        Hitbox[][] viewField = new Hitbox[15][15];
+        for (int i = 0; i < viewField.length; i++) {
+            for (int j = 0; j < viewField[i].length; j++) {
+                int x = this.x - 7 + j;
+                int y = this.y - 7 + i;
+                if (x >= 0 && x < Grid.grid.length && y >= 0 && y < Grid.grid[0].length) {
+                    viewField[i][j] = Grid.grid[x][y];
+                } else {
+                    viewField[i][j] = null;
+                }
+            }
+        }
+        return viewField;
+    }
+
     private void move() {
-        Organism[][] viewField = new Organism[51][51];
+        //get field of view of organism (27 x 27 square with organism in the middle)
+        Hitbox[][] viewField = getViewField();
         WeightVector v = new WeightVector(0, 0, 0);
+        //create list of organisms in sight to avoid counting the same organism multiple times
+        ArrayList<Organism> organismsInSight = new ArrayList<>();
 
 
         for (int i = 0; i < viewField.length; i++) {
             for (int j = 0; j < viewField[i].length; j++) {
-                Organism o = viewField[i][j];
+                if (viewField[i][j] == null)
+                    continue;
+                Organism o = viewField[i][j].getOrganism();
                 WeightVector w = new WeightVector(0,0,0);
-                if (o != null || o != this) {
-                    int x =  j - 24;
-                    int y = i - 24;
-                    double d = Math.sqrt(x*x + y*y);
-                    
-                    if (predators.contains(o)) {
+                //makes sure it will only add a weight vector if it is a new organism that has not been counted yet
+                if (isNewOrganism(organismsInSight, o)) {
+                    organismsInSight.add(o);
+                    int x =  j - 7;      
+                    int y = i - 7;    
+                    double d = Math.sqrt(x*x + y*y);  
+                    /*formula for calculating the weight vector for each organism.
+                    the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
+                    if (predators.contains(o.getSpecies())) {
                         double weight = (double) 250 / d;
                         w.orient(x, y, weight);
-                        
+                        w.doubleOrthogonalize();
+                        //System.err.printf("  Predator %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, final angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
-                    else if (prey.contains(o)) {
-                        double weight = (double) o.energy / d;
+                    else if (prey.contains(o.getSpecies())) {
+                        double weight = (double) o.energy / (5*d);
                         w.orient(x, y, weight);
+                        //System.err.printf("  Prey %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
                     v = v.add(w);
 
                 }
             }   
         }
+
         Grid.Direction direction = getDirection(v);
+        //System.err.printf("[%s at (%d,%d)] Organisms in sight: %d, v.weight=%.2f, v.theta=%.2f, direction=%s%n", 
+            //species, x, y, organismsInSight.size(), v.getWeight(), v.getTheta(), direction);
         if (v.getWeight() != 0) {
             safeMove(direction);
         } else {
             Grid.Direction randomD = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
+            //System.err.printf("  -> Weight is 0, choosing RANDOM direction: %s%n", randomD);
             safeMove(randomD);
         }
     }
@@ -180,22 +269,32 @@ public class Animal extends Organism {
             
         }
         else {
-            Grid.removeOrganism(x,y);
+            Hitbox hitbox = this.getHitbox();
+            Grid.removeOrganism(hitbox);
             x = newX;
             y = newY;
-            Grid.addOrganism(this);
+            hitbox.setX(newX);
+            hitbox.setY(newY);
+            Grid.addOrganism(hitbox);
         }
     }
+
     /**
      * checks if the animal can move in any direction at all
      * 
      */
     private boolean canMove(){
-        for (int i = 0; i < Grid.Direction.values().length; i++) {
-            if (canMove(Grid.Direction.values()[i])) {
-                return true;
+        for (int i = x; i < x + width; i++) {
+            for (int j = y; j < y + height; j++) {
+                //check all directions for each item in the hitbox
+                for (int k = 0; k < Grid.Direction.values().length; k++) {
+                    if (canMove(Grid.Direction.values()[k])) {
+                        return true;
+                }
+        }
             }
         }
+        
         return false;
 
     }
@@ -236,12 +335,21 @@ public class Animal extends Organism {
                 newY += 1;
                 break;
         }
-        return (
-            newX >= 0 
-            && newX < Grid.grid.length
-            && newY >= 0 
-            && newY < Grid.grid[0].length 
-            && Grid.grid[newX][newY] == null);
+
+        // Check all grid spaces the organism would occupy after the move
+        for (int i = newX; i < newX + width; i++) {
+            for (int j = newY; j < newY + height; j++) {
+                // Check if position is in bounds
+                if (i < 0 || i >= Grid.grid.length || j < 0 || j >= Grid.grid[0].length) {
+                    return false;
+                }
+                // Check if cell is empty or occupied by this organism
+                if (Grid.grid[i][j] != null && Grid.grid[i][j].getOrganism() != this) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -292,7 +400,22 @@ public class Animal extends Organism {
         return offspring;
     }
 
+    
 
+
+    public String toString() {
+        if (species == Species.ANT) {
+            return "A";
+        } else if (species == Species.SPIDER) {
+            return "S";
+        }
+        return "O";
+    }
+    
+
+    
+
+    
 
 }
 

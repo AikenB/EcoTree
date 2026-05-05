@@ -5,28 +5,21 @@ import java.util.ArrayList;
 public class Plant extends Organism {
     
     private double photosynthesisEfficiency;
-    private PlantSpecies species;
+    
     private ArrayList<Organism> predators;
 
-    public static enum PlantSpecies {
-        GRASS,
-        FLOWER,
-        APPLE_TREE,
-        OAK_TREE,
-        PINE_TREE,
-        CACTUS,
-        FERN,
-        ALGAE,
-        MOSS,
-        BUSH
+    
+
+    // public static enum PlantSpecies {
+        
 
 
 
-    }
+    // }
 
 
-    public Plant(PlantSpecies species) {
-        super();
+    public Plant(Species species) {
+        super(species);
         this.species = species;
         photosynthesisEfficiency = 1.0;
         generateMutation();

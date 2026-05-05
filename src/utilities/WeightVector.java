@@ -1,4 +1,4 @@
-package gameobjects;
+package utilities;
 public class WeightVector {
 
     private double x;
@@ -24,10 +24,8 @@ public class WeightVector {
      * 
      */
     public void orient(double x, double y, double weight) {
+
         this.theta = Math.atan2(y, x);
-        if (x < 0) {
-            this.theta += Math.PI;
-        }
         this.x = Math.cos(theta) * weight;
         this.y = Math.sin(theta) * weight;
     }
@@ -51,16 +49,22 @@ public class WeightVector {
     }
 
     public WeightVector add(WeightVector other) {
-        return new WeightVector(x + other.getX(), y + other.getY(), weight + other.getWeight());
+        // Sum the weighted components directly
+        WeightVector result = new WeightVector(0, 0, 0);  // Dummy creation
+        result.x = this.x + other.getX();  // Sum weighted x components
+        result.y = this.y + other.getY();  // Sum weighted y components
+        result.weight = Math.sqrt(result.x * result.x + result.y * result.y);  
+        result.theta = Math.atan2(result.y, result.x);  // Calculate new angle from summed components
+        return result;
     }
     
     /**
      * turns the vector 180 degrees
      */
-    public void flip(){
+    public void doubleOrthogonalize(){
         x *= -1;
         y *= -1;
-        orient(x, y, weight);
+        theta = Math.atan2(y, x);  // Just recalculate theta, don't call orient()
     }
 
     
