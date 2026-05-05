@@ -38,8 +38,23 @@ public class Grid {
     }
 
     public static void removeOrganism(Hitbox hitbox) {
+        
+        //hitbox.getOrganism().setCachedHitbox(null);  // Clear the cache
+        int x = hitbox.getX();
+        int y = hitbox.getY();
+        int width = hitbox.getWidth();
+        int height = hitbox.getHeight();
+
+        for (int i = x; i < x + width; i++) {
+            for (int j = y; j < y + height; j++) {
+                grid[i][j] = null;
+            }
+        }
+    }
+
+    public static void killOrganism(Hitbox hitbox) {
         hitboxes.remove(hitbox);
-        hitbox.getOrganism().setCachedHitbox(null);  // Clear the cache
+        //hitbox.getOrganism().setCachedHitbox(null);  // Clear the cache
         int x = hitbox.getX();
         int y = hitbox.getY();
         int width = hitbox.getWidth();

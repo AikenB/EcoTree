@@ -5,7 +5,6 @@ import gui.Grid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.*;
-import javax.swing.Timer;
 import utilities.Hitbox;
 import utilities.WeightVector;
 
@@ -35,9 +34,17 @@ public class Animal extends Organism {
         
         
         generateMutation();
+        configureSpecies(species);
+
+        // moveTimer = new Timer((int) (4000/speed), e -> move());
+        // moveTimer.start();
+        startBackgroundMovement();
+    }
+
+    private void configureSpecies(Species species) {
         switch(species){
             case ANT:
-                speed = 2.0;
+                speed = 1.0;
                 foodCapacity = 5.0;
                 thirstCapacity = 5.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER));
@@ -51,12 +58,17 @@ public class Animal extends Organism {
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT));
                 prey.add(Species.ANT);
                 break;
+            case FROG:
+                speed = 1.5;
+                foodCapacity = 15.0;
+                thirstCapacity = 20.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
+                prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER));
+                break;
 
         }
 
-        // moveTimer = new Timer((int) (4000/speed), e -> move());
-        // moveTimer.start();
-        startBackgroundMovement();
+        
     }
 
     private void startBackgroundMovement() {
@@ -79,6 +91,8 @@ public class Animal extends Organism {
             }
         });
     }
+
+    
 
     public void stopMovement() {
         if (executor != null) {
@@ -408,8 +422,11 @@ public class Animal extends Organism {
             return "A";
         } else if (species == Species.SPIDER) {
             return "S";
+        } else if (species == Species.FROG) {
+            return "F";
+        } else {
+            return "O";
         }
-        return "O";
     }
     
 

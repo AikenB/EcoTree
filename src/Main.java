@@ -19,7 +19,7 @@ public class Main {
         Hitbox hitbox3 = new Hitbox(animal3, 10, 10);
         Animal animal2 = new Animal(Species.SPIDER);
         Hitbox hitbox2 = new Hitbox(animal2, 4, 5);
-        Animal animal4 = new Animal(Species.SPIDER);
+        Animal animal4 = new Animal(Species.FROG);
         Hitbox hitbox4 = new Hitbox(animal4, 7, 7);
 
         Grid.addOrganism(hitbox);

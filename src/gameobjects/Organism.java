@@ -28,7 +28,8 @@ public class Organism {
         BEAR,
         COW,
         SNAKE,
-        TARDIGRADE,
+        FROG,
+        BOBCAT,
         ANT,
         WORM,
         MOUSE,
@@ -41,7 +42,7 @@ public class Organism {
         PINE_TREE,
         CACTUS,
         FERN,
-        ALGAE,
+        BERRYBUSH,
         MOSS,
         BUSH
 
