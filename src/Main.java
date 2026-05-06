@@ -3,9 +3,7 @@ import gameobjects.Animal;
 import gameobjects.Organism.Species;
 import gui.Grid;
 import gui.Menu;
-import javax.swing.*;
 import utilities.Hitbox;
-import terrain.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -45,18 +43,19 @@ public class Main {
         Grid.addOrganism(hitbox4);
         Grid.addOrganism(hitbox5);
         Grid.addOrganism(hitbox6);
-        Grid.printGrid();
+        
+        //Grid.printGrid();
+
+        //Grid.addSprite(new gui.Sprite(7, 4, 5, 5, "src/images/frog.jpg"));
+
 
         // Timer to print grid every second
-        // I temporarily commented it to test things easier
-        /* 
-        Timer printTimer = new Timer(2000, e -> {
-            System.out.println("================================");
-            Grid.printGrid();
+        // Timer printTimer = new Timer(2000, e -> {
+        //     System.out.println("================================");
+        //     //Grid.printGrid();
             
-        });
-        printTimer.start();
-        */
+        // });
+        //printTimer.start();
         
     }
 }

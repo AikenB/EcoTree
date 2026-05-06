@@ -9,13 +9,14 @@ import gui.Controls;
 
 public class Menu {
 
-    JFrame frame;
+    private JFrame frame;
     int width = 1920;
     int height = 1080;
     int introButtonWidth = 600;
     int introButtonHeight = 100;
     int instrWidth = 1600;
     int instrHeight = 800;
+    private Map m;
     ArrayList<JComponent> components = new ArrayList<JComponent>();
     // the idea of the ArrayList is that references to different buttons and whatnot can be accessed...
     //... from the place where the buttons were initialized. This enables more modular programming, ...
@@ -92,7 +93,7 @@ public class Menu {
             if (!componentsVisible.get(2)) {
                 start.setVisible(false);
                 instrButton.setVisible(false);
-                Map m = new Map();
+                m = new Map();
                 m.setBounds(0,0,1920, 1080);
                 frame.add(m);
                 System.out.println("something");
@@ -124,5 +125,13 @@ public class Menu {
         componentsVisible.set(2, true);
         componentsVisible.set(3, true);
         refresh();
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public Map getMap() {
+        return m;
     }
 }

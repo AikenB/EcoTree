@@ -108,6 +108,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import gui.Sprite;
+
+import gui.Grid;
 
 public class Map extends JPanel {
     // NOTE TO SELF: add constructor?
@@ -160,7 +163,7 @@ public class Map extends JPanel {
         g2d.translate(deltaX,deltaY);
 
         // rectangle outline color
-        g2d.setColor(Color.BLUE);
+        g2d.setColor(Color.BLACK);
 
         int squareWidth = 1920/width;
         int squareHeight = 1080/height;
@@ -181,6 +184,23 @@ public class Map extends JPanel {
 
             }
         }
+
+        
+        
+            if (Grid.sprites.size() > 0){
+
+                for (int i = 0; i < Grid.sprites.size(); i++){
+                    Sprite s = Grid.sprites.get(i);
+                    if (s != null) {
+                        g2d.drawImage(s.getImage(), s.getGridX() + deltaX, s.getGridY() + deltaY, s.getGridWidth(), s.getGridHeight(), null);
+                        s.setGridX(deltaX + s.getY());
+                        s.setGridY(deltaY + s.getX());
+                    }
+                    
+                }
+            }
+            
+        
 
     }
     // testing this by changing it to a constructor
