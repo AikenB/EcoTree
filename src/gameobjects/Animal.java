@@ -34,9 +34,12 @@ public class Animal extends Organism {
 
         // moveTimer = new Timer((int) (4000/speed), e -> move());
         // moveTimer.start();
-        startBackgroundMovement();
+        initializeBehavior();
     }
 
+    /**
+     * applies the stats for the species
+     */
     private void configureSpecies(Species species) {
         switch(species){
             case ANT:
@@ -68,15 +71,20 @@ public class Animal extends Organism {
 
         
     }
+    /**
+     * initializes the animal's behavior that will run while it's alive
+     */
+    private void initializeBehavior() {
 
-    private void startBackgroundMovement() {
+        /*creates a new thread for each animal created. This makes it so that each animal
+         can move independently and can move at different speeds and perform different behaviors at different times*/
         executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             
             
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-
+                    //this is how the animal will eat prey TODO: add energy and hunger mechanics
                     if (contactingPrey()) {
                         Organism prey = getContactedPrey(this);
                         if (prey != null) {
@@ -98,8 +106,10 @@ public class Animal extends Organism {
     }
 
     
-
-    public void stopMovement() {
+    /**
+     * stops the animal's behavior thread
+     */
+    public void stopBehavior() {
         if (executor != null) {
             executor.shutdown();
         }
@@ -151,7 +161,7 @@ public class Animal extends Organism {
     //#region MOVEMENT
 
     /**
-     * used for move() method
+     * used for move() method. This checks if the organism being detected as the animal scans its surroundings in its viewfield is a new organism that was not previously counted for
      * 
      */
     private boolean isNewOrganism(ArrayList<Organism> organisms, Organism o) {
@@ -167,6 +177,10 @@ public class Animal extends Organism {
         }
         
     }
+
+    /**
+     * returns the viewfield of the animal. The viewfield is a coordinate grid of hitboxes relative to the animal, with the animal at the center. Used for move() method.
+     */
     private Hitbox[][] getViewField() {
         Hitbox[][] viewField = new Hitbox[15][15];
         for (int i = 0; i < viewField.length; i++) {
@@ -182,19 +196,26 @@ public class Animal extends Organism {
         }
         return viewField;
     }
-
+    /**
+     * moves the organism. It will scan its surroundings and weigh in how much it will 
+     * want to go towards or away from each organism it sees, then sums up all of these 
+     * weightvectors to then determine its direction of movement. It will then use safemove() to make sure it at least moves in a direction that is possible to move in
+     */
     private void move() {
-        //get field of view of organism (27 x 27 square with organism in the middle)
+        //get field of view of organism. This is a 2d array of hitboxes where we can get the organism that the hitbox represents when we access the individual hitboxes inside the array
         Hitbox[][] viewField = getViewField();
         WeightVector v = new WeightVector(0, 0, 0);
         //create list of organisms in sight to avoid counting the same organism multiple times
         ArrayList<Organism> organismsInSight = new ArrayList<>();
 
-
+        //scan viewfield
         for (int i = 0; i < viewField.length; i++) {
             for (int j = 0; j < viewField[i].length; j++) {
+                //if the hitbox detected is null, skip it
                 if (viewField[i][j] == null)
                     continue;
+
+                //get organism evaluated for pathfinding
                 Organism o = viewField[i][j].getOrganism();
                 WeightVector w = new WeightVector(0,0,0);
                 //makes sure it will only add a weight vector if it is a new organism that has not been counted yet
@@ -223,8 +244,8 @@ public class Animal extends Organism {
         }
 
         Grid.Direction direction = getDirection(v);
-        //System.err.printf("[%s at (%d,%d)] Organisms in sight: %d, v.weight=%.2f, v.theta=%.2f, direction=%s%n", 
-            //species, x, y, organismsInSight.size(), v.getWeight(), v.getTheta(), direction);
+        
+        //makes sure that it has a valid direction to move in, if it doesn't it will move in a random valid direction
         if (v.getWeight() != 0) {
             safeMove(direction);
         } else {
@@ -280,9 +301,11 @@ public class Animal extends Organism {
         if (!canMove(d)) {
             //if the animal can move in A direction:
             if (canMove()){
+                //check each direction until it finds a direction where it can move int
                 for (int i = (d.ordinal() + 1) % 8; i != d.ordinal() + 8; i++) {
                     Grid.Direction newDirection = Grid.Direction.values()[i % 8];
                     if (canMove(newDirection)) {
+                        //if it can move in this direction, then call the method again. This time it should not run through this loop again
                         safeMove(newDirection);
                         return;
                     }
@@ -292,6 +315,9 @@ public class Animal extends Organism {
             
         }
         else {
+
+            //move the organism
+            
             Hitbox hitbox = this.getHitbox();
             if (hitbox == null) {
                 // Organism has been removed from grid or hitbox is null
@@ -408,6 +434,10 @@ public class Animal extends Organism {
 
     //#region BEHAVIOR
 
+    /**
+     * checks if the animal is touching any prey around its borders
+     * @return true if touching any prey, false otherwise
+     */
     public boolean contactingPrey() {
         // Check a range around the entire organism footprint, not just the top-left corner
         for (int i = x - 1; i <= x + width + 1; i++) {
@@ -425,7 +455,10 @@ public class Animal extends Organism {
         }
         return false;
     }
-
+    /**
+     * returns the prey that is being contacted by the animal
+     * @return The prey organism, or null if none is being contacted
+     */
     public static Organism getContactedPrey(Animal animal) {
         // Check a range around the entire organism footprint
         for (int i = animal.x - 1; i <= animal.x + animal.width + 1; i++) {
@@ -445,7 +478,7 @@ public class Animal extends Organism {
     }
 
 
-
+    //todo: add reproduction mechanics
     public static Animal reproduce(Animal parent1, Animal parent2) {
         // Create offspring of the same species as parent1
         Animal offspring = new Animal(parent1.species);
