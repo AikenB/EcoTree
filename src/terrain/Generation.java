@@ -1,5 +1,5 @@
 
-    package terrain;
+package terrain;
 
 import java.awt.Color;
 public class Generation {

@@ -5,6 +5,8 @@ import java.awt.*;
 import terrain.Map;
 import java.util.ArrayList;
 
+import gui.Controls;
+
 public class Menu {
 
     JFrame frame;
@@ -32,6 +34,12 @@ public class Menu {
         frame.setVisible(true);
         frame.setLayout(null);
         setButtons();
+
+        // initialize controls/ key listeners
+        // focus screen - this is necessary in order for controls to work 
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
+        Controls.initializeControls(frame);
     }
     public void setButtons() {
 
@@ -89,7 +97,7 @@ public class Menu {
                 frame.add(m);
                 System.out.println("something");
                 frame.repaint();
-                // Map.loadMap();
+                //Map.loadMap();
             }
 
         });

@@ -5,6 +5,7 @@ import gui.Grid;
 import gui.Menu;
 import javax.swing.*;
 import utilities.Hitbox;
+import terrain.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -13,7 +14,12 @@ public class Main {
         // frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         // frame.setSize(1280,720);
         // frame.setVisible(true);
+
+        // initialize terrain generation before drawing map
+        terrain.Generation.initialize();
+
         Menu menu = new Menu();
+        
         //Map.loadMap();
         
         
@@ -42,12 +48,15 @@ public class Main {
         Grid.printGrid();
 
         // Timer to print grid every second
+        // I temporarily commented it to test things easier
+        /* 
         Timer printTimer = new Timer(2000, e -> {
             System.out.println("================================");
             Grid.printGrid();
             
         });
         printTimer.start();
+        */
         
     }
 }
