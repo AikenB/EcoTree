@@ -13,12 +13,34 @@ public class WeightVector {
      * @param y
      * @param weight
      */
+
+    
+
     public WeightVector(double x, double y, double weight) {
         this.weight = weight;
         orient(x, y, weight);
 
 
     }
+
+    // NORMAL VECTORS NOT WEIRD ONES
+    public WeightVector(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+
+        this.theta = Math.atan2(y, x);
+        this.weight = Math.sqrt(x * x + y * y);
+    }
+    // DOT PRODUCT
+    public static double dotProduct(WeightVector v1, WeightVector v2)
+    {
+        double dp = v1.getWeight()*v2.getWeight();
+        double theta = (v1.getX()*v2.getX() ) + (v1.getY()*v2.getY() );
+        // note to self: COMPLETE
+        return dp;
+    }
+
     /**
      * sets the WeightVector's x,y,theta, and weight components based on the inputs
      * 

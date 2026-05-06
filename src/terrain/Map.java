@@ -59,6 +59,8 @@ public class Map extends JPanel {
         // rectangle outline color
         g2d.setColor(Color.BLACK);
 
+        // IF width = 96, squareWidth = 20
+        // IF height = 54, squareHeight = 20
         int squareWidth = 1920/width;
         int squareHeight = 1080/height;
         //
