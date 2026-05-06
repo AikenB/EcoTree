@@ -1,5 +1,5 @@
 
-    package terrain;
+package terrain;
 
 import java.awt.Color;
 public class Generation {
@@ -15,11 +15,11 @@ public class Generation {
                 land[i][j] = Color.BLUE;
 
                 // random gen test
-                int r = (int)(Math.random()*100);
+                int r = (int)(Math.random()*255);
                 int g = (int)(Math.random()*255);
-                //int b = (int)(Math.random()*255);
+                int b = (int)(Math.random()*255);
 
-                land[i][j]= new Color(r,g,0);
+                land[i][j]= new Color(r,g,b);
             }
         }
     }

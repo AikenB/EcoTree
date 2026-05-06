@@ -12,10 +12,12 @@ public class Main {
         // frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         // frame.setSize(1280,720);
         // frame.setVisible(true);
+
+        // initialize terrain generation before drawing map
+        terrain.Generation.initialize();
+
         Menu menu = new Menu();
-        //ComponentBuilder b = new ComponentBuilder(menu.getFrame(),menu.getMap());
-        //BufferedImage frogImage = ImageIO.read(new File("src/images/frog.jpg"));
-        //g2d.drawImage(frogImage, 100, 100, 200, 200, null); // x, y, width, height
+        
         //Map.loadMap();
         
         
