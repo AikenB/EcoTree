@@ -8,6 +8,8 @@ public class Grid {
 
     public static Hitbox[][] grid = new Hitbox[15][15];
     public static CopyOnWriteArrayList<Hitbox> hitboxes = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
+    
 
     public static enum Direction{
         UP,
@@ -99,6 +101,12 @@ public class Grid {
                 
             }
             System.out.println();
+        }
+    }
+
+    public static void addSprite(Sprite sprite) {
+        if (!sprites.contains(sprite)) {
+            sprites.add(sprite);
         }
     }
 

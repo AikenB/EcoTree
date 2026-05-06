@@ -14,6 +14,9 @@ public class Main {
         // frame.setSize(1280,720);
         // frame.setVisible(true);
         Menu menu = new Menu();
+        //ComponentBuilder b = new ComponentBuilder(menu.getFrame(),menu.getMap());
+        //BufferedImage frogImage = ImageIO.read(new File("src/images/frog.jpg"));
+        //g2d.drawImage(frogImage, 100, 100, 200, 200, null); // x, y, width, height
         //Map.loadMap();
         
         
@@ -40,6 +43,9 @@ public class Main {
         Grid.addOrganism(hitbox5);
         Grid.addOrganism(hitbox6);
         Grid.printGrid();
+
+        Grid.addSprite(new gui.Sprite(7, 4, 5, 5, "src/images/frog.jpg"));
+
 
         // Timer to print grid every second
         Timer printTimer = new Timer(2000, e -> {
