@@ -7,11 +7,12 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Map extends JPanel {
+    // NOTE TO SELF: add constructor?
     // boolean used later on for tracking if the mouse is pressed
-    public static boolean pressed = false;
+    private static boolean pressed = false;
     // numbers to track screen translation
-    public static int deltaX = 0;
-    public static int deltaY = 0;
+    private static int deltaX = 0;
+    private static int deltaY = 0;
 
     // boolean array to check if each arrow key is pressed
     // indexes of boolean array
@@ -19,15 +20,30 @@ public class Map extends JPanel {
     // 1 corresponds to right
     // 2 corresponds to up
     // 3 corresponds to down
-    public static boolean[] keysPressed = {false, false, false, false};
+    private static boolean[] keysPressed = {false, false, false, false};
 
     // each keyMovement corresponds to a translation
     // ie index 0 being pressed will signify keycode 37 (left arrow) is being pressed, translating x to the left
-    public static final int[] keyMovements = {10,-10,10,-10};
+    private static final int[] keyMovements = {10,-10,10,-10};
 
+    //NOTE: 1920 must be divisible by width, 1080 must be divisible by height
+    // CONFIG WIDTH AND HEIGHT HERE
+    private static int width = 96;
+    private static int height = 54;
+
+    public static int getMapWidth()
+    {
+        return width;
+    }
+    public static int getMapHeight()
+    {
+        return height;
+    }
     @Override
     protected void paintComponent(Graphics g)
     {
+         // initialize terrain generation before drawing map
+        terrain.Generation.initialize();
         // clear the screen
         super.paintComponent(g);
         //use graphics 2d ( so we can translate things during screen scrolling)
@@ -37,12 +53,6 @@ public class Map extends JPanel {
 
         // rectangle outline color
         g2d.setColor(Color.BLUE);
-
-
-        //NOTE: 1920 must be divisible by width, 1080 must be divisible by height
-        // CONFIG WIDTH AND HEIGHT HERE
-        int width = 96;
-        int height = 54;
 
         int squareWidth = 1920/width;
         int squareHeight = 1080/height;
@@ -57,6 +67,10 @@ public class Map extends JPanel {
             {
                 // draw each square in the grid
                 g2d.drawRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight);       
+                // setting colors using generation
+                g2d.setColor(terrain.Generation.terrainValues()[j][i]);
+                g2d.fillRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight); 
+
             }
         }
 
