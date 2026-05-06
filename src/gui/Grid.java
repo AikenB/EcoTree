@@ -71,7 +71,7 @@ public class Grid {
         
         // Stop the organism's background movement if it's an Animal
         if (organism instanceof Animal) {
-            ((Animal) organism).stopMovement();
+            ((Animal) organism).stopBehavior();
         }
         
         synchronized (grid) {

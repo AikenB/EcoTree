@@ -76,7 +76,7 @@ public class Organism {
 
     public static void kill(Organism organism) {
         if (organism instanceof Animal) {
-            ((Animal) organism).stopMovement();
+            ((Animal) organism).stopBehavior();
         }
         
         Grid.killOrganism(organism.getHitbox());
