@@ -19,7 +19,7 @@ public class Menu {
     //... from the place where the buttons were initialized. This enables more modular programming, ...
     //... rather than putting everything in the setup() method. However, it requires careful documentation...
     //... of what diferent indices represent.
-    // current: 0 - start button, 1 - instructions button, 2- instructions panel
+    // current: 0 - start button, 1 - instructions button, 2 - instructions panel, 3 - close instructions button
     ArrayList<Boolean> componentsVisible = new ArrayList<Boolean>();
     // this is a parallel array to manage whether items are hidden or not.
 
@@ -60,15 +60,25 @@ public class Menu {
         components.add(instr);
         componentsVisible.add(false);
         frame.add(instr);
+        frame.getContentPane().setComponentZOrder(instr,0);
 
         JButton closeInstr = new JButton("X");
         closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
+        //closeInstr.setBounds(0, 150, 50, 50);
         // so I literally can't see the close button if I put it on the traditional top right corner...
         //..., so I will put it top-left for testing and change later.
-        //components.add(instr);
-        
+        //closeInstr.setComponentZOrder(instr, 0);
+        components.add(closeInstr);
+        componentsVisible.add(false);
+        frame.add(closeInstr);
+        frame.getContentPane().setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
+        //closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
+
 
         refresh();
+
+        System.out.println(components.size());
+        System.out.println(componentsVisible);
 
         start.addActionListener(e -> {
             if (!componentsVisible.get(2)) {
@@ -86,6 +96,13 @@ public class Menu {
 
         instrButton.addActionListener(e -> {
             setupInstructions();
+            System.out.println(componentsVisible);
+        });
+
+        closeInstr.addActionListener(e -> {
+            componentsVisible.set(2,false);
+            componentsVisible.set(3, false);
+            refresh();
         });
     }
 
@@ -97,6 +114,7 @@ public class Menu {
     }
     public void setupInstructions() {
         componentsVisible.set(2, true);
+        componentsVisible.set(3, true);
         refresh();
     }
 }
