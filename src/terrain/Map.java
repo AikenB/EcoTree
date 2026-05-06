@@ -181,7 +181,7 @@ public class Map extends JPanel {
     {
 
         // open terrain window
-         frame = new JFrame("EcoTree");
+        frame = new JFrame("EcoTree");
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setSize(1920,1080);
         Color backgroundColor = new Color(170, 240, 130); // Dark green
