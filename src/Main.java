@@ -46,15 +46,10 @@ public class Main {
         
         //Grid.printGrid();
 
-        //Grid.addSprite(new gui.Sprite(7, 4, 5, 5, "src/images/frog.jpg"));
+        Grid.addSprite(new gui.Sprite(7, 4, 5, 5, "src/images/frog.jpg"));
 
 
         // Timer to print grid every second
-        // Timer printTimer = new Timer(2000, e -> {
-        //     System.out.println("================================");
-        //     //Grid.printGrid();
-            
-        // });
         //printTimer.start();
         
     }
