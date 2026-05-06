@@ -28,6 +28,9 @@ public class Grid {
     public static void addOrganism(Hitbox hitbox) {
         if (!hitboxes.contains(hitbox)) {
             hitboxes.add(hitbox);
+            
+            sprites.add(hitbox.getSprite());
+            addSprite(hitbox.getSprite());
         }
         synchronized (grid) {
             int x = hitbox.getX();
@@ -90,19 +93,19 @@ public class Grid {
         }
     }
 
-    public static void printGrid() {
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == null) {
-                    System.out.print("_ ");
-                } else {
-                    System.out.print(grid[i][j] + " ");
-                }
+    // public static void printGrid() {
+    //     for (int i = 0; i < grid.length; i++) {
+    //         for (int j = 0; j < grid[i].length; j++) {
+    //             if (grid[i][j] == null) {
+    //                 System.out.print("_ ");
+    //             } else {
+    //                 System.out.print(grid[i][j] + " ");
+    //             }
                 
-            }
-            System.out.println();
-        }
-    }
+    //         }
+    //         System.out.println();
+    //     }
+    // }
 
     public static void addSprite(Sprite sprite) {
         if (!sprites.contains(sprite)) {

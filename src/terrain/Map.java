@@ -178,13 +178,22 @@ public class Map extends JPanel {
             }
         }
 
-        for (int i = 0; i < Grid.sprites.size(); i++)
-        {
-            Sprite s = Grid.sprites.get(i);
-            g2d.drawImage(s.getImage(), s.getGridX() + deltaX, s.getGridY() + deltaY, s.getGridWidth(), s.getGridHeight(), null);
-            s.setGridX(deltaX + s.getX());
-            s.setGridY(deltaY + s.getY());
-        }
+        
+        
+            if (Grid.sprites.size() > 0){
+
+                for (int i = 0; i < Grid.sprites.size(); i++){
+                    Sprite s = Grid.sprites.get(i);
+                    if (s != null) {
+                        g2d.drawImage(s.getImage(), s.getGridX() + deltaX, s.getGridY() + deltaY, s.getGridWidth(), s.getGridHeight(), null);
+                        s.setGridX(deltaX + s.getY());
+                        s.setGridY(deltaY + s.getX());
+                    }
+                    
+                }
+            }
+            
+        
 
     }
     public static void loadMap()
