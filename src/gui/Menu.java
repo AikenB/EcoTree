@@ -1,4 +1,4 @@
-package menu;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +89,7 @@ public class Menu {
                 frame.add(m);
                 System.out.println("something");
                 frame.repaint();
-                m.loadMap(frame);
+                // Map.loadMap();
             }
 
         });

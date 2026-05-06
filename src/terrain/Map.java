@@ -102,11 +102,10 @@
 
 package terrain;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import java.util.ArrayList;
+import javax.swing.*;
 
 public class Map extends JPanel {
     // NOTE TO SELF: add constructor?
@@ -115,7 +114,7 @@ public class Map extends JPanel {
     // numbers to track screen translation
     private static int deltaX = 0;
     private static int deltaY = 0;
-
+    private static final JFrame frame = new JFrame("EcoTree");
     // boolean array to check if each arrow key is pressed
     // indexes of boolean array
     // 0 corresponds to left
@@ -177,11 +176,11 @@ public class Map extends JPanel {
         }
 
     }
-    public static void loadMap(JFrame frame)
+    public static void loadMap()
     {
 
         // open terrain window
-        frame = new JFrame("EcoTree");
+        
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setSize(1920,1080);
         Color backgroundColor = new Color(170, 240, 130); // Dark green

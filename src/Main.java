@@ -2,16 +2,20 @@
 import gameobjects.Animal;
 import gameobjects.Organism.Species;
 import gui.Grid;
+import gui.Menu;
 import javax.swing.*;
 import utilities.Hitbox;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        JFrame frame = new JFrame("Menu");
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame.setSize(1280,720);
-        frame.setVisible(true);
+        // JFrame frame = new JFrame("Menu");
+        // frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        // frame.setSize(1280,720);
+        // frame.setVisible(true);
+        Menu menu = new Menu();
+        //Map.loadMap();
+        
         
 
         Grid grid = new Grid();
