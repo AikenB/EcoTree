@@ -1,6 +1,5 @@
 package utilities;
 import gameobjects.Organism;
-import gui.Grid;
 
 public class Hitbox{
 
@@ -16,9 +15,7 @@ public class Hitbox{
         this.organism = organism;
         organism.setX(x);
         organism.setY(y);
-        organism.setCachedHitbox(this);  // Cache the hitbox reference
-        Grid.hitboxes.add(this);
-
+        organism.setHitbox(this);  
         
     }
 

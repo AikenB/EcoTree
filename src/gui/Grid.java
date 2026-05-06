@@ -1,11 +1,13 @@
 package gui;
-import java.util.ArrayList;
+import gameobjects.Animal;
+import gameobjects.Organism;
+import java.util.concurrent.CopyOnWriteArrayList;
 import utilities.Hitbox;
 
 public class Grid {
 
     public static Hitbox[][] grid = new Hitbox[15][15];
-    public static ArrayList<Hitbox> hitboxes = new ArrayList<>();
+    public static CopyOnWriteArrayList<Hitbox> hitboxes = new CopyOnWriteArrayList<>();
 
     public static enum Direction{
         UP,
@@ -22,47 +24,66 @@ public class Grid {
     
 
     public static void addOrganism(Hitbox hitbox) {
-        hitboxes.add(hitbox);
-        int x = hitbox.getX();
-        int y = hitbox.getY();
-        int width = hitbox.getWidth();
-        int height = hitbox.getHeight();
+        if (!hitboxes.contains(hitbox)) {
+            hitboxes.add(hitbox);
+        }
+        synchronized (grid) {
+            int x = hitbox.getX();
+            int y = hitbox.getY();
+            int width = hitbox.getWidth();
+            int height = hitbox.getHeight();
 
-        
-
-        for (int i = x; i < x + width; i++) {
-            for (int j = y; j < y + height; j++) {
-                grid[i][j] = hitbox;
+            for (int i = y; i < y + height; i++) {
+                for (int j = x; j < x + width; j++) {
+                    grid[i][j] = hitbox;
+                }
             }
         }
     }
 
     public static void removeOrganism(Hitbox hitbox) {
+        if (hitbox == null) {
+            return;
+        }
         
-        //hitbox.getOrganism().setCachedHitbox(null);  // Clear the cache
-        int x = hitbox.getX();
-        int y = hitbox.getY();
-        int width = hitbox.getWidth();
-        int height = hitbox.getHeight();
+        synchronized (grid) {
+            int x = hitbox.getX();
+            int y = hitbox.getY();
+            int width = hitbox.getWidth();
+            int height = hitbox.getHeight();
 
-        for (int i = x; i < x + width; i++) {
-            for (int j = y; j < y + height; j++) {
-                grid[i][j] = null;
+            for (int i = y; i < y + height; i++) {
+                for (int j = x; j < x + width; j++) {
+                    grid[i][j] = null;
+                }
             }
         }
     }
 
     public static void killOrganism(Hitbox hitbox) {
+        if (hitbox == null) {
+            return;
+        }
+        
         hitboxes.remove(hitbox);
-        //hitbox.getOrganism().setCachedHitbox(null);  // Clear the cache
-        int x = hitbox.getX();
-        int y = hitbox.getY();
-        int width = hitbox.getWidth();
-        int height = hitbox.getHeight();
+        Organism organism = hitbox.getOrganism();
+        organism.setHitbox(null);  // Clear the cache
+        
+        // Stop the organism's background movement if it's an Animal
+        if (organism instanceof Animal) {
+            ((Animal) organism).stopMovement();
+        }
+        
+        synchronized (grid) {
+            int x = hitbox.getX();
+            int y = hitbox.getY();
+            int width = hitbox.getWidth();
+            int height = hitbox.getHeight();
 
-        for (int i = x; i < x + width; i++) {
-            for (int j = y; j < y + height; j++) {
-                grid[i][j] = null;
+            for (int i = y; i < y + height; i++) {
+                for (int j = x; j < x + width; j++) {
+                    grid[i][j] = null;
+                }
             }
         }
     }

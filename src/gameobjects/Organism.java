@@ -19,7 +19,7 @@ public class Organism {
     protected int y;
     protected int width = 1;
     protected int height = 1;
-    protected Hitbox cachedHitbox;  // Cache the hitbox reference
+    protected Hitbox hitbox; 
 
     public static enum Species {
         RABBIT,
@@ -74,6 +74,15 @@ public class Organism {
 
     }
 
+    public static void kill(Organism organism) {
+        if (organism instanceof Animal) {
+            ((Animal) organism).stopMovement();
+        }
+        
+        Grid.killOrganism(organism.getHitbox());
+        organism.hitbox = null; // Clear hitbox reference to help GC
+    }
+
     public ArrayList<Mutation> getMutations() {
         return mutations;
     }
@@ -103,21 +112,21 @@ public class Organism {
 
     public Hitbox getHitbox() {
         // Return cached hitbox if available
-        if (cachedHitbox != null) {
-            return cachedHitbox;
+        if (hitbox != null) {
+            return hitbox;
         }
-        // Fallback: search if cache is stale (shouldn't happen normally)
+        
         for (Hitbox hitbox : Grid.hitboxes) {
             if (hitbox.getOrganism() == this) {
-                cachedHitbox = hitbox;  // Update cache
+                this.hitbox = hitbox;  // Update cache
                 return hitbox;
             }
         }
         return null;
     }
     
-    public void setCachedHitbox(Hitbox hitbox) {
-        this.cachedHitbox = hitbox;
+    public void setHitbox(Hitbox hitbox) {
+        this.hitbox = hitbox;
     }
     
     public Species getSpecies() {

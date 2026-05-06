@@ -22,10 +22,6 @@ public class Animal extends Organism {
     // private Timer moveTimer;
 
     private ExecutorService executor;
-
-    
-
-
     
 
 
@@ -59,6 +55,8 @@ public class Animal extends Organism {
                 prey.add(Species.ANT);
                 break;
             case FROG:
+                width = 2;
+                height = 2;
                 speed = 1.5;
                 foodCapacity = 15.0;
                 thirstCapacity = 20.0;
@@ -74,19 +72,26 @@ public class Animal extends Organism {
     private void startBackgroundMovement() {
         executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
+            
+            
             while (!Thread.currentThread().isInterrupted()) {
                 try {
+
+                    if (contactingPrey()) {
+                        Organism prey = getContactedPrey(this);
+                        if (prey != null) {
+                            this.energy += prey.energy;
+                            kill(prey);
+                        }
+                    }
                     int dt = (int)(4000/speed);
                     Thread.sleep(dt);
                     move();
                     
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
                 } catch (Exception e) {
                     System.err.println("Error in move() for " + species + ": " + e.getMessage());
                     e.printStackTrace();
-                    break;
+                    
                 }
             }
         });
@@ -142,6 +147,8 @@ public class Animal extends Organism {
 
         
     }
+
+    //#region MOVEMENT
 
     /**
      * used for move() method
@@ -266,6 +273,8 @@ public class Animal extends Organism {
                 newY += 1;
                 break;
         }
+
+
         /*if the animal can't move in the specific direction, iterate through 
         each possible direction until it finds one that is available*/
         if (!canMove(d)) {
@@ -284,6 +293,10 @@ public class Animal extends Organism {
         }
         else {
             Hitbox hitbox = this.getHitbox();
+            if (hitbox == null) {
+                // Organism has been removed from grid or hitbox is null
+                return;
+            }
             Grid.removeOrganism(hitbox);
             x = newX;
             y = newY;
@@ -393,6 +406,46 @@ public class Animal extends Organism {
     }
     
 
+    //#region BEHAVIOR
+
+    public boolean contactingPrey() {
+        // Check a range around the entire organism footprint, not just the top-left corner
+        for (int i = x - 1; i <= x + width + 1; i++) {
+            for (int j = y - 1; j <= y + height + 1; j++) {
+                if (i >= 0 && i < Grid.grid[0].length && j >= 0 && j < Grid.grid.length) {
+                    Hitbox hitbox = Grid.grid[j][i];
+                    if (hitbox == null) 
+                        continue;
+                    Organism o = hitbox.getOrganism();
+                    if (o != null && prey.contains(o.getSpecies())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static Organism getContactedPrey(Animal animal) {
+        // Check a range around the entire organism footprint
+        for (int i = animal.x - 1; i <= animal.x + animal.width + 1; i++) {
+            for (int j = animal.y - 1; j <= animal.y + animal.height + 1; j++) {
+                if (i >= 0 && i < Grid.grid[0].length && j >= 0 && j < Grid.grid.length) {
+                    Hitbox hitbox = Grid.grid[j][i];
+                    if (hitbox != null) {
+                        Organism o = hitbox.getOrganism();
+                        if (o != null && o != animal && animal.prey.contains(o.getSpecies())) {
+                            return o;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+
     public static Animal reproduce(Animal parent1, Animal parent2) {
         // Create offspring of the same species as parent1
         Animal offspring = new Animal(parent1.species);
@@ -415,6 +468,7 @@ public class Animal extends Organism {
     }
 
     
+    
 
 
     public String toString() {
@@ -428,6 +482,8 @@ public class Animal extends Organism {
             return "O";
         }
     }
+
+
     
 
     
