@@ -30,8 +30,8 @@ public class Map extends JPanel {
 
     //NOTE: 1920 must be divisible by width, 1080 must be divisible by height
     // CONFIG WIDTH AND HEIGHT HERE
-    private static int width = 96;
-    private static int height = 54;
+    private static int width = 128;
+    private static int height = 128;
 
     public static int getMapWidth()
     {
@@ -54,10 +54,8 @@ public class Map extends JPanel {
         // rectangle outline color
         g2d.setColor(Color.BLACK);
 
-        // IF width = 96, squareWidth = 20
-        // IF height = 54, squareHeight = 20
-        int squareWidth = 1920/width;
-        int squareHeight = 1080/height;
+        int squareWidth = 20;
+        int squareHeight = 20;
         //
 
         // width
@@ -94,15 +92,6 @@ public class Map extends JPanel {
     // testing this by changing it to a constructor
     public Map()
     {
-        // open terrain window
-        /* 
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame.setSize(1920,1080);
-        Color backgroundColor = new Color(170, 240, 130); // Dark green
-        // background 
-        frame.getContentPane().setBackground(backgroundColor);
-        frame.setVisible(true);
-        */
 
         Timer timer = new Timer(100, e -> {
             repaint();
