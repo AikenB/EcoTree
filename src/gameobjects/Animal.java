@@ -69,7 +69,7 @@ public class Animal extends Organism {
                 foodCapacity = 45;
                 width = 2;
                 height = 2;
-                speed = 3;
+                speed = 2;
                 
                 thirstCapacity = 20.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
@@ -246,20 +246,37 @@ public class Animal extends Organism {
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies())) {
-                        double weight = (double) (250 / d);
+                        double weight = (double) (250 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
                         //System.err.printf("  Predator %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, final angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
-                    else if (prey.contains(o.getSpecies()) && this.isHungry()) {
-                        double weight = (double) (o.energy / (5*d));
+                    else if (prey.contains(o.getSpecies())) {
+
+                        if (isHungry()){
+                            double weight = (double) (o.energy / (Math.sqrt(d)));
+                            w.orient(x, y, weight);
+                        } else {
+                            //makes organisms less motivated to follow prey if they aren't hungry
+                            int tendency = (int) (Math.random() * 3);
+                            if (tendency == 0){
+                                double weight = (double) (o.energy / (5 * Math.sqrt(d)));
+                                w.orient(x, y, weight);
+                            }
+                        }
                         
-                        w.orient(x, y, weight);
                         //System.err.printf("  Prey %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
                     else if (!o.equals(this) && o.getSpecies() == this.getSpecies() && !this.isHungry()) {
-                        double weight = (double) (5 / d);
-                        w.orient(x, y, weight);
+                        //this is so that organisms will tend to stick with organisms of the same species
+
+                        //this is to prevent the organisms from constantly following each other if there are no prey or predators around
+                        int tendency = (int) (Math.random() * 4);
+                        if (tendency == 0){
+                            double weight = (double) (5 / d);
+                            w.orient(x, y, weight);
+                        }
+                        
                         
                         //System.err.printf("  Ally %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
