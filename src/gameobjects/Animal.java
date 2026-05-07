@@ -11,14 +11,16 @@ import utilities.WeightVector;
 
 public class Animal extends Organism {
     
-    private double photosynthesisEfficiency;
     
     private ArrayList<Species> predators;
     private ArrayList<Species> prey;
 
     private double speed;
     private double foodCapacity;
+    private double satiety;
     private double thirstCapacity;
+    private double mass;
+    
     // private Timer moveTimer;
 
     private ExecutorService executor;
@@ -31,7 +33,7 @@ public class Animal extends Organism {
         
         generateMutation();
         configureSpecies(species);
-
+        mass = width * height;
         // moveTimer = new Timer((int) (4000/speed), e -> move());
         // moveTimer.start();
         initializeBehavior();
@@ -43,32 +45,39 @@ public class Animal extends Organism {
     private void configureSpecies(Species species) {
         switch(species){
             case ANT:
+                energy = 10;
+                foodCapacity = 10;
+                
                 speed = 1.0;
-                foodCapacity = 5.0;
+                
                 thirstCapacity = 5.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER));
                 prey = new ArrayList<>();
                 break;
             case SPIDER:
+                energy = 15;
+                foodCapacity = 20;
                 speed = 2;
-                foodCapacity = 10.0;
+                
                 thirstCapacity = 10.0;
                 predators = new ArrayList<>();
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT));
                 prey.add(Species.ANT);
                 break;
             case FROG:
+                energy = 15;
+                foodCapacity = 45;
                 width = 2;
                 height = 2;
                 speed = 3;
-                foodCapacity = 15.0;
+                
                 thirstCapacity = 20.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER));
                 break;
 
         }
-
+        satiety = 0.9 * foodCapacity;
         
     }
     /**
@@ -85,16 +94,22 @@ public class Animal extends Organism {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     //this is how the animal will eat prey TODO: add energy and hunger mechanics
-                    if (contactingPrey()) {
+                    if (contactingPrey() && isHungry()) {
                         Organism prey = getContactedPrey(this);
                         if (prey != null) {
-                            this.energy += prey.energy;
+                            
+                            satiety += prey.energy;
                             kill(prey);
                         }
                     }
-                    int dt = (int)(4000/speed);
+                    double speedboost = 1.0;
+                    if (isHungry()) {
+                        speedboost = 1.5;
+                    }
+                    int dt = (int)(4000/(speed * speedboost));
                     Thread.sleep(dt);
                     move();
+                    satiety -= 0.1 * mass;
                     
                     
                 } catch (Exception e) {
@@ -231,15 +246,22 @@ public class Animal extends Organism {
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies())) {
-                        double weight = (double) 250 / d;
+                        double weight = (double) (250 / d);
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
                         //System.err.printf("  Predator %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, final angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
-                    else if (prey.contains(o.getSpecies())) {
-                        double weight = (double) o.energy / (6*d);
+                    else if (prey.contains(o.getSpecies()) && this.isHungry()) {
+                        double weight = (double) (o.energy / (5*d));
+                        
                         w.orient(x, y, weight);
                         //System.err.printf("  Prey %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
+                    }
+                    else if (!o.equals(this) && o.getSpecies() == this.getSpecies() && !this.isHungry()) {
+                        double weight = (double) (5 / d);
+                        w.orient(x, y, weight);
+                        
+                        //System.err.printf("  Ally %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
                     v = v.add(w);
 
@@ -502,6 +524,10 @@ public class Animal extends Organism {
         }
         
         return offspring;
+    }
+
+    public boolean isHungry() {
+        return satiety < 0.8 * foodCapacity; //TODO: tune this variable
     }
 
     

@@ -1,6 +1,8 @@
 package gui;
 import gameobjects.Animal;
 import gameobjects.Organism;
+import gameobjects.Organism.Species;
+import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import utilities.Hitbox;
 
@@ -92,6 +94,19 @@ public class Grid {
                 }
             }
         }
+    }
+
+    /**
+     * Creates an animal and automatically adds it to the grid
+     * 
+     */
+    public static Animal createAnimal(Species species, int x, int y) throws IOException {
+        Animal animal = null;
+        animal = new Animal(species);
+        Hitbox hitbox = new Hitbox(animal, x, y);
+        addOrganism(hitbox);
+        
+        return animal;
     }
 
     // public static void printGrid() {
