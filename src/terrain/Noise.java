@@ -2,9 +2,9 @@ package terrain;
 import utilities.WeightVector;
 public class Noise {
     // p = partition size, generally is a power of 2
-    public static int[][] noiseLayer(int p, int w, int h)
+    public static double[][] noiseLayer(int p, int w, int h)
     {
-        int[][] output = new int[h][w];
+        double[][] output = new double[h][w];
         WeightVector[][] vectorArr = new WeightVector[(h/p)+2][(w/p)+2];
             //
 
@@ -85,18 +85,49 @@ public class Noise {
                     // divide it by 2 to make it [0,1]
                     output3 /= 2;
 
-                    int val = (int)(output3 * 255);
-                    if (val > 255)
-                    {
-                        val = 255;
-                    }
-                    if (val < 0)
-                    {
-                        val = 0;
-                    }
-                    output[i][j]= val;
+                    //int val = (int)(output3 * 255);
+                    //if (val > 255)
+                    //{
+                    //   val = 255;
+                    //}
+                    //if (val < 0)
+                    //{
+                    //   val = 0;
+                    //}
+                    //output[i][j]= val;
+
+                    output[i][j] = output3;
                 }
             }
             return output;
+    }
+    // this function layers with 64x64 partitions, 32x32 partitions, 16x16 partitions, and then 8x8 partitions
+    public static int[][] octaveNoiseLayer(int w,int h)
+    {
+        double[][] noise64 = noiseLayer(64,w,h);
+        double[][] noise32 = noiseLayer(32,w,h);
+        double[][] noise16 = noiseLayer(16,w,h);
+        double[][] noise8 = noiseLayer(8,w,h);
+        double[][] output = new int[h][w];
+
+        // blend noises together, giving more weight to the larger partition sizes
+        // noise64 gets 1 weight, noise32 gets 1/2 weight, noise16 gets 1/4 weight, and noise8 gets 1/8 weight
+        // 8/8+4/8+2/8+1/8= 15/8
+        for (int i = 0; i < h; i ++)
+        {
+            for (int j = 0; j < w; j ++)
+            {
+                output[i][j] = (int)((noise64[i][j]*8.0/15)+(noise32[i][j]*4.0/15)+(noise16[i][j]*2.0/15)+(noise8[i][j]*1.0/15));
+                if (output[i][j] > 255)
+                {
+                    output[i][j] = 255;
+                }
+                if (output[i][j] < 0)
+                {
+                    output[i][j] = 0;
+                }
+            }
+        }
+        return output;
     }
 }
