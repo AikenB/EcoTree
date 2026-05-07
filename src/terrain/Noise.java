@@ -42,19 +42,19 @@ public class Noise {
                     double y = (i % p) / (double)p;
                     // create 4 vectors, one from each corner to the selected cell
                     // top left
-                    WeightVector vTL = new WeightVector(x, y-1);
+                    WeightVector vTL = new WeightVector(x, y);
                     // top right
-                    WeightVector vTR = new WeightVector(x-1, y-1);
+                    WeightVector vTR = new WeightVector(x-1, y);
                     // bottom left
-                    WeightVector vBL = new WeightVector(x, y);
+                    WeightVector vBL = new WeightVector(x, y-1);
                     // bottom right
-                    WeightVector vBR = new WeightVector(x-1, y);
+                    WeightVector vBR = new WeightVector(x-1, y-1);
 
                     // find the dot product of these vectors and the 4 corner vectors
-                    WeightVector bottomLeftVector = vectorArr[(i/p)][(j/p)];
-                    WeightVector bottomRightVector = vectorArr[(i/p)][(j/p)+1];
-                    WeightVector topLeftVector = vectorArr[(i/p)+1][(j/p)];
-                    WeightVector topRightVector = vectorArr[(i/p)+1][(j/p)+1];
+                    WeightVector bottomLeftVector = vectorArr[(i/p+1)][(j/p)];
+                    WeightVector bottomRightVector = vectorArr[(i/p+1)][(j/p+1)];
+                    WeightVector topLeftVector = vectorArr[(i/p)][(j/p)];
+                    WeightVector topRightVector = vectorArr[(i/p)][(j/p)+1];
 
                     double topLeftDP = WeightVector.dotProduct(vTL, topLeftVector);
                     double topRightDP = WeightVector.dotProduct(vTR, topRightVector);
@@ -108,7 +108,7 @@ public class Noise {
         double[][] noise32 = noiseLayer(32,w,h);
         double[][] noise16 = noiseLayer(16,w,h);
         double[][] noise8 = noiseLayer(8,w,h);
-        double[][] output = new int[h][w];
+        int[][] output = new int[h][w];
 
         // blend noises together, giving more weight to the larger partition sizes
         // noise64 gets 1 weight, noise32 gets 1/2 weight, noise16 gets 1/4 weight, and noise8 gets 1/8 weight
@@ -117,7 +117,8 @@ public class Noise {
         {
             for (int j = 0; j < w; j ++)
             {
-                output[i][j] = (int)((noise64[i][j]*8.0/15)+(noise32[i][j]*4.0/15)+(noise16[i][j]*2.0/15)+(noise8[i][j]*1.0/15));
+                double weightedNoises = (noise64[i][j]*8.0/15)+(noise32[i][j]*4.0/15)+(noise16[i][j]*2.0/15)+(noise8[i][j]*1.0/15);
+                output[i][j] = (int)(255*weightedNoises);
                 if (output[i][j] > 255)
                 {
                     output[i][j] = 255;
@@ -126,6 +127,20 @@ public class Noise {
                 {
                     output[i][j] = 0;
                 }
+            }
+        }
+
+        // loop through output to find the min and max
+        int max = Integer.MAX_VALUE;
+        int min = Integer.MIN_VALUE;
+        for (int i = 0; i < h; i ++)
+        {
+            for (int j = 0; j < w; j ++)
+            {
+                if (output[i][j] < min) 
+                    min = output[i][j];
+                if (output[i][j] > max) 
+                    max = output[i][j];
             }
         }
         return output;

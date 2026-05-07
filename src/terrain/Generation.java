@@ -51,29 +51,6 @@ public class Generation {
             WeightVector[][] vectorArr = new WeightVector[(h/p)+2][(w/p)+2];
             //
 
-            // set each vector to 1 of 8 directions randomly
-            // arrays are in the form of [x,y]
-
-
-            //rt = root two over two, basically so the vectors pointing diagonally have the same magnitude as the ones pointing horizontally or vertically
-            final double rt = Math.sqrt(2)/2;
-
-            double[][] randomVectors = {{0,1}, {1*rt,1*rt}, {1,0}, {rt,-1*rt}, {0,-1}, {-1*rt,-1*rt}, {-1,0}, {-1*rt,1*rt}};
-            for (int i = 0; i < vectorArr.length; i++)
-            {
-                for (int j = 0; j < vectorArr[0].length;j++)
-                {
-                    // each vector in vectorArr gets a random x and y value
-                    int randInt = (int)(Math.random()*8);
-                    // TEMP 
-                    //vectorArr[i][j] = new WeightVector(randomVectors[randInt][0],randomVectors[randInt][1]);
-                    // TEST WITH RANDOM VECTORS
-                    double randomAngle = Math.random() * Math.PI * 2;
-                    vectorArr[i][j] = new WeightVector(Math.cos(randomAngle), Math.sin(randomAngle));
-
-                }
-            }
-
             // loop through each cell in the grid
             // remember that the array is formatted arr[height][width]
 
@@ -87,6 +64,14 @@ public class Generation {
                     int b = 50;
                     int g = output[i][j];
                     land[i][j]= new Color(r,g,b);
+
+                    // lakes attempt
+                    if (output[i][j] > 100 && output[i][j] < 130)
+                    {
+                        b = 100;
+                        land[i][j] = new Color(r,g,b);
+                    }
+                    System.out.println(output[i][j]);
                 }
             }
         }
