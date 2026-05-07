@@ -183,15 +183,18 @@ public class Animal extends Organism {
      * returns the viewfield of the animal. The viewfield is a coordinate grid of hitboxes relative to the animal, with the animal at the center. Used for move() method.
      */
     private Hitbox[][] getViewField() {
-        Hitbox[][] viewField = new Hitbox[25][25];
-        for (int i = 0; i < viewField.length; i++) {
-            for (int j = 0; j < viewField[i].length; j++) {
-                int x = this.x - 7 + j;
-                int y = this.y - 7 + i;
-                if (x >= 0 && x < Grid.grid.length && y >= 0 && y < Grid.grid[0].length) {
-                    viewField[i][j] = Grid.grid[x][y];
-                } else {
-                    viewField[i][j] = null;
+        Hitbox[][] viewField = new Hitbox[30][30];
+        synchronized (Grid.grid) {
+            for (int i = 0; i < viewField.length; i++) {
+                for (int j = 0; j < viewField[i].length; j++) {
+                    int x = this.x - 14 + j;
+                    int y = this.y - 14 + i;
+                    // Grid is [height][width], so y is row index, x is column index
+                    if (y >= 0 && y < Grid.grid.length && x >= 0 && x < Grid.grid[0].length) {
+                        viewField[i][j] = Grid.grid[y][x];
+                    } else {
+                        viewField[i][j] = null;
+                    }
                 }
             }
         }
@@ -222,8 +225,8 @@ public class Animal extends Organism {
                 //makes sure it will only add a weight vector if it is a new organism that has not been counted yet
                 if (isNewOrganism(organismsInSight, o)) {
                     organismsInSight.add(o);
-                    int x =  j - 7;      
-                    int y = i - 7;    
+                    int x =  j - 14;      
+                    int y = i - 14;    
                     double d = Math.sqrt(x*x + y*y);  
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
@@ -234,7 +237,7 @@ public class Animal extends Organism {
                         //System.err.printf("  Predator %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, final angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
                     else if (prey.contains(o.getSpecies())) {
-                        double weight = (double) o.energy / (5*d);
+                        double weight = (double) o.energy / (6*d);
                         w.orient(x, y, weight);
                         //System.err.printf("  Prey %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
