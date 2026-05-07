@@ -30,8 +30,8 @@ public class Generation {
         int h = Map.getMapHeight();
         int w = Map.getMapWidth();
 
-        // break up into 8x8 squares
-        WeightVector[][] vectorArr = new WeightVector[(h/8)+1][(w/8)+1];
+        // break up into 4x4 squares
+        WeightVector[][] vectorArr = new WeightVector[(h/4)+1][(w/4)+1];
         //
 
         // set each vector to 1 of 8 directions randomly
@@ -53,11 +53,11 @@ public class Generation {
         {
             for (int j = 0; j < land[0].length; j ++)
             {
-                // find the local coordinates of the cell within the 8x8 square
+                // find the local coordinates of the cell within the 4x4 square
                 // Example: cells in column 0 of the array are considered to have a localX of 1
                 // Example II: cells in column 10 of the array are considered to have a localX of 3
-                int localX = 1 + j % 8;
-                int localY = 1 + i % 8;
+                int localX = 1 + j % 4;
+                int localY = 1 + i % 4;
 
                 // because each partition is 8x8, scale down
                 // local coordinates of corners are 
@@ -65,8 +65,8 @@ public class Generation {
                 // top right: (1,1)
                 // bottom left: (0,0)
                 // bottom right: (1,0)
-                double scaledLocalX = 0.125*localX;
-                double scaledLocalY = 0.125*localY;
+                double scaledLocalX = 0.25*localX;
+                double scaledLocalY = 0.25*localY;
 
                 // create 4 vectors, one from each corner to the selected cell
                 // top left
@@ -80,8 +80,36 @@ public class Generation {
 
                 // find the dot product of these vectors and the 4 corner vectors
 
+                System.out.println(i/4);
+                System.out.println(vectorArr.length);
+                WeightVector topLeftVector = vectorArr[(i/4)][(j/4)];
+                WeightVector topRightVector = vectorArr[(i/4)][(j/4)+1];
+                WeightVector bottomLeftVector = vectorArr[(i/4)+1][(j/4)];
+                WeightVector bottomRightVector = vectorArr[(i/4)+1][(j/4)+1];
 
+                double topLeftDP = WeightVector.dotProduct(v1, topLeftVector);
+                double topRightDP = WeightVector.dotProduct(v2, topRightVector);
+                double bottomLeftDP = WeightVector.dotProduct(v3, bottomLeftVector);
+                double bottomRightDP = WeightVector.dotProduct(v4, bottomRightVector);
 
+                // interpolate horizontally between topleft & topright dot product
+                // equation for variable t is 6x^5-15x^4+10x^3
+                double t = (6*Math.pow(scaledLocalX,5)) - (15*Math.pow(scaledLocalX,4)) + ((10*Math.pow(scaledLocalX,3)));
+
+                // output equation is (a*t) + (b*(1-t))
+                // as t (the output of the function / y value) increases, a*t increases, a being the top right dot product in this case
+
+                double output1 = (topRightDP*t)+(topLeftDP*(1-t));
+                // interpolate horizontally between bottomleft & bottomright dot product
+                double output2 = (bottomRightDP*t)+(bottomLeftDP*(1-t));
+
+                // interpolate vertically using output1 and output2
+                // this time we input the localY coordinate of the cell into the equation for t
+                t = (6*Math.pow(scaledLocalY,5)) - (15*Math.pow(scaledLocalY,4)) + ((10*Math.pow(scaledLocalY,3)));
+                double output3 = (output2*t)+(output1*(1-t));
+
+                // output 3 should be a double between -1 and 1
+                System.out.println(output3);
             }
         }
 

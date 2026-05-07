@@ -35,8 +35,7 @@ public class WeightVector {
     // DOT PRODUCT
     public static double dotProduct(WeightVector v1, WeightVector v2)
     {
-        double dp = v1.getWeight()*v2.getWeight();
-        double theta = (v1.getX()*v2.getX() ) + (v1.getY()*v2.getY() );
+        double dp = (v1.getX()*v2.getX()) + (v1.getY()*v2.getY());
         // note to self: COMPLETE
         return dp;
     }
