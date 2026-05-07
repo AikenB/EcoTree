@@ -6,7 +6,7 @@ import utilities.Hitbox;
 
 public class Grid {
 
-    public static Hitbox[][] grid = new Hitbox[15][15];
+    public static Hitbox[][] grid = new Hitbox[54][96];
     public static CopyOnWriteArrayList<Hitbox> hitboxes = new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
     
@@ -71,6 +71,7 @@ public class Grid {
         }
         
         hitboxes.remove(hitbox);
+        sprites.remove(hitbox.getSprite());
         Organism organism = hitbox.getOrganism();
         organism.setHitbox(null);  // Clear the cache
         

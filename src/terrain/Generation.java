@@ -1,14 +1,23 @@
 
 package terrain;
 
-import utilities.WeightVector;
 import java.awt.Color;
+import utilities.WeightVector;
 
 public class Generation {
     public static Color[][] land;
+
+    public static boolean initialized = false;
+
+    
     public static void initialize()
     {
-        land = new Color[terrain.Map.getMapHeight()][terrain.Map.getMapWidth()];
+
+        if (!initialized)
+        {
+            initialized = true;
+
+            land = new Color[terrain.Map.getMapHeight()][terrain.Map.getMapWidth()];
         // test
         for (int i = 0; i < land.length; i++)
         {
@@ -17,13 +26,15 @@ public class Generation {
                 land[i][j] = Color.BLUE;
 
                 // random gen test
-                int r = (int)(Math.random()*255);
+                int r = (int)(Math.random()*100);
                 int g = (int)(Math.random()*255);
-                int b = (int)(Math.random()*255);
+                //int b = (int)(Math.random()*255);
 
-                land[i][j]= new Color(r,g,b);
+                land[i][j]= new Color(r,g,0);
             }
         }
+        }
+        
 
         // NEW noise gen
 
@@ -80,7 +91,7 @@ public class Generation {
 
                 // find the dot product of these vectors and the 4 corner vectors
 
-                double dp1 = 
+                //double dp1 = 
 
 
             }

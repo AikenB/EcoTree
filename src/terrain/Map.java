@@ -1,14 +1,9 @@
 package terrain;
 
-import terrain.Generation;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import javax.swing.*;
-import gui.Sprite;
-
 import gui.Grid;
+import gui.Sprite;
+import java.awt.*;
+import javax.swing.*;
 
 public class Map extends JPanel {
 
@@ -88,11 +83,8 @@ public class Map extends JPanel {
                 for (int i = 0; i < Grid.sprites.size(); i++){
                     Sprite s = Grid.sprites.get(i);
                     if (s != null) {
-                        g2d.drawImage(s.getImage(), s.getGridX() + deltaX, s.getGridY() + deltaY, s.getGridWidth(), s.getGridHeight(), null);
-                        s.setGridX(-1*deltaX + s.getY());
-                        s.setGridY(-1*deltaY + s.getX());
+                        g2d.drawImage(s.getImage(), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
                     }
-                    
                 }
             }
             
@@ -111,6 +103,12 @@ public class Map extends JPanel {
         frame.getContentPane().setBackground(backgroundColor);
         frame.setVisible(true);
         */
+
+        Timer timer = new Timer(100, e -> {
+            repaint();
+        });
+
+        timer.start();
     }
 }
 //BUG: holding a key and then switching directions halts movement

@@ -50,7 +50,7 @@ public class Animal extends Organism {
                 prey = new ArrayList<>();
                 break;
             case SPIDER:
-                speed = 1.5;
+                speed = 2;
                 foodCapacity = 10.0;
                 thirstCapacity = 10.0;
                 predators = new ArrayList<>();
@@ -60,7 +60,7 @@ public class Animal extends Organism {
             case FROG:
                 width = 2;
                 height = 2;
-                speed = 1.5;
+                speed = 3;
                 foodCapacity = 15.0;
                 thirstCapacity = 20.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
@@ -95,6 +95,7 @@ public class Animal extends Organism {
                     int dt = (int)(4000/speed);
                     Thread.sleep(dt);
                     move();
+                    
                     
                 } catch (Exception e) {
                     System.err.println("Error in move() for " + species + ": " + e.getMessage());
@@ -182,7 +183,7 @@ public class Animal extends Organism {
      * returns the viewfield of the animal. The viewfield is a coordinate grid of hitboxes relative to the animal, with the animal at the center. Used for move() method.
      */
     private Hitbox[][] getViewField() {
-        Hitbox[][] viewField = new Hitbox[15][15];
+        Hitbox[][] viewField = new Hitbox[25][25];
         for (int i = 0; i < viewField.length; i++) {
             for (int j = 0; j < viewField[i].length; j++) {
                 int x = this.x - 7 + j;
