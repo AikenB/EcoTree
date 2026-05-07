@@ -31,12 +31,14 @@ public class Hitbox{
         }
     public void setX(int x) { 
         this.x = x;
+        sprite.setX(x);
     }
     public int getY() {
         return y; 
         }
     public void setY(int y) { 
         this.y = y;
+        sprite.setY(y);
     }
     public int getWidth() {
          return width;
@@ -81,6 +83,14 @@ public class Hitbox{
             //     break;
             case FROG:
                 imagePath = "src/images/frog.jpg";
+                sprite = new Sprite(x, y, width, height, imagePath);
+                break;
+            case SPIDER:
+                imagePath = "src/images/spider.jpg";
+                sprite = new Sprite(x, y, width, height, imagePath);
+                break;
+            case ANT:
+                imagePath = "src/images/ant.jpg";
                 sprite = new Sprite(x, y, width, height, imagePath);
                 break;
             // Add more cases for other species
