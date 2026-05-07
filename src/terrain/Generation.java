@@ -91,7 +91,6 @@ public class Generation {
 
                 // find the dot product of these vectors and the 4 corner vectors
 
-                //double dp1 = 
 
 
             }
