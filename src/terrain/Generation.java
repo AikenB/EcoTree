@@ -77,7 +77,7 @@ public class Generation {
             // loop through each cell in the grid
             // remember that the array is formatted arr[height][width]
 
-            int[][] output = Noise.noiseLayer(16,land.length,land[0].length);
+            int[][] output = Noise.octaveNoiseLayer(land.length,land[0].length);
             for (int i = 0; i < land.length; i ++ )
             {
                 for (int j = 0; j < land[0].length; j ++)
