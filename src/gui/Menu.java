@@ -293,9 +293,11 @@ public class Menu {
             int yPos = Map.getDeltaY()+ y;
             System.out.println("(" + x + ", " + y + ")");
             try {
-                Grid.createAnimal(Species.GRASS, xPos, yPos);
+                Grid.addSprite(new Sprite(xPos, yPos, 5, 5, "images/tree_1.png"));
+                //Grid.createAnimal(Species.GRASS, xPos, yPos);
             } catch (Exception e) {
                 System.out.println("thing");
+                System.out.println(e);
             }
         }
     }
