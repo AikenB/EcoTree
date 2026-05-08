@@ -71,7 +71,8 @@ public class Generation {
                         b = 100;
                         land[i][j] = new Color(r,g,b);
                     }
-                    System.out.println(output[i][j]);
+                    
+                    //System.out.println(output[i][j]);
                 }
             }
         }

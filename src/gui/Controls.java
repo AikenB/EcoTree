@@ -22,7 +22,7 @@ public class Controls {
 
     // each keyMovement corresponds to a translation
     // ie index 0 being pressed will signify keycode 37 (left arrow) is being pressed, translating x to the left
-    private static final int[] keyMovements = {10,-10,10,-10};
+    private static final int[] keyMovements = {20,-20,20,-20};
 
     public static void initializeControls(JFrame frame)
     {

@@ -22,15 +22,15 @@ public class Noise {
                 {
                     // each vector in vectorArr gets a random x and y value
                     int randInt = (int)(Math.random()*8);
-                    // TEMP 
-                    //vectorArr[i][j] = new WeightVector(randomVectors[randInt][0],randomVectors[randInt][1]);
+                    vectorArr[i][j] = new WeightVector(randomVectors[randInt][0],randomVectors[randInt][1]);
                     // TEST WITH RANDOM VECTORS
+                    /* 
                     double randomAngle = Math.random() * Math.PI * 2;
                     vectorArr[i][j] = new WeightVector(Math.cos(randomAngle), Math.sin(randomAngle));
+                    */
 
                 }
             }
-
             // loop through each cell in the grid
             // remember that the array is formatted arr[height][width]
             for (int i = 0; i < h; i ++ )
@@ -77,30 +77,11 @@ public class Noise {
                     t = y*y*y*(y*(y*6 - 15) + 10);
                     double output3 = (output2*t)+(output1*(1-t));
 
-                    // output 3 should be a double between -1 and 1
-
-                    // normalize output3
-                    // first make it [0,2]
-                    output3 += 1;
-                    // divide it by 2 to make it [0,1]
-                    output3 /= 2;
-
-                    //int val = (int)(output3 * 255);
-                    //if (val > 255)
-                    //{
-                    //   val = 255;
-                    //}
-                    //if (val < 0)
-                    //{
-                    //   val = 0;
-                    //}
-                    //output[i][j]= val;
-
                     output[i][j] = output3;
                 }
             }
             return output;
-    }
+        }
     // this function layers with 64x64 partitions, 32x32 partitions, 16x16 partitions, and then 8x8 partitions
     public static int[][] octaveNoiseLayer(int w,int h)
     {
@@ -110,6 +91,7 @@ public class Noise {
         double[][] noise8 = noiseLayer(8,w,h);
         int[][] output = new int[h][w];
 
+
         // blend noises together, giving more weight to the larger partition sizes
         // noise64 gets 1 weight, noise32 gets 1/2 weight, noise16 gets 1/4 weight, and noise8 gets 1/8 weight
         // 8/8+4/8+2/8+1/8= 15/8
@@ -117,8 +99,16 @@ public class Noise {
         {
             for (int j = 0; j < w; j ++)
             {
-                double weightedNoises = (noise64[i][j]*8.0/15)+(noise32[i][j]*4.0/15)+(noise16[i][j]*2.0/15)+(noise8[i][j]*1.0/15);
-                output[i][j] = (int)(255*weightedNoises);
+                double weightedNoise = (noise64[i][j]*1.0)+(noise32[i][j]*1.0/2)+(noise16[i][j]*1.0/4)+(noise8[i][j]*1.0/8);
+                //normalize weightedNoise 
+                // consider the range of each noise should be [-1,1]
+                weightedNoise /= (15.0/8);
+                
+                // now convert weightedNoise so that the range is [0,1]
+                weightedNoise +=1;
+                weightedNoise *= 0.5;
+
+                output[i][j] = (int)(255*weightedNoise);
                 if (output[i][j] > 255)
                 {
                     output[i][j] = 255;
@@ -130,19 +120,6 @@ public class Noise {
             }
         }
 
-        // loop through output to find the min and max
-        int max = Integer.MAX_VALUE;
-        int min = Integer.MIN_VALUE;
-        for (int i = 0; i < h; i ++)
-        {
-            for (int j = 0; j < w; j ++)
-            {
-                if (output[i][j] < min) 
-                    min = output[i][j];
-                if (output[i][j] > max) 
-                    max = output[i][j];
-            }
-        }
         return output;
     }
 }
