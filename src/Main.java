@@ -3,6 +3,7 @@ import gameobjects.Animal;
 import gameobjects.Organism.Species;
 import gui.Grid;
 import gui.Menu;
+import gui.Sprite;
 
 public class Main {
     public static void main(String[] args) throws Exception {

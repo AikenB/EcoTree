@@ -109,19 +109,19 @@ public class Grid {
         return animal;
     }
 
-    // public static void printGrid() {
-    //     for (int i = 0; i < grid.length; i++) {
-    //         for (int j = 0; j < grid[i].length; j++) {
-    //             if (grid[i][j] == null) {
-    //                 System.out.print("_ ");
-    //             } else {
-    //                 System.out.print(grid[i][j] + " ");
-    //             }
+    public static void printGrid() {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == null) {
+                    System.out.print("_ ");
+                } else {
+                    System.out.print(grid[i][j] + " ");
+                }
                 
-    //         }
-    //         System.out.println();
-    //     }
-    // }
+            }
+            System.out.println();
+        }
+    }
 
     public static void addSprite(Sprite sprite) {
         if (!sprites.contains(sprite)) {

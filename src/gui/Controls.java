@@ -12,6 +12,11 @@ public class Controls {
     // boolean used later on for tracking if the mouse is pressed
     static boolean pressed;
 
+    static public int x;
+    static public int y;
+
+    static Menu menu;
+
     // boolean array to check if each arrow key is pressed
     // indexes of boolean array
     // 0 corresponds to left
@@ -34,6 +39,9 @@ public class Controls {
                 frame.requestFocusInWindow();
                 // focus window on left click
                 pressed = true;
+                // x = e.getX();
+                // y = e.getY();
+                menu.recieveClick(e.getX(), e.getY());
             }
         });
         // detect when mouse is released
@@ -105,6 +113,7 @@ public class Controls {
                     // repaint canvas with translations
 
                     frame.repaint();
+                    frame.revalidate();
                 }
 
             }
