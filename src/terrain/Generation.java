@@ -2,14 +2,20 @@
 package terrain;
 
 import java.awt.Color;
+import java.io.IOException;
+
+import gui.Grid;
+import gui.Sprite;
 import utilities.WeightVector;
 import terrain.Noise;
+
+import java.util.ArrayList;
 public class Generation {
     public static Color[][] land;
-
     public static boolean initialized = false;
-    public static boolean terrainGenerated = false;
+    private static boolean terrainGenerated = false;
 
+    private static ArrayList<int[]> treeLocations = new ArrayList<int[]>();
     
     public static void initialize()
     {
@@ -71,16 +77,33 @@ public class Generation {
                         b = 100;
                         land[i][j] = new Color(r,g,b);
                     }
+                    if (output[i][j] < 100 || output[i][j] == 140)
+                    // tree gen
+                    {
+                        int randInt = (int)(Math.random()*15);
+                        if (randInt == 1)
+                        {
+                            int[] loc = {i,j};
+                            treeLocations.add(loc);
+                        }
+                        
+                    }
                     
                     //System.out.println(output[i][j]);
                 }
             }
         }
         
-        
-        // NEW
+
 
     }
+
+
+    public static ArrayList<int[]> getTreeLocations()
+    {
+        return treeLocations;
+    }
+    
     public static Color[][] terrainValues()
     {
         return land;
