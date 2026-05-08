@@ -3,6 +3,7 @@ import gameobjects.Animal;
 import gameobjects.Organism.Species;
 import gui.Grid;
 import gui.Menu;
+import gui.Sprite;
 import java.util.ArrayList;
 
 public class Main {

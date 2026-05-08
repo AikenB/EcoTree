@@ -2,6 +2,7 @@ package terrain;
 
 import gui.Grid;
 import gui.Sprite;
+import gui.Menu;
 import java.awt.*;
 import javax.swing.*;
 
@@ -10,6 +11,7 @@ public class Map extends JPanel {
     // numbers to track screen translation
     private static int deltaX = 0;
     private static int deltaY = 0;
+    private Menu m;
     
     public static int getDeltaX()
     {
@@ -85,16 +87,19 @@ public class Map extends JPanel {
                     }
                 }
             }
-            
+            //m.refresh();
         
 
     }
     // testing this by changing it to a constructor
-    public Map()
+    public Map(Menu m)
     {
-
+        this.m = m;
         Timer timer = new Timer(100, e -> {
             repaint();
+            revalidate();
+            //m.refresh();
+            //m.frame.setComponentZOrder(m.components.get(4),0);
         });
 
         timer.start();

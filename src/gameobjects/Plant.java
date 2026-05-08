@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Plant extends Organism {
     
     private double photosynthesisEfficiency;
+    private double cost;
     
     private ArrayList<Organism> predators;
 
@@ -77,6 +78,10 @@ public class Plant extends Organism {
             newPlant.addMutation(mutation);
         }
         return newPlant;
+    }
+
+    public double getCost() {
+        return cost;
     }
 
 
