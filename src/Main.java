@@ -63,6 +63,16 @@ public class Main {
         Grid.createPlant(Species.GRASS, 31,20);
         Grid.createPlant(Species.GRASS, 32,20);
         Grid.createPlant(Species.GRASS, 32,21);
+        Grid.createPlant(Species.APPLE_TREE, 50,5);
+        Grid.createPlant(Species.APPLE_TREE, 7,45);
+        Grid.createPlant(Species.APPLE_TREE, 45,45);
+        Grid.createAnimal(Species.WORM, 35,35);
+        Grid.createAnimal(Species.WORM, 40,20);
+        Grid.createAnimal(Species.WORM, 40,20);
+        Grid.createAnimal(Species.WORM, 30,4);
+        Grid.createAnimal(Species.SNAKE, 40,20);
+        Grid.createAnimal(Species.SNAKE, 7,30);
+        Grid.createAnimal(Species.SNAKE, 12,3);
 
 
         

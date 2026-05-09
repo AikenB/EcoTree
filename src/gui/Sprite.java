@@ -29,6 +29,11 @@ public class Sprite {
     public static final String FERN_SPRITE_1 = "src/images/fern_1.png";
     public static final String GRASS_SPRITE_0 = "src/images/grass_0.png";
     public static final String GRASS_SPRITE_1 = "src/images/grass_1.png";
+    public static final String APPLE_TREE_SPRITE_0 = "src/images/apple_tree_0.png";
+    public static final String APPLE_TREE_SPRITE_1 = "src/images/apple_tree_1.png";
+    public static final String WORM_SPRITE = "src/images/worm.png";
+    public static final String SNAKE_SPRITE = "src/images/snake.png";
+    
 
     private BufferedImage image;
     public Sprite(int x, int y, int width, int height, String imagePath) throws IOException {

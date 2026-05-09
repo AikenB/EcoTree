@@ -84,22 +84,33 @@ public class Hitbox{
             //     break;
             case FROG:
                 imagePath = Sprite.FROG_SPRITE;
-                sprite = new Sprite(x, y, width, height, imagePath);
                 break;
             case SPIDER:
                 imagePath = Sprite.SPIDER_SPRITE;
-                sprite = new Sprite(x, y, width, height, imagePath);
                 break;
             case ANT:
                 imagePath = Sprite.ANT_SPRITE;
-                sprite = new Sprite(x, y, width, height, imagePath);
                 break;
             case FERN:
                 imagePath = Sprite.FERN_SPRITE_0;
-                sprite = new Sprite(x, y, width, height, imagePath);
                 break;
+            case GRASS:
+                imagePath = Sprite.GRASS_SPRITE_0;
+                break;
+            case APPLE_TREE:
+                imagePath = Sprite.APPLE_TREE_SPRITE_0;
+                break;
+            case WORM:
+                imagePath = Sprite.WORM_SPRITE;
+                break;
+            case SNAKE:
+                imagePath = Sprite.SNAKE_SPRITE;
+                break;
+            default:
+                imagePath = null;
             // Add more cases for other species
         }
+        sprite = new Sprite(x, y, width, height, imagePath);
 
         // this.sprite = new Sprite(x, y, width, height, imagePath);
         

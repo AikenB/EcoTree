@@ -74,7 +74,7 @@ public class Animal extends Organism {
                 prey.add(Species.ANT);
                 break;
             case FROG:
-                energy = 15;
+                energy = 25;
                 foodCapacity = 45;
                 rftr = 50.0;
                 width = 2;
@@ -84,6 +84,28 @@ public class Animal extends Organism {
                 thirstCapacity = 20.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER));
+                break;
+            case SNAKE:
+                energy = 30;
+                foodCapacity = 75;
+                rftr = 50.0;
+                width = 3;
+                height = 2;
+                speed = 2.5;
+                thirstCapacity = 25.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT));
+                prey = new ArrayList<Species>(Arrays.asList(Species.FROG));
+                break;
+            case WORM:
+                energy = 20;
+                foodCapacity = 25;
+                rftr = 40;
+                width = 1;
+                height = 1;
+                speed = 0.75;
+                thirstCapacity = 10.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER));
+                prey = new ArrayList<Species>(Arrays.asList(Species.APPLE_TREE));
                 break;
 
         }
