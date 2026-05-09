@@ -66,7 +66,7 @@ public class Animal extends Organism {
             case SPIDER:
                 energy = 15;
                 foodCapacity = 20;
-                rftr = 25.0;
+                rftr = 40.0;
                 speed = 2;
                 thirstCapacity = 10.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
@@ -293,7 +293,7 @@ public class Animal extends Organism {
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies())) {
                         
-                        double weight = (double) (50 / Math.sqrt(d));
+                        double weight = (double) (25 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
                         // System.out.println("predator:" + o.getSpecies());
@@ -308,17 +308,17 @@ public class Animal extends Organism {
                             //FOR DEALING WITH PLANTS
                             if (o.getClass() == Plant.class && ((Plant) o).hasProduce()) {
                                 
-                                double weight = (double) (5 * o.energy / (Math.sqrt(d)));
+                                double weight = (double) (5 * o.energy / (Math.pow(d,1/4)));
                                 w.orient(x, y, weight);
                             } else if (o.getClass() == Plant.class && !((Plant) o).hasProduce()) {
                                 //makes the animal less motivated to go towards plants that don't have produce
                                 int tendency = (int) (Math.random() * 3 * preySpotted());
                                 if (tendency == 0){
-                                    double weight = (double) (o.energy / (5 * Math.sqrt(d)));
+                                    double weight = (double) (o.energy / (Math.pow(d,1/4)));
                                     w.orient(x, y, weight);
                                 }
                             } else { //FOR DEALING WITH ANIMALS WHEN ANIMAL IS HUNGRY
-                                double weight = (double) (o.energy / (Math.sqrt(d)));
+                                double weight = (double) (o.energy / (Math.pow(d,1/4)));
                                 w.orient(x, y, weight);
                             }
                         } 
@@ -328,7 +328,7 @@ public class Animal extends Organism {
                             //since this calculation will be done for each prey spotted, it will be scaled with the amount of prey spotted to prevent itself from constantly following prey
                             int tendency = (int) (Math.random() * 3 * preySpotted());
                             if (tendency == 0){
-                                double weight = (double) (o.energy / (5 * Math.sqrt(d)));
+                                double weight = (double) (o.energy / (Math.pow(d,1/4)));
                                 w.orient(x, y, weight);
                             }
                         }
@@ -595,10 +595,10 @@ public class Animal extends Organism {
 
     //TODO: tune this mechanic
     public boolean isHungry() {
-        if (satiety < 0.95 * foodCapacity && preySpotted() >= 5) {
+        if (satiety < 0.9 * foodCapacity && preySpotted() >= 5) {
             return true;
         } 
-        else if (satiety < 0.9 * foodCapacity && preySpotted() >= 3) {
+        else if (satiety < 0.85 * foodCapacity && preySpotted() >= 3) {
             return false;
         } else {
             return satiety < 0.8 * foodCapacity; 
