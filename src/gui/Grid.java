@@ -2,6 +2,7 @@ package gui;
 import gameobjects.Animal;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
+import gameobjects.Plant;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import utilities.Hitbox;
@@ -109,25 +110,40 @@ public class Grid {
         return animal;
     }
 
-    public static void printGrid() {
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == null) {
-                    System.out.print("_ ");
-                } else {
-                    System.out.print(grid[i][j] + " ");
-                }
-                
-            }
-            System.out.println();
-        }
+    /**
+     * Creates a plant and automatically adds it to the grid
+     * 
+     */
+    public static Plant createPlant(Species species, int x, int y) throws IOException {
+        
+        Plant plant = new Plant(species);
+        Hitbox hitbox = new Hitbox(plant, x, y);
+        addOrganism(hitbox);
+        
+        return plant;
     }
+
+    // public static void printGrid() {
+    //     for (int i = 0; i < grid.length; i++) {
+    //         for (int j = 0; j < grid[i].length; j++) {
+    //             if (grid[i][j] == null) {
+    //                 System.out.print("_ ");
+    //             } else {
+    //                 System.out.print(grid[i][j] + " ");
+    //             }
+                
+    //         }
+    //         System.out.println();
+    //     }
+    // }
 
     public static void addSprite(Sprite sprite) {
         if (!sprites.contains(sprite)) {
             sprites.add(sprite);
         }
     }
+
+    
 
     
 }

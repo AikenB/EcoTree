@@ -1,13 +1,25 @@
 package gameobjects;
+import gui.Menu;
+import gui.Sprite;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Plant extends Organism {
     
     private double photosynthesisEfficiency;
     private double cost;
-    
+    private Species species;
+    private int produce;
+    private int maxProduce;
+    private double productionRarity; //NOTE: the higher this value the harder it is to get fruit
+    private boolean hasProduce;
     private ArrayList<Organism> predators;
+
+    //public static int t = 0;
+
+    private ExecutorService executor;
 
     
 
@@ -22,13 +34,70 @@ public class Plant extends Organism {
     public Plant(Species species) {
         super(species);
         this.species = species;
-        photosynthesisEfficiency = 1.0;
+        produce = 0;
+        hasProduce = false;
         generateMutation();
-        switch(species){
-
-        }
+        configureSpecies(species);
+        initializeBehavior();
+        
+        
 
     }
+
+    private void configureSpecies(Species species){
+        switch (species){
+            case FERN:
+                energy = 5;
+                width = 2;
+                height = 2;
+                photosynthesisEfficiency = 2.0;
+                maxProduce = 3;
+                productionRarity = 50;
+                break;
+        }
+    }
+
+    /**
+     * initializes the plant's behavior that will run while it's alive
+     */
+    private void initializeBehavior() {
+
+        /*creates a new thread for each animal created. This makes it so that each animal
+         can move independently and can move at different speeds and perform different behaviors at different times*/
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            
+            
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                   
+                    int dt = 1000;
+                    // t++;
+                    Thread.sleep(dt);
+                    Menu.updateMoney(photosynthesisEfficiency);
+                    int chance = (int) (Math.random() * (int)(productionRarity));
+                    if (chance == 0 && produce < maxProduce){
+                        produce++;
+                        // System.out.println("produce made after " + t + " seconds");
+                    }
+                    if (produce > 0){
+                        hasProduce = true;
+                        Sprite.updateSprite(this, Sprite.FERN_SPRITE_1);
+                    } else {
+                        hasProduce = false;
+                        Sprite.updateSprite(this, Sprite.FERN_SPRITE_0);
+                    }
+
+                    
+                } catch (Exception e) {
+                    System.err.println("Error in move() for " + species + ": " + e.getMessage());
+                    e.printStackTrace();
+                    
+                }
+            }
+        });
+    }
+
     /**
      * adds a mutation to the plant and applies its effects
      */
@@ -82,6 +151,17 @@ public class Plant extends Organism {
 
     public double getCost() {
         return cost;
+    }
+
+    public boolean hasProduce() {
+        return hasProduce;
+    }
+
+    public void updateProduce(int amount) {
+        produce += amount;
+        if (produce < 0) {
+            produce = 0;
+        }
     }
 
 

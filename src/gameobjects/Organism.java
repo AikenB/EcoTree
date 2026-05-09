@@ -42,7 +42,7 @@ public class Organism {
         PINE_TREE,
         CACTUS,
         FERN,
-        BERRYBUSH,
+        BERRY_BUSH,
         MOSS,
         BUSH
 

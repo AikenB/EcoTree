@@ -1,9 +1,11 @@
 package gui;
 
+import gameobjects.Organism;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import utilities.Hitbox;
 
 public class Sprite {
 
@@ -18,6 +20,12 @@ public class Sprite {
     private int gridWidth;
     private int gridHeight;
     private String imagePath;
+
+    public static final String FROG_SPRITE = "src/images/frog.png";
+    public static final String SPIDER_SPRITE = "src/images/spider.png";
+    public static final String ANT_SPRITE = "src/images/ant.png";
+    public static final String FERN_SPRITE_0 = "src/images/fern_0.png";
+    public static final String FERN_SPRITE_1 = "src/images/fern_1.png";
 
     private BufferedImage image;
     public Sprite(int x, int y, int width, int height, String imagePath) throws IOException {
@@ -100,4 +108,13 @@ public class Sprite {
         this.gridHeight = gridHeight;
         this.height = gridHeight / SQUARE_WIDTH;
     }
+    
+    /**
+     * this does the same thing as updateSprite in Hitbox but can also be used by the Sprite class for code readibility
+     */
+    public static void updateSprite(Organism o, String newImagePath) throws IOException {
+        Hitbox.updateSprite(o, newImagePath);
+    }
+
+    
 }

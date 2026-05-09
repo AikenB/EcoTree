@@ -3,9 +3,7 @@ package gameobjects;
 import gameobjects.Organism.Species;
 import gui.Grid;
 import gui.Grid.Direction;
-
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.*;
@@ -26,7 +24,10 @@ public class Animal extends Organism {
     private double mass;
     private double fertility;
     //TODO: tune this variable for each species
-    private double rftr; //Required Fertility To Reproduce
+    /**
+     * required fertility to reproduce
+     */
+    private double rftr;
     
     // private Timer moveTimer;
 
@@ -53,14 +54,14 @@ public class Animal extends Organism {
     private void configureSpecies(Species species) {
         switch(species){
             case ANT:
-                energy = 10;
+                energy = 5;
                 foodCapacity = 10;
                 rftr = 20.0;
                 speed = 1.0;
                 
                 thirstCapacity = 5.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER, Species.FROG));
-                prey = new ArrayList<>();
+                prey = new ArrayList<Species>(Arrays.asList(Species.FERN, Species.GRASS));
                 break;
             case SPIDER:
                 energy = 15;
@@ -102,16 +103,22 @@ public class Animal extends Organism {
             
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    //this is how the animal will eat prey TODO: add energy and hunger mechanics
+    //====================EATING MECHANICS============================
                     if (contactingPrey() && isHungry()) {
                         Organism prey = getContactedPrey(this);
-                        if (prey != null) {
+                        if (prey != null && prey.getClass() == Animal.class) {
                             
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
                             kill(prey);
+                        } else if (prey != null && prey.getClass() == Plant.class) {
+                            satiety += prey.energy;
+                            fertility += prey.energy * 0.8;
+                            ((Plant) prey).updateProduce(-1);
                         }
-                    } else if (canReproduce()) {
+                    } 
+    //=====================REPRODUCTION MECHANICS===========================             
+                    else if (canReproduce()) {
                         reproduce(getMate());
                         fertility = 0;
                         getMate().fertility = 0;
@@ -120,9 +127,12 @@ public class Animal extends Organism {
                     if (isHungry()) {
                         speedboost = 1.5;
                     }
+                    //movement
                     int dt = (int)(4000/(speed * speedboost));
                     Thread.sleep(dt);
                     move();
+                    //hunger + fertility updating
+                    //TODO: tune the rate of hunger and fertility increase for each species
                     satiety -= 0.1 * mass;
                     satiety = Math.min(foodCapacity, Math.max(satiety, 0)); //clamp satiety between 0 and its max capacity
                     fertility += 1;
@@ -257,7 +267,7 @@ public class Animal extends Organism {
         // System.out.println("------///------");
         //get field of view of organism. This is a 2d array of hitboxes where we can get the organism that the hitbox represents when we access the individual hitboxes inside the array
         Hitbox[][] viewField = getViewField();
-        WeightVector v = new WeightVector(0, 0, 0);
+        WeightVector movementVector = new WeightVector(0, 0, 0);
         //create list of organisms in sight to avoid counting the same organism multiple times
         ArrayList<Organism> organismsInSight = new ArrayList<>();
 
@@ -283,7 +293,7 @@ public class Animal extends Organism {
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies())) {
                         
-                        double weight = (double) (250 / Math.sqrt(d));
+                        double weight = (double) (50 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
                         // System.out.println("predator:" + o.getSpecies());
@@ -293,10 +303,27 @@ public class Animal extends Organism {
                     }
                     else if (prey.contains(o.getSpecies())) {
 
+    //======================IF THE ANIMAL IS HUNGRY=============================
                         if (isHungry()){
-                            double weight = (double) (o.energy / (Math.sqrt(d)));
-                            w.orient(x, y, weight);
-                        } else {
+                            //FOR DEALING WITH PLANTS
+                            if (o.getClass() == Plant.class && ((Plant) o).hasProduce()) {
+                                
+                                double weight = (double) (5 * o.energy / (Math.sqrt(d)));
+                                w.orient(x, y, weight);
+                            } else if (o.getClass() == Plant.class && !((Plant) o).hasProduce()) {
+                                //makes the animal less motivated to go towards plants that don't have produce
+                                int tendency = (int) (Math.random() * 3 * preySpotted());
+                                if (tendency == 0){
+                                    double weight = (double) (o.energy / (5 * Math.sqrt(d)));
+                                    w.orient(x, y, weight);
+                                }
+                            } else { //FOR DEALING WITH ANIMALS WHEN ANIMAL IS HUNGRY
+                                double weight = (double) (o.energy / (Math.sqrt(d)));
+                                w.orient(x, y, weight);
+                            }
+                        } 
+//======================IF THE ANIMAL IS NOT HUNGRY=============================
+                        else {
                             //makes organisms less motivated to follow prey if they aren't hungry
                             //since this calculation will be done for each prey spotted, it will be scaled with the amount of prey spotted to prevent itself from constantly following prey
                             int tendency = (int) (Math.random() * 3 * preySpotted());
@@ -321,7 +348,8 @@ public class Animal extends Organism {
                         
                         //System.err.printf("  Ally %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
-                    v = v.add(w);
+                    //add the vector contribution to the movement vector
+                    movementVector = movementVector.add(w);
 
                 }
             }   
@@ -329,10 +357,10 @@ public class Animal extends Organism {
         // System.out.println("this species: " + this.getSpecies());
         // System.out.println("movement vector: X: " + v.getX() + " Y: " + v.getY());
         // System.out.println("-----***------");
-        Grid.Direction direction = getDirection(v);
+        Grid.Direction direction = getDirection(movementVector);
         
         //makes sure that it has a valid direction to move in, if it doesn't it will move in a random valid direction
-        if (v.getWeight() != 0) {
+        if (movementVector.getWeight() != 0) {
             safeMove(direction);
         } else {
             Grid.Direction randomD = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
@@ -565,8 +593,17 @@ public class Animal extends Organism {
         return null;
     }
 
+    //TODO: tune this mechanic
     public boolean isHungry() {
-        return satiety < 0.8 * foodCapacity; //TODO: tune this variable
+        if (satiety < 0.95 * foodCapacity && preySpotted() >= 5) {
+            return true;
+        } 
+        else if (satiety < 0.9 * foodCapacity && preySpotted() >= 3) {
+            return false;
+        } else {
+            return satiety < 0.8 * foodCapacity; 
+        }
+        
     }
 
     //#region REPRODUCTION

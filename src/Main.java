@@ -39,6 +39,7 @@ public class Main {
         Animal spider1 = Grid.createAnimal(Species.SPIDER, 10, 30);
         Animal spider2 = Grid.createAnimal(Species.SPIDER, 15, 15);
         Animal frog1 = Grid.createAnimal(Species.FROG, 10, 10);
+        Animal frog2 = Grid.createAnimal(Species.FROG, 10, 17);
         Animal ant3 = Grid.createAnimal(Species.ANT, 0, 0);
         Animal ant4 = Grid.createAnimal(Species.ANT, 20, 25);
         Animal ant5 = Grid.createAnimal(Species.ANT, 5, 25);
@@ -48,6 +49,13 @@ public class Main {
         Grid.createAnimal(Species.ANT, 27, 10);
         Grid.createAnimal(Species.ANT, 15, 7);
         Grid.createAnimal(Species.SPIDER, 30, 30);
+        Grid.createPlant(Species.FERN, 5,27);
+        Grid.createPlant(Species.FERN, 6,27);
+        Grid.createPlant(Species.FERN, 7,27);
+        Grid.createPlant(Species.FERN, 6,28);
+        Grid.createPlant(Species.FERN, 20,2);
+        Grid.createPlant(Species.FERN, 21,2);
+        Grid.createPlant(Species.FERN, 21,3);
 
 
         

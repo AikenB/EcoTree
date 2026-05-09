@@ -1,6 +1,7 @@
 package utilities;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
+import gui.Grid;
 import gui.Sprite;
 import java.io.IOException;
 
@@ -82,21 +83,40 @@ public class Hitbox{
             //     imagePath = "src/images/spider.png";
             //     break;
             case FROG:
-                imagePath = "src/images/frog.jpg";
+                imagePath = Sprite.FROG_SPRITE;
                 sprite = new Sprite(x, y, width, height, imagePath);
                 break;
             case SPIDER:
-                imagePath = "src/images/spider.jpg";
+                imagePath = Sprite.SPIDER_SPRITE;
                 sprite = new Sprite(x, y, width, height, imagePath);
                 break;
             case ANT:
-                imagePath = "src/images/ant.jpg";
+                imagePath = Sprite.ANT_SPRITE;
+                sprite = new Sprite(x, y, width, height, imagePath);
+                break;
+            case FERN:
+                imagePath = Sprite.FERN_SPRITE_0;
                 sprite = new Sprite(x, y, width, height, imagePath);
                 break;
             // Add more cases for other species
         }
 
         // this.sprite = new Sprite(x, y, width, height, imagePath);
-
+        
     }
+
+    /**
+     * updates the sprite of the organism
+     */
+    public static void updateSprite(Organism o, String newImagePath) throws IOException {
+    Hitbox hitbox = o.getHitbox();
+    if (hitbox != null) {
+        Sprite newSprite = new Sprite(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight(), newImagePath);
+        
+        Grid.sprites.remove(hitbox.sprite);
+        hitbox.sprite = newSprite;
+        Grid.sprites.add(newSprite);
+    }
+}     
+
 }

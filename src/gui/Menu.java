@@ -159,7 +159,7 @@ public class Menu {
     int introButtonHeight = 100;
     int instrWidth = 1600;
     int instrHeight = 800;
-    double money = 1000;
+    public static double money = 1000;
     public ArrayList<JComponent> components = new ArrayList<JComponent>();
     // the idea of the ArrayList is that references to different buttons and whatnot can be accessed...
     //... from the place where the buttons were initialized. This enables more modular programming, ...
@@ -396,5 +396,9 @@ public class Menu {
 
         refresh();
 
+    }
+
+    public synchronized static void updateMoney(double amount) {
+        money += amount;
     }
 }
