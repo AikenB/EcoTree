@@ -74,7 +74,9 @@ public class Generation {
                     // lakes attempt
                     if (output[i][j] > 100 && output[i][j] < 130)
                     {
-                        b = 100;
+                        b = 0;
+                        r = 15;
+                        g = 100;
                         land[i][j] = new Color(r,g,b);
                     }
                     if (output[i][j] < 100 || output[i][j] == 140)

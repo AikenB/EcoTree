@@ -17,6 +17,9 @@ public class Plant extends Organism {
     private boolean hasProduce;
     private ArrayList<Organism> predators;
 
+    private String SPRITE_0;
+    private String SPRITE_1;
+
     //public static int t = 0;
 
     private ExecutorService executor;
@@ -53,6 +56,19 @@ public class Plant extends Organism {
                 photosynthesisEfficiency = 2.0;
                 maxProduce = 3;
                 productionRarity = 50;
+                SPRITE_0 = Sprite.FERN_SPRITE_0;
+                SPRITE_1 = Sprite.FERN_SPRITE_1;
+                break;
+            
+            case GRASS:
+                energy = 5;
+                width = 1;
+                height = 1;
+                photosynthesisEfficiency = 1.0;
+                maxProduce = 1;
+                productionRarity = 50;
+                SPRITE_0 = Sprite.GRASS_SPRITE_0;
+                SPRITE_1 = Sprite.GRASS_SPRITE_1;
                 break;
         }
     }
@@ -82,10 +98,10 @@ public class Plant extends Organism {
                     }
                     if (produce > 0){
                         hasProduce = true;
-                        Sprite.updateSprite(this, Sprite.FERN_SPRITE_1);
+                        Sprite.updateSprite(this, SPRITE_1);
                     } else {
                         hasProduce = false;
-                        Sprite.updateSprite(this, Sprite.FERN_SPRITE_0);
+                        Sprite.updateSprite(this, SPRITE_0);
                     }
 
                     

@@ -21,11 +21,14 @@ public class Sprite {
     private int gridHeight;
     private String imagePath;
 
+    //constants for sprite image paths
     public static final String FROG_SPRITE = "src/images/frog.png";
     public static final String SPIDER_SPRITE = "src/images/spider.png";
     public static final String ANT_SPRITE = "src/images/ant.png";
     public static final String FERN_SPRITE_0 = "src/images/fern_0.png";
     public static final String FERN_SPRITE_1 = "src/images/fern_1.png";
+    public static final String GRASS_SPRITE_0 = "src/images/grass_0.png";
+    public static final String GRASS_SPRITE_1 = "src/images/grass_1.png";
 
     private BufferedImage image;
     public Sprite(int x, int y, int width, int height, String imagePath) throws IOException {

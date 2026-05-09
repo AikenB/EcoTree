@@ -58,6 +58,11 @@ public class Main {
         Grid.createPlant(Species.FERN, 21,3);
         Grid.createPlant(Species.FERN, 30,2);
         Grid.createPlant(Species.FERN, 32,3);
+        Grid.createPlant(Species.GRASS, 30,30);
+        Grid.createPlant(Species.GRASS, 31,31);
+        Grid.createPlant(Species.GRASS, 31,20);
+        Grid.createPlant(Species.GRASS, 32,20);
+        Grid.createPlant(Species.GRASS, 32,21);
 
 
         

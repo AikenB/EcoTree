@@ -34,6 +34,7 @@ public class Organism {
         WORM,
         MOUSE,
         SPIDER,
+        GRASSHOPPER,
 
         GRASS,
         FLOWER,
