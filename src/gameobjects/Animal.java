@@ -2,6 +2,7 @@ package gameobjects;
 
 import gameobjects.Organism.Species;
 import gui.Grid;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.*;
@@ -51,16 +52,15 @@ public class Animal extends Organism {
                 speed = 1.0;
                 
                 thirstCapacity = 5.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER));
+                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER, Species.FROG));
                 prey = new ArrayList<>();
                 break;
             case SPIDER:
                 energy = 15;
                 foodCapacity = 20;
                 speed = 2;
-                
                 thirstCapacity = 10.0;
-                predators = new ArrayList<>();
+                predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT));
                 prey.add(Species.ANT);
                 break;
@@ -194,6 +194,22 @@ public class Animal extends Organism {
         
     }
 
+    private int preySpotted() {
+        Hitbox[][] viewfield = getViewField();
+        int count = 0;
+        for (int i = 0; i < viewfield.length; i++) {
+            for (int j = 0; j < viewfield[i].length; j++) {
+                if (viewfield[i][j] != null) {
+                    Organism o = viewfield[i][j].getOrganism();
+                    if (o != null && prey.contains(o.getSpecies())) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
     /**
      * returns the viewfield of the animal. The viewfield is a coordinate grid of hitboxes relative to the animal, with the animal at the center. Used for move() method.
      */
@@ -221,6 +237,7 @@ public class Animal extends Organism {
      * weightvectors to then determine its direction of movement. It will then use safemove() to make sure it at least moves in a direction that is possible to move in
      */
     private void move() {
+        // System.out.println("------///------");
         //get field of view of organism. This is a 2d array of hitboxes where we can get the organism that the hitbox represents when we access the individual hitboxes inside the array
         Hitbox[][] viewField = getViewField();
         WeightVector v = new WeightVector(0, 0, 0);
@@ -230,6 +247,7 @@ public class Animal extends Organism {
         //scan viewfield
         for (int i = 0; i < viewField.length; i++) {
             for (int j = 0; j < viewField[i].length; j++) {
+                
                 //if the hitbox detected is null, skip it
                 if (viewField[i][j] == null)
                     continue;
@@ -240,15 +258,20 @@ public class Animal extends Organism {
                 //makes sure it will only add a weight vector if it is a new organism that has not been counted yet
                 if (isNewOrganism(organismsInSight, o)) {
                     organismsInSight.add(o);
+                    
                     int x =  j - 14;      
                     int y = i - 14;    
                     double d = Math.sqrt(x*x + y*y);  
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies())) {
+                        
                         double weight = (double) (250 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
+                        // System.out.println("predator:" + o.getSpecies());
+                        // System.out.println("predator: X: " + w.getX() + " Y: " + w.getY());
+                        // System.out.println("-------------");
                         //System.err.printf("  Predator %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, final angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
                     else if (prey.contains(o.getSpecies())) {
@@ -258,7 +281,8 @@ public class Animal extends Organism {
                             w.orient(x, y, weight);
                         } else {
                             //makes organisms less motivated to follow prey if they aren't hungry
-                            int tendency = (int) (Math.random() * 3);
+                            //since this calculation will be done for each prey spotted, it will be scaled with the amount of prey spotted to prevent itself from constantly following prey
+                            int tendency = (int) (Math.random() * 3 * preySpotted());
                             if (tendency == 0){
                                 double weight = (double) (o.energy / (5 * Math.sqrt(d)));
                                 w.orient(x, y, weight);
@@ -271,7 +295,7 @@ public class Animal extends Organism {
                         //this is so that organisms will tend to stick with organisms of the same species
 
                         //this is to prevent the organisms from constantly following each other if there are no prey or predators around
-                        int tendency = (int) (Math.random() * 4);
+                        int tendency = (int) (Math.random() * 3);
                         if (tendency == 0){
                             double weight = (double) (5 / d);
                             w.orient(x, y, weight);
@@ -285,7 +309,9 @@ public class Animal extends Organism {
                 }
             }   
         }
-
+        // System.out.println("this species: " + this.getSpecies());
+        // System.out.println("movement vector: X: " + v.getX() + " Y: " + v.getY());
+        // System.out.println("-----***------");
         Grid.Direction direction = getDirection(v);
         
         //makes sure that it has a valid direction to move in, if it doesn't it will move in a random valid direction
@@ -433,15 +459,17 @@ public class Animal extends Organism {
         }
 
         // Check all grid spaces the organism would occupy after the move
-        for (int i = newX; i < newX + width; i++) {
-            for (int j = newY; j < newY + height; j++) {
-                // Check if position is in bounds
-                if (i < 0 || i >= Grid.grid.length || j < 0 || j >= Grid.grid[0].length) {
-                    return false;
-                }
-                // Check if cell is empty or occupied by this organism
-                if (Grid.grid[i][j] != null && Grid.grid[i][j].getOrganism() != this) {
-                    return false;
+        synchronized (Grid.grid) {
+            for (int i = newY; i < newY + height; i++) {
+                for (int j = newX; j < newX + width; j++) {
+                    // Check if position is in bounds
+                    if (i < 0 || i >= Grid.grid.length || j < 0 || j >= Grid.grid[0].length) {
+                        return false;
+                    }
+                    // Check if cell is empty or occupied by this organism
+                    if (Grid.grid[i][j] != null && Grid.grid[i][j].getOrganism() != this) {
+                        return false;
+                    }
                 }
             }
         }
@@ -521,7 +549,7 @@ public class Animal extends Organism {
     }
 
 
-    //todo: add reproduction mechanics
+    //TODO: add reproduction mechanics
     public static Animal reproduce(Animal parent1, Animal parent2) {
         // Create offspring of the same species as parent1
         Animal offspring = new Animal(parent1.species);
