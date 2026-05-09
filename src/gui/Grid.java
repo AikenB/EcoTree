@@ -101,8 +101,8 @@ public class Grid {
      * 
      */
     public static Animal createAnimal(Species species, int x, int y) throws IOException {
-        Animal animal = null;
-        animal = new Animal(species);
+        
+        Animal animal = new Animal(species);
         Hitbox hitbox = new Hitbox(animal, x, y);
         addOrganism(hitbox);
         

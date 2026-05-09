@@ -3,7 +3,6 @@ import gameobjects.Animal;
 import gameobjects.Organism.Species;
 import gui.Grid;
 import gui.Menu;
-import gui.Sprite;
 import java.util.ArrayList;
 
 public class Main {
@@ -45,6 +44,10 @@ public class Main {
         Animal ant5 = Grid.createAnimal(Species.ANT, 5, 25);
         Animal ant6 = Grid.createAnimal(Species.ANT, 5, 10);
         Animal spider3 = Grid.createAnimal(Species.SPIDER, 3, 10);
+        Grid.createAnimal(Species.ANT, 25, 25);
+        Grid.createAnimal(Species.ANT, 27, 10);
+        Grid.createAnimal(Species.ANT, 15, 7);
+        Grid.createAnimal(Species.SPIDER, 30, 30);
 
 
         

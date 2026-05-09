@@ -2,6 +2,9 @@ package gameobjects;
 
 import gameobjects.Organism.Species;
 import gui.Grid;
+import gui.Grid.Direction;
+
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +24,9 @@ public class Animal extends Organism {
     private double satiety;
     private double thirstCapacity;
     private double mass;
+    private double fertility;
+    //TODO: tune this variable for each species
+    private double rftr; //Required Fertility To Reproduce
     
     // private Timer moveTimer;
 
@@ -35,6 +41,7 @@ public class Animal extends Organism {
         generateMutation();
         configureSpecies(species);
         mass = width * height;
+        fertility = 0;
         // moveTimer = new Timer((int) (4000/speed), e -> move());
         // moveTimer.start();
         initializeBehavior();
@@ -48,7 +55,7 @@ public class Animal extends Organism {
             case ANT:
                 energy = 10;
                 foodCapacity = 10;
-                
+                rftr = 20.0;
                 speed = 1.0;
                 
                 thirstCapacity = 5.0;
@@ -58,6 +65,7 @@ public class Animal extends Organism {
             case SPIDER:
                 energy = 15;
                 foodCapacity = 20;
+                rftr = 25.0;
                 speed = 2;
                 thirstCapacity = 10.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
@@ -67,6 +75,7 @@ public class Animal extends Organism {
             case FROG:
                 energy = 15;
                 foodCapacity = 45;
+                rftr = 50.0;
                 width = 2;
                 height = 2;
                 speed = 2;
@@ -99,8 +108,13 @@ public class Animal extends Organism {
                         if (prey != null) {
                             
                             satiety += prey.energy;
+                            fertility += prey.energy * 0.8;
                             kill(prey);
                         }
+                    } else if (canReproduce()) {
+                        reproduce(getMate());
+                        fertility = 0;
+                        getMate().fertility = 0;
                     }
                     double speedboost = 1.0;
                     if (isHungry()) {
@@ -110,6 +124,9 @@ public class Animal extends Organism {
                     Thread.sleep(dt);
                     move();
                     satiety -= 0.1 * mass;
+                    satiety = Math.min(foodCapacity, Math.max(satiety, 0)); //clamp satiety between 0 and its max capacity
+                    fertility += 1;
+                    fertility = Math.min(fertility, rftr);
                     
                     
                 } catch (Exception e) {
@@ -548,16 +565,20 @@ public class Animal extends Organism {
         return null;
     }
 
+    public boolean isHungry() {
+        return satiety < 0.8 * foodCapacity; //TODO: tune this variable
+    }
 
+    //#region REPRODUCTION
     //TODO: add reproduction mechanics
-    public static Animal reproduce(Animal parent1, Animal parent2) {
+    public void reproduce(Animal parent) throws IOException {
         // Create offspring of the same species as parent1
-        Animal offspring = new Animal(parent1.species);
+        Animal offspring = new Animal(this.species);
         
         // Combine mutations from both parents into a gene pool
         ArrayList<Mutation> genePool = new ArrayList<>();
-        genePool.addAll(parent1.getMutations());
-        genePool.addAll(parent2.getMutations());
+        genePool.addAll(this.getMutations());
+        genePool.addAll(parent.getMutations());
         
         // Randomly inherit half of the mutations from the gene pool
         int inheritCount = genePool.size() / 2;
@@ -567,13 +588,55 @@ public class Animal extends Organism {
             offspring.addMutation(inheritedMutation);
             genePool.remove(randomIndex);  // Remove to avoid inheriting twice
         }
+
+        Hitbox hitbox = new Hitbox(offspring, this.x, this.y);
+        if (offspring.canMove()){
+            Direction d = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
+            offspring.safeMove(d);
+            Grid.addOrganism(hitbox);
+        }
         
-        return offspring;
     }
 
-    public boolean isHungry() {
-        return satiety < 0.8 * foodCapacity; //TODO: tune this variable
+    public boolean foundPotentialMate(){
+        for (int i = this.y - 2; i <= this.y + this.height + 2; i++) {
+            for (int j = this.x - 2; j <= this.x + this.width + 2; j++) {
+                if (i >= 0 && i < Grid.grid.length && j >= 0 && j < Grid.grid[0].length) {
+                    Hitbox hitbox = Grid.grid[i][j];
+                    if (hitbox != null) {
+                        Organism o = hitbox.getOrganism();
+                        if (o != null && o != this && o.getSpecies() == this.getSpecies()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
+
+    public Animal getMate(){
+        for (int i = this.y - 2; i <= this.y + this.height + 2; i++) {
+            for (int j = this.x - 2; j <= this.x + this.width + 2; j++) {
+                if (i >= 0 && i < Grid.grid.length && j >= 0 && j < Grid.grid[0].length) {
+                    Hitbox hitbox = Grid.grid[i][j];
+                    if (hitbox != null) {
+                        Organism o = hitbox.getOrganism();
+                        if (o != null && o != this && o.getSpecies() == this.getSpecies()) {
+                            return (Animal) o;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean canReproduce() {
+        return fertility >= rftr && satiety >= 0.6 * foodCapacity && foundPotentialMate();
+    }
+
+    
 
     
     
