@@ -70,7 +70,7 @@ public class Animal extends Organism {
                 speed = 2;
                 thirstCapacity = 10.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
-                prey = new ArrayList<Species>(Arrays.asList(Species.ANT));
+                prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.WORM));
                 prey.add(Species.ANT);
                 break;
             case FROG:
@@ -147,8 +147,9 @@ public class Animal extends Organism {
                     }
                     double speedboost = 1.0;
                     if (isHungry()) {
-                        speedboost = 1.5;
+                        speedboost = 1.75 - (1.25 * ((foodCapacity - satiety) / foodCapacity));
                     }
+                    
                     //movement
                     int dt = (int)(4000/(speed * speedboost));
                     Thread.sleep(dt);
@@ -159,6 +160,11 @@ public class Animal extends Organism {
                     satiety = Math.min(foodCapacity, Math.max(satiety, 0)); //clamp satiety between 0 and its max capacity
                     fertility += 1;
                     fertility = Math.min(fertility, rftr);
+                    if (satiety == 0) {
+                        //animal dies if it reaches 0 satiety
+                        kill(this);
+                        stopBehavior();
+                    }
                     
                     
                 } catch (Exception e) {

@@ -73,6 +73,10 @@ public class Main {
         Grid.createAnimal(Species.SNAKE, 40,20);
         Grid.createAnimal(Species.SNAKE, 7,30);
         Grid.createAnimal(Species.SNAKE, 12,3);
+        Grid.createAnimal(Species.ANT,24,24);
+        Grid.createAnimal(Species.ANT,24,25);
+        Grid.createAnimal(Species.FROG,30,25);
+        Grid.createAnimal(Species.FROG,29,21);
 
 
         
