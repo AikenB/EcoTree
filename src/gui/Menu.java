@@ -1,26 +1,3 @@
-// package gui;
-
-// import javax.swing.*;
-// import java.awt.*;
-// import terrain.Map;
-// import java.util.ArrayList;
-
-// import gui.Controls;
-
-// public class Menu {
-
-//     private JFrame frame;
-//     int width = 1920;
-//     int height = 1080;
-//     int introButtonWidth = 600;
-//     int introButtonHeight = 100;
-//     int instrWidth = 1600;
-//     int instrHeight = 800;
-//     private Map m;
-//     ArrayList<JComponent> components = new ArrayList<JComponent>();
-//     // the idea of the ArrayList is that references to different buttons and whatnot can be accessed...
-//     //... from the plac
-
 package gui;
 
 import javax.swing.*;
@@ -191,11 +168,17 @@ public class Menu {
     public void setupGame() {
 
         JPanel shopPanel = new JPanel();
+        JScrollPane scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        //JScrollBar bar = shopPanel.createVerticalScrollBar();
+       // shopPanel.setVerticalScrollBar(bar);
+        //bar.setVisible(true);
         shopPanel.setLayout(null);
         components.add(shopPanel);
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
-        frame2.add(shopPanel);
+        //frame2.add(shopPanel);
+        frame2.add(scroll);
         shopPanel.setBounds(0, 0, 500, 700);
         frame2.getContentPane().setComponentZOrder(shopPanel, 0);
         
