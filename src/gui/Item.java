@@ -1,5 +1,6 @@
 package gui;
 
+import gameobjects.Organism.Species;
 import javax.swing.*;
 public class Item {
     // public double price;
@@ -13,6 +14,7 @@ public class Item {
     public int x;
     public int y;
     public double priceNumber;
+    private Species species;
 
     public int quantity;
     public boolean isShop; // tells if we are in shop or inventory state
@@ -33,6 +35,14 @@ public class Item {
         this.y = 200 +  400 * (number / 2); // does the integer division to determine which row. 
         this.x = (number % 2) * 250;
         isShop = true;
+        
+        if (name.equals("Grass")){
+            this.species = Species.GRASS;
+        }
+        else if (name.equals("Apple Tree")){
+            this.species = Species.APPLE_TREE;
+        }
+       
 
 
     }
@@ -49,5 +59,9 @@ public class Item {
         //this.name.setVisible(false);
         this.price.setText("Quantity: " + this.quantity);
         this.buyButton.setText("select");
+    }
+
+    public Species getSpecies() {
+        return species;
     }
 }

@@ -3,6 +3,7 @@ package terrain;
 import gui.Menu;
 import gui.StatsScreen;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import utilities.Grid;
 import utilities.Sprite;
@@ -98,6 +99,14 @@ public class Map extends JPanel {
     {
         this.m = m;
         this.statsScreen = new StatsScreen(this);
+        
+        
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                m.recieveClick(e.getX(), e.getY());
+            }
+        });
         
         Timer timer = new Timer(100, e -> {
             repaint();

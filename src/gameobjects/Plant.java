@@ -3,6 +3,7 @@ import gui.Menu;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import utilities.Sprite;
 
 
@@ -123,6 +124,20 @@ public class Plant extends Organism {
             }
         });
     }
+
+    public void stopBehavior() {
+    if (executor != null) {
+        executor.shutdownNow();  // Interrupt the thread immediately
+        try {
+            if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+}
 
     /**
      * adds a mutation to the plant and applies its effects

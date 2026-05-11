@@ -171,6 +171,10 @@ public class Animal extends Organism {
                     }
                     
                     
+                } catch (InterruptedException e) {
+                    // Thread was interrupted, exit the loop gracefully
+                    Thread.currentThread().interrupt();
+                    break;
                 } catch (Exception e) {
                     System.err.println("Error in move() for " + species + ": " + e.getMessage());
                     e.printStackTrace();
@@ -186,8 +190,16 @@ public class Animal extends Organism {
      */
     public void stopBehavior() {
         if (executor != null) {
-            executor.shutdown();
+        executor.shutdownNow();  // Interrupt the thread immediately
+        try {
+            if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
         }
+    }
     }
     /**
      * adds a mutation to the animal and applies its effects

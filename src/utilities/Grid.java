@@ -103,10 +103,40 @@ public class Grid {
     public static Animal createAnimal(Species species, int x, int y) throws IOException {
         
         Animal animal = new Animal(species);
-        Hitbox hitbox = new Hitbox(animal, x, y);
-        addOrganism(hitbox);
+        if (Grid.canFit(animal, x, y)){
+            Hitbox hitbox = new Hitbox(animal, x, y);
+            addOrganism(hitbox);
+            return animal;
+        }
+        return null;
         
-        return animal;
+    }
+
+    public static Organism createOrganism(Species species, int x, int y) throws IOException {
+        switch (species) {
+            case FERN:
+                return createPlant(species, x, y);
+            case GRASS:
+                return createPlant(species, x, y);
+            case APPLE_TREE:
+                return createPlant(species, x, y);
+            case RABBIT:
+                return createAnimal(species, x, y);
+            case DEER:
+                return createAnimal(species, x, y);
+            case ANT:
+                return createAnimal(species, x, y);
+            case FROG:
+                return createAnimal(species, x, y);
+            case SNAKE:
+                return createAnimal(species, x, y);
+            case WORM:
+                return createAnimal(species, x, y);
+            case SPIDER:
+                return createAnimal(species, x, y);
+            default:
+                return null;
+        }
     }
 
     /**
@@ -116,10 +146,38 @@ public class Grid {
     public static Plant createPlant(Species species, int x, int y) throws IOException {
         
         Plant plant = new Plant(species);
-        Hitbox hitbox = new Hitbox(plant, x, y);
-        addOrganism(hitbox);
+        if (Grid.canFit(plant, x, y)){
+            Hitbox hitbox = new Hitbox(plant, x, y);
+            addOrganism(hitbox);
+            return plant;
+        } 
+        return null;
         
-        return plant;
+    }
+
+    public static boolean canFit(Organism organism, int x, int y) {
+        int width = organism.getWidth();
+        int height = organism.getHeight();
+
+        for (int i = y; i < y + height; i++) {
+            for (int j = x; j < x + width; j++) {
+                if (i >= grid.length || j >= grid[0].length || grid[i][j] != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean canFit(int x, int y, int width, int height) {
+        for (int i = y; i < y + height; i++) {
+            for (int j = x; j < x + width; j++) {
+                if (i >= grid.length || j >= grid[0].length || grid[i][j] != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // public static void printGrid() {
