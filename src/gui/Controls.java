@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.*;
 import terrain.Map;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Controls {
     // boolean used later on for tracking if the mouse is pressed
@@ -29,6 +31,63 @@ public class Controls {
     // ie index 0 being pressed will signify keycode 37 (left arrow) is being pressed, translating x to the left
     private static final int[] keyMovements = {20,-20,20,-20};
 
+    private ExecutorService executor;
+
+    ArrayList<Integer> movements = new ArrayList<Integer>();
+
+    public void initializeControlsB(JFrame frame)
+    {
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                            // detect arrow key presses for screen translation
+                    // 0 = left arrow
+                    // 1 = up arrow
+                    // 2 = right arrow
+                    // 3 = down arrow
+                    if (keysPressed[0] == true)
+                    {
+                        if (Map.getDeltaX()+keyMovements[0] <= 0)
+                        {
+                            Map.setDeltaX(Map.getDeltaX()+keyMovements[0]);
+                        }
+                    }
+                    if (keysPressed[1] == true)
+                    {
+                        if (Map.getDeltaX()+keyMovements[1] >= -620)
+                        {
+                            Map.setDeltaX(Map.getDeltaX()+keyMovements[1]);
+                        }
+                    }
+                    if (keysPressed[2] == true)
+                    {
+                        if (Map.getDeltaY()+keyMovements[2] <= 0)
+                        {
+                            Map.setDeltaY(Map.getDeltaY()+keyMovements[2]);
+                        }
+                    }
+                    if (keysPressed[3] == true)
+                    {
+                        if (Map.getDeltaY()+keyMovements[3] >= -620)
+                        {
+                            Map.setDeltaY(Map.getDeltaY()+keyMovements[3]);
+                        }
+                    }
+
+                    //System.out.println("y: " + Map.getDeltaY());
+                    System.out.println("x: " + Map.getDeltaX());
+                    frame.repaint();
+                    Thread.sleep(25);
+                }
+                 catch (Exception e) {
+                    System.err.println(e);
+                    e.printStackTrace();
+                    
+                }
+            } 
+        });
+    }
     public static void initializeControls(JFrame frame)
     {
         frame.addMouseListener(new MouseAdapter()
@@ -54,12 +113,6 @@ public class Controls {
             }
         });
 
-        // detect arrow key presses for screen translation
-        // 37 = left arrow
-        // 38 = up arrow
-        // 39 = right arrow
-        // 40 = down arrow
-
         frame.addKeyListener(new KeyListener() 
         {
             @Override
@@ -82,42 +135,10 @@ public class Controls {
                 {
                     keysPressed[3] = true;
                 }
-
-                // movement: checks if any keys were pressed by referencing the keysPressed array
-                ArrayList<Integer> movements = new ArrayList<Integer>();
-                // loops through each key to see if it is pressed
-                for (int i = 0; i < 4; i ++)
-                {
-                    if (keysPressed[i])
-                    {
-                        movements.add(i);
-                    }
-                }
-                
-                // if any movement keys are pressed
-                if (movements.size() > 0)
-                {
-                    // loop through pressed keys
-                    for (int i = 0; i < movements.size(); i++)
-                    {
-                        int key = movements.get(i);
-                        if (key == 0 || key == 1)
-                        {
-                            Map.setDeltaX(Map.getDeltaX()+keyMovements[key]);
-                        }
-                        if (key == 2 || key == 3)
-                        {
-                            Map.setDeltaY(Map.getDeltaY()+keyMovements[key]);
-                        }
-                    }
                     // repaint canvas with translations
-
-                    frame.repaint();
-                    frame.revalidate();
-                }
-
             }
-            public void keyReleased(KeyEvent e)
+
+                public void keyReleased(KeyEvent e)
             {
                 // update keysPressed arrays to reflect which keys are no longer pressed
                 if (e.getKeyCode() == 37)
