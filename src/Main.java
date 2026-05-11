@@ -35,6 +35,7 @@ public class Main {
             //Grid.addSprite(new gui.Sprite(x-2, y-2, 5, 5, "src/images/tree_1.png"));
         }
         
+        
         Animal ant1 = Grid.createAnimal(Species.ANT, 7, 4);
         Animal ant2 = Grid.createAnimal(Species.ANT, 20, 8);
         Animal spider1 = Grid.createAnimal(Species.SPIDER, 10, 30);
