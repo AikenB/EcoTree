@@ -33,7 +33,7 @@ public class Animal extends Organism {
 
     private ExecutorService executor;
     
-
+    
 
     public Animal(Species species) {
         super(species);
@@ -113,7 +113,7 @@ public class Animal extends Organism {
         
     }
     /**
-     * initializes the animal's behavior that will run while it's alive
+     * initializes the animal's behavior that will run while it's alive. This method is also where the animal's behavior mechanics runs
      */
     private void initializeBehavior() {
 
@@ -149,7 +149,7 @@ public class Animal extends Organism {
                         }
                     }
                     double speedboost = 1.0;
-                    if (isHungry()) {
+                    if (isHungry()) { //give the animal a speed boost if they are hungry. The hungrier they are the slower they will move however
                         speedboost = 1.75 - (0.75 * ((foodCapacity - satiety) / foodCapacity));
                     } else {
                         speedboost = 1 - (0.5 * (foodCapacity - satiety) / foodCapacity);
@@ -162,7 +162,7 @@ public class Animal extends Organism {
                     //TODO: tune the rate of hunger and fertility increase for each species
                     satiety -= 0.1 * mass;
                     satiety = Math.min(foodCapacity, Math.max(satiety, 0)); //clamp satiety between 0 and its max capacity
-                    fertility += 1;
+                    fertility += 0.5;
                     fertility = Math.min(fertility, rftr);
                     if (satiety == 0) {
                         //animal dies if it reaches 0 satiety
