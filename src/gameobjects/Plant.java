@@ -54,7 +54,7 @@ public class Plant extends Organism {
                 energy = 5;
                 width = 2;
                 height = 2;
-                photosynthesisEfficiency = 2.0;
+                photosynthesisEfficiency = 0.02;
                 maxProduce = 3;
                 productionRarity = 50;
                 SPRITE_0 = Sprite.FERN_SPRITE_0;
@@ -65,7 +65,7 @@ public class Plant extends Organism {
                 energy = 5;
                 width = 1;
                 height = 1;
-                photosynthesisEfficiency = 1.0;
+                photosynthesisEfficiency = 0.01;
                 maxProduce = 1;
                 productionRarity = 50;
                 SPRITE_0 = Sprite.GRASS_SPRITE_0;
@@ -75,7 +75,7 @@ public class Plant extends Organism {
                 energy = 20;
                 width = 3;
                 height = 3;
-                photosynthesisEfficiency = 10;
+                photosynthesisEfficiency = 0.1;
                 maxProduce = 8;
                 productionRarity = 100;
                 SPRITE_0 = Sprite.APPLE_TREE_SPRITE_0;
@@ -101,7 +101,7 @@ public class Plant extends Organism {
                     int dt = 1000;
                     // t++;
                     Thread.sleep(dt);
-                    Menu.updateMoney(photosynthesisEfficiency * 0.1);
+                    Menu.updateMoney(photosynthesisEfficiency);
                     int chance = (int) (Math.random() * (int)(productionRarity));
                     if (chance == 0 && produce < maxProduce){
                         produce++;
