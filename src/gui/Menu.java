@@ -144,6 +144,8 @@ import gameobjects.Organism.Species;
 
 import java.awt.*;
 import terrain.Map;
+import utilities.Grid;
+
 import java.util.ArrayList;
 
 import gui.Controls;
@@ -159,7 +161,9 @@ public class Menu {
     int introButtonHeight = 100;
     int instrWidth = 1600;
     int instrHeight = 800;
-    public static double money = 1000;
+    public static double money = 0;
+    static Map m;
+    private static JLabel moneyLabel = new JLabel("Money: " + String.valueOf(money));
     public ArrayList<JComponent> components = new ArrayList<JComponent>();
     // the idea of the ArrayList is that references to different buttons and whatnot can be accessed...
     //... from the place where the buttons were initialized. This enables more modular programming, ...
@@ -250,10 +254,10 @@ public class Menu {
             if (!componentsVisible.get(2)) {
                 componentsVisible.set(0, false);
                 componentsVisible.set(1,false);
-                Map m = new Map(this);
+                m = new Map(this);
                 m.setBounds(0,0,1920, 1080);
                 frame.add(m);
-                System.out.println("something");
+                //System.out.println("something");
                 frame.repaint();
                 refresh();
                 setupGame();
@@ -330,13 +334,15 @@ public class Menu {
         shopPanel.add(label);
         components.get(7).setBounds(0, 100, 500, 50);   
         
-        JLabel moneyLabel = new JLabel("Money: " + String.valueOf(money));
+        
         components.add(moneyLabel);
         componentsVisible.add(true);
         shopPanel.add(moneyLabel);
         components.get(8).setBounds(250, 0, 250, 50);
 
-        Item[] items = {new Item("Plant1", 0, 50.0), new Item("Plant2", 1, 100.0)};
+        Item[] items = {
+            new Item("Grass", 0, 50.0),
+            new Item("Apple Tree", 1, 100.0)};
 
         for (int i = 0; i < items.length; i++) {
             frame2.add(items[i].panel);
@@ -398,7 +404,12 @@ public class Menu {
 
     }
 
+    public static Map getMap() {
+        return m;
+    }
+
     public synchronized static void updateMoney(double amount) {
         money += amount;
+        moneyLabel.setText(String.valueOf(Math.floor(money)));
     }
 }

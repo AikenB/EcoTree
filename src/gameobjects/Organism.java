@@ -1,7 +1,7 @@
 package gameobjects;
 
-import gui.Grid;
 import java.util.ArrayList;
+import utilities.Grid;
 import utilities.Hitbox;
 
 public class Organism {
@@ -71,6 +71,7 @@ public class Organism {
         stormResistance *= mutation.stormResistanceBoost;
         heatToleranceBoost *= mutation.heatToleranceBoost;
         coldToleranceBoost *= mutation.coldToleranceBoost;
+        
 
 
     }

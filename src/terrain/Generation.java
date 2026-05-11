@@ -4,8 +4,8 @@ package terrain;
 import java.awt.Color;
 import java.io.IOException;
 
-import gui.Grid;
-import gui.Sprite;
+import utilities.Grid;
+import utilities.Sprite;
 import utilities.WeightVector;
 import terrain.Noise;
 

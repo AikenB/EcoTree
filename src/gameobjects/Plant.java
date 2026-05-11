@@ -1,16 +1,16 @@
 package gameobjects;
 import gui.Menu;
-import gui.Sprite;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import utilities.Sprite;
 
 
 public class Plant extends Organism {
     
     private double photosynthesisEfficiency;
     private double cost;
-    private Species species;
+    
     private int produce;
     private int maxProduce;
     private double productionRarity; //NOTE: the higher this value the harder it is to get fruit
@@ -100,7 +100,7 @@ public class Plant extends Organism {
                     int dt = 1000;
                     // t++;
                     Thread.sleep(dt);
-                    Menu.updateMoney(photosynthesisEfficiency);
+                    Menu.updateMoney(photosynthesisEfficiency * 0.1);
                     int chance = (int) (Math.random() * (int)(productionRarity));
                     if (chance == 0 && produce < maxProduce){
                         produce++;
@@ -181,6 +181,18 @@ public class Plant extends Organism {
 
     public boolean hasProduce() {
         return hasProduce;
+    }
+
+    public int getProduce() {
+        return produce;
+    }
+
+    public double getPhotosynthesisEfficiency() {
+        return photosynthesisEfficiency;
+    }
+
+    public int getMaxProduce() {
+        return maxProduce;
     }
 
     public void updateProduce(int amount) {

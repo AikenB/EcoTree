@@ -1,15 +1,14 @@
-package gui;
+package utilities;
 import gameobjects.Animal;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
-import utilities.Hitbox;
 
 public class Grid {
 
-    public static Hitbox[][] grid = new Hitbox[54][96];
+    public static Hitbox[][] grid = new Hitbox[128][128];
     public static CopyOnWriteArrayList<Hitbox> hitboxes = new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
     

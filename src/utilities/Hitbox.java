@@ -1,8 +1,6 @@
 package utilities;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
-import gui.Grid;
-import gui.Sprite;
 import java.io.IOException;
 
 public class Hitbox{

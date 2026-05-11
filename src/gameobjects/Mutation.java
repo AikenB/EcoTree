@@ -15,6 +15,7 @@ public class Mutation {
         HEAT_TOLERANCE_BOOST,
         COLD_TOLERANCE_BOOST,
         STORM_RESISTANCE_BOOST,
+        FERTILITY_BOOST,
 
         //animal mutations
         SPEED_BOOST,
@@ -26,7 +27,7 @@ public class Mutation {
 
     //yes I know I made these public so that I dont have to make a ton of getter methods
     //mutation boosts will be a multiplier from 0.75 to 1.25
-    public double healthBoost;
+    //public double healthBoost;
     public double speedBoost;
     public double foodCapacityBoost;
     public double thirstCapacityBoost;
@@ -34,6 +35,7 @@ public class Mutation {
     public double photosynthesisEfficiencyBoost;
     public double heatToleranceBoost;
     public double coldToleranceBoost;
+    public double fertilityBoost;
 
     public Type type;
 
@@ -72,6 +74,39 @@ public class Mutation {
 
     public Type getType() {
         return type;
+    }
+
+    public String toString() {
+        String name;
+        switch(type) {
+            case SPEED_BOOST:
+                name = "Speed";
+                break;
+            case FOOD_CAPACITY_BOOST:
+                name = "Food Capacity";
+                break;
+            case THIRST_CAPACITY_BOOST:
+                name = "Thirst Capacity";
+                break;
+            case STORM_RESISTANCE_BOOST:
+                name = "Storm Resistance";
+                break;
+            case PHOTOSYNTHESIS_EFFICIENCY_BOOST:
+                name = "Photosynthesis Efficiency";
+                break;
+            case HEAT_TOLERANCE_BOOST:
+                name = "Heat Tolerance";
+                break;
+            case COLD_TOLERANCE_BOOST:
+                name = "Cold Tolerance";
+                break;
+            case FERTILITY_BOOST:
+                name = "Fertility";
+                break;
+            default:
+                name = "Unknown Mutation";
+        }
+        return name + "x" + value;
     }
 
 }

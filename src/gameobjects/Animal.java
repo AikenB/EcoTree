@@ -1,12 +1,12 @@
 package gameobjects;
 
 import gameobjects.Organism.Species;
-import gui.Grid;
-import gui.Grid.Direction;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.*;
+import utilities.Grid;
+import utilities.Grid.Direction;
 import utilities.Hitbox;
 import utilities.WeightVector;
 
@@ -37,12 +37,12 @@ public class Animal extends Organism {
 
     public Animal(Species species) {
         super(species);
-        
+        fertility = 0;
         
         generateMutation();
         configureSpecies(species);
         mass = width * height;
-        fertility = 0;
+        
         // moveTimer = new Timer((int) (4000/speed), e -> move());
         // moveTimer.start();
         initializeBehavior();
@@ -74,8 +74,8 @@ public class Animal extends Organism {
                 prey.add(Species.ANT);
                 break;
             case FROG:
-                energy = 25;
-                foodCapacity = 45;
+                energy = 30;
+                foodCapacity = 55;
                 rftr = 50.0;
                 width = 2;
                 height = 2;
@@ -86,7 +86,7 @@ public class Animal extends Organism {
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER));
                 break;
             case SNAKE:
-                energy = 30;
+                energy = 40;
                 foodCapacity = 75;
                 rftr = 50.0;
                 width = 3;
@@ -141,15 +141,19 @@ public class Animal extends Organism {
                     } 
     //=====================REPRODUCTION MECHANICS===========================             
                     else if (canReproduce()) {
-                        reproduce(getMate());
-                        fertility = 0;
-                        getMate().fertility = 0;
+                        int chance = (int) (Math.random() * 3);
+                        if (chance == 0) {
+                            reproduce(getMate());
+                            fertility = 0;
+                            getMate().fertility = 0;
+                        }
                     }
                     double speedboost = 1.0;
                     if (isHungry()) {
-                        speedboost = 1.75 - (1.25 * ((foodCapacity - satiety) / foodCapacity));
+                        speedboost = 1.75 - (0.75 * ((foodCapacity - satiety) / foodCapacity));
+                    } else {
+                        speedboost = 1 - (0.5 * (foodCapacity - satiety) / foodCapacity);
                     }
-                    
                     //movement
                     int dt = (int)(4000/(speed * speedboost));
                     Thread.sleep(dt);
@@ -191,6 +195,10 @@ public class Animal extends Organism {
     @Override
     public void addMutation(Mutation mutation) {
         super.addMutation(mutation);
+        this.speed *= mutation.speedBoost;
+        this.foodCapacity *= mutation.foodCapacityBoost;
+        this.thirstCapacity *= mutation.thirstCapacityBoost;
+        this.rftr *= mutation.fertilityBoost;
         
     }
 
@@ -208,20 +216,20 @@ public class Animal extends Organism {
         the list of possible mutations */
         if (m1 == 0){
             //selects a random mutation from the list of enums for mutations
-            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 6 + 1)];
+            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 7 + 1)];
             //generates a random multiplier between 0.75 and 1.25, rounded to 2 decimal places
-            double amplifier = Math.round((0.75 + Math.random() * 0.5) * 100) / 100.0;
+            double amplifier = Math.round(0.75 + (Math.random() * 0.5)) * 100 / 100.0;
             addMutation(new Mutation(type, amplifier));
         }
 
         if (m2 == 0){
-            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 6 + 1)];
+            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 7 + 1)];
             double amplifier = Math.round((0.75 + Math.random() * 0.5) * 100) / 100.0;
             addMutation(new Mutation(type, amplifier));
         }
 
         if (m3 == 0){
-            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 6 + 1)];
+            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 7 + 1)];
             double amplifier = Math.round((0.75 + Math.random() * 0.5) * 100) / 100.0;
             addMutation(new Mutation(type, amplifier));
         }
@@ -269,12 +277,12 @@ public class Animal extends Organism {
      * returns the viewfield of the animal. The viewfield is a coordinate grid of hitboxes relative to the animal, with the animal at the center. Used for move() method.
      */
     private Hitbox[][] getViewField() {
-        Hitbox[][] viewField = new Hitbox[30][30];
+        Hitbox[][] viewField = new Hitbox[35][35];
         synchronized (Grid.grid) {
             for (int i = 0; i < viewField.length; i++) {
                 for (int j = 0; j < viewField[i].length; j++) {
-                    int x = this.x - 14 + j;
-                    int y = this.y - 14 + i;
+                    int x = this.x - 17 + j;
+                    int y = this.y - 17 + i;
                     // Grid is [height][width], so y is row index, x is column index
                     if (y >= 0 && y < Grid.grid.length && x >= 0 && x < Grid.grid[0].length) {
                         viewField[i][j] = Grid.grid[y][x];
@@ -314,14 +322,14 @@ public class Animal extends Organism {
                 if (isNewOrganism(organismsInSight, o)) {
                     organismsInSight.add(o);
                     
-                    int x =  j - 14;      
-                    int y = i - 14;    
+                    int x =  j - 17;      
+                    int y = i - 17;    
                     double d = Math.sqrt(x*x + y*y);  
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies())) {
                         
-                        double weight = (double) (25 / Math.sqrt(d));
+                        double weight = (double) (50 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
                         // System.out.println("predator:" + o.getSpecies());
@@ -635,7 +643,7 @@ public class Animal extends Organism {
     }
 
     //#region REPRODUCTION
-    //TODO: add reproduction mechanics
+    
     public void reproduce(Animal parent) throws IOException {
         // Create offspring of the same species as parent1
         Animal offspring = new Animal(this.species);
@@ -701,23 +709,58 @@ public class Animal extends Organism {
         return fertility >= rftr && satiety >= 0.6 * foodCapacity && foundPotentialMate();
     }
 
-    
 
-    
-    
+    //#region GETTERS
 
-
-    public String toString() {
-        if (species == Species.ANT) {
-            return "A";
-        } else if (species == Species.SPIDER) {
-            return "S";
-        } else if (species == Species.FROG) {
-            return "F";
-        } else {
-            return "O";
-        }
+    public double getRFTR() {
+        return  rftr;
     }
+
+    public double getFertility() {
+        return  fertility;
+    }
+
+    public double getFertilityPercentage() {
+        return (fertility / rftr) * 100;
+    }
+
+    public double getSatiety() {
+        return satiety;
+    }
+
+    public double getThirstCapacity() {
+        return thirstCapacity;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public double getFoodCapacity() {
+        return foodCapacity;
+    }
+
+    public double getSatietyPercentage() {
+        return (satiety / foodCapacity) * 100;
+    }
+
+    
+
+    
+    
+
+
+    // public String toString() {
+    //     if (species == Species.ANT) {
+    //         return "A";
+    //     } else if (species == Species.SPIDER) {
+    //         return "S";
+    //     } else if (species == Species.FROG) {
+    //         return "F";
+    //     } else {
+    //         return "O";
+    //     }
+    // }
 
 
     

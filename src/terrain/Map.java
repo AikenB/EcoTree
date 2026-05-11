@@ -1,10 +1,11 @@
 package terrain;
 
-import gui.Grid;
-import gui.Sprite;
 import gui.Menu;
+import gui.StatsScreen;
 import java.awt.*;
 import javax.swing.*;
+import utilities.Grid;
+import utilities.Sprite;
 
 public class Map extends JPanel {
 
@@ -12,6 +13,7 @@ public class Map extends JPanel {
     private static int deltaX = 0;
     private static int deltaY = 0;
     private Menu m;
+    private StatsScreen statsScreen;
     
     public static int getDeltaX()
     {
@@ -95,6 +97,8 @@ public class Map extends JPanel {
     public Map(Menu m)
     {
         this.m = m;
+        this.statsScreen = new StatsScreen(this);
+        
         Timer timer = new Timer(100, e -> {
             repaint();
             revalidate();
