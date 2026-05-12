@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Sprite {
 
-    private final int SQUARE_WIDTH = 20;
+    public static int SQUARE_WIDTH = 20;
     private int x;
     private int y;
     private int width;

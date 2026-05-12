@@ -179,13 +179,13 @@ public class Menu {
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
+        shopPanel.setPreferredSize(new Dimension(480, 900));
         components.add(shopPanel);
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
         //frame2.add(shopPanel);
         frame2.add(scroll);
-        shopPanel.setBounds(0, 0, 500, 700);
-        frame2.getContentPane().setComponentZOrder(shopPanel, 0);
+        scroll.setBounds(0, 0, 500, 700);
         
         JButton shop = new JButton("shop");
         shopPanel.add(shop);
@@ -215,12 +215,13 @@ public class Menu {
 
         Item[] items = {
             new Item("Grass", 0, 50.0),
-            new Item("Apple Tree", 1, 100.0)};
+            new Item("Apple Tree", 1, 100.0),
+            new Item("Fern", 2, 75.0)};
 
 
         for (int i = 0; i < items.length; i++) {
-            frame2.add(items[i].panel);
-            items[i].panel.setBounds(items[i].x, items[i].y, 250, 400);
+            shopPanel.add(items[i].panel);
+            items[i].panel.setBounds(items[i].x, items[i].y, 250, 280);
         }
 
         //for (int i = 0; i < items.length; i++) { // for now, this loop demands i be final for some reason
@@ -253,6 +254,20 @@ public class Menu {
                     items[1].price.setText("Quantity: " + items[1].quantity);
                     waiting = true;
                     waitingItem = items[1];
+                }
+             });
+             items[2].buyButton.addActionListener(e -> {
+                if(items[2].isShop) {
+                  if (money - (items[2]).priceNumber >= 0) {
+                      money -= items[2].priceNumber;
+                      items[2].quantity++;
+                      moneyLabel.setText(String.valueOf(money));
+                  }
+                } else if (items[2].quantity > 0) {
+                    items[2].quantity--;
+                    items[2].price.setText("Quantity: " + items[2].quantity);
+                    waiting = true;
+                    waitingItem = items[2];
                 }
              });
          //}

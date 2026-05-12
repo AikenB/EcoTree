@@ -106,6 +106,7 @@ public class Controls {
             } 
         });
     }
+    
     public static void initializeControls(JFrame frame)
     {
         frame.addMouseListener(new MouseAdapter()

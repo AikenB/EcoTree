@@ -1,6 +1,8 @@
 package gui;
 
 import gameobjects.Organism.Species;
+import java.awt.Image;
+import java.io.File;
 import javax.swing.*;
 public class Item {
     // public double price;
@@ -9,6 +11,7 @@ public class Item {
 
     public JPanel panel;
     public JLabel name;
+    public JLabel imageLabel;
     public JLabel price;
     public JButton buyButton;
     public int x;
@@ -23,16 +26,40 @@ public class Item {
         panel = new JPanel();
         panel.setLayout(null);
         this.name = new JLabel(name);
+        this.name.setHorizontalAlignment(JLabel.CENTER);
         this.price = new JLabel("Price: " + String.valueOf(price));
         this.priceNumber = price;
         this.buyButton = new JButton("buy");
         panel.add(this.name);
+        
+        this.imageLabel = new JLabel();
+        try {
+            String imagePath = null;
+            if (name.equals("Grass")) {
+                imagePath = "src/images/grass_1.png";
+            } else if (name.equals("Apple Tree")) {
+                imagePath = "src/images/apple_tree_1.png";
+            } else if (name.equals("Fern")) {
+                imagePath = "src/images/fern_1.png";
+            }
+            
+            if (imagePath != null && new File(imagePath).exists()) {
+                ImageIcon icon = new ImageIcon(imagePath);
+                Image scaledImage = icon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+                this.imageLabel.setIcon(new ImageIcon(scaledImage));
+            }
+        } catch (Exception e) {
+            this.imageLabel.setText("No image");
+        }
+        panel.add(this.imageLabel);
+        
         panel.add(this.price);
         panel.add(this.buyButton);
         this.name.setBounds(50, 0, 150, 50);
-        this.price.setBounds(50, 300, 150, 50);
-        this.buyButton.setBounds(50, 350, 150, 50);
-        this.y = 200 +  400 * (number / 2); // does the integer division to determine which row. 
+        this.imageLabel.setBounds(90, 60, 70, 70);
+        this.price.setBounds(50, 150, 150, 50);
+        this.buyButton.setBounds(50, 200, 150, 50);
+        this.y = 200 +  280 * (number / 2); // does the integer division to determine which row. 
         this.x = (number % 2) * 250;
         isShop = true;
         
@@ -41,6 +68,9 @@ public class Item {
         }
         else if (name.equals("Apple Tree")){
             this.species = Species.APPLE_TREE;
+        }
+        else if (name.equals("Fern")){
+            this.species = Species.FERN;
         }
        
 
