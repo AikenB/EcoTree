@@ -25,7 +25,9 @@ public class Controls {
     // 1 corresponds to right
     // 2 corresponds to up
     // 3 corresponds to down
-    private static boolean[] keysPressed = {false, false, false, false};
+    // 4 corresponds to the NUMBER 1
+    // 5 corresponds to the NUMBER 2
+    private static boolean[] keysPressed = {false, false, false, false, false, false};
 
     // each keyMovement corresponds to a translation
     // ie index 0 being pressed will signify keycode 37 (left arrow) is being pressed, translating x to the left
@@ -75,8 +77,24 @@ public class Controls {
                         }
                     }
 
-                    //System.out.println("y: " + Map.getDeltaY());
-                    System.out.println("x: " + Map.getDeltaX());
+
+                    // zoom in and out with keys "1" and "2"
+                    if (keysPressed[4] == true)
+                    {
+                        if (Map.getScale() < 2)
+                        {
+                            Map.setScale(Map.getScale() + 0.05);
+                        }
+                    }
+
+                    // minimum scale is 1
+                    if (keysPressed[5] == true)
+                    {
+                        if (Map.getScale()-0.05 >= 1)
+                        {
+                            Map.setScale(Map.getScale() - 0.05);
+                        }
+                    }
                     frame.repaint();
                     Thread.sleep(25);
                 }
@@ -135,10 +153,22 @@ public class Controls {
                 {
                     keysPressed[3] = true;
                 }
+
+                // update keysPressed for keys "1" and "2"
+
+                if (e.getKeyCode() == 49)
+                {
+                    keysPressed[4] = true;
+                }
+                if (e.getKeyCode() == 50)
+                {
+                    keysPressed[5] = true;
+                }
+
                     // repaint canvas with translations
             }
 
-                public void keyReleased(KeyEvent e)
+            public void keyReleased(KeyEvent e)
             {
                 // update keysPressed arrays to reflect which keys are no longer pressed
                 if (e.getKeyCode() == 37)
@@ -157,12 +187,19 @@ public class Controls {
                 {
                     keysPressed[3] = false;
                 }
+                if (e.getKeyCode() == 49)
+                {
+                    keysPressed[4] = false;
+                }
+                if (e.getKeyCode() == 50)
+                {
+                    keysPressed[5] = false;
+                }
             }
             // all 3 methods must be implemented even if they are not used, hence why keyTyped is here
             public void keyTyped(KeyEvent e)
             {
             }
-        }
-    );
+        });
     }
 }

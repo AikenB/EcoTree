@@ -125,9 +125,13 @@ public class StatsScreen extends JPopupMenu {
             @Override
             public void mouseMoved(MouseEvent e) {
                 // Convert screen coordinates to grid coordinates
-                int screenX = e.getX() - Map.getDeltaX();
-                int screenY = e.getY() - Map.getDeltaY();
-                
+
+                //NEW: rescale screen coords based on zoom
+                double scale = Map.getScale();
+
+                int screenX = (int) ((e.getX() - Map.getDeltaX()) / scale);
+                int screenY = (int) ((e.getY() - Map.getDeltaY()) / scale);
+
                 // Each grid square is 20 pixels
                 int gridX = screenX / 20;
                 int gridY = screenY / 20;
