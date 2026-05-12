@@ -16,6 +16,20 @@ public class Map extends JPanel {
     private Menu m;
     private StatsScreen statsScreen;
     
+
+
+    // numbers to track zoom in
+    private static double scale = 1;
+    
+    public static double getScale()
+    {
+        return scale;
+    }
+    public static void setScale(double s)
+    {
+        scale = s;
+    }
+
     public static int getDeltaX()
     {
         return deltaX;
@@ -54,7 +68,12 @@ public class Map extends JPanel {
         //use graphics 2d ( so we can translate things during screen scrolling)
         Graphics2D g2d = (Graphics2D) g;
 
+        // move screen
+
         g2d.translate(deltaX,deltaY);
+
+        // zoom in/out
+        g2d.scale(scale, scale);
 
         // rectangle outline color
         g2d.setColor(Color.BLACK);

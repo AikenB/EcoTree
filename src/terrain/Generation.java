@@ -66,8 +66,8 @@ public class Generation {
                 for (int j = 0; j < land[0].length; j ++)
                 {
                     // set color based on output3
-                    int r = 50;
-                    int b = 50;
+                    int r = 20;
+                    int b = 0;
                     int g = output[i][j];
                     land[i][j]= new Color(r,g,b);
 
@@ -76,7 +76,7 @@ public class Generation {
                     {
                         b = 0;
                         r = 15;
-                        g = 100;
+                        g = output[i][j]-20;
                         land[i][j] = new Color(r,g,b);
                     }
                     if (output[i][j] < 100 || output[i][j] == 140)

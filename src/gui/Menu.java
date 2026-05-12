@@ -61,6 +61,11 @@ public class Menu {
         frame.setFocusable(true);
         frame.requestFocusInWindow();
         Controls.initializeControls(frame);
+
+        // initialize movement
+        Controls controls = new Controls();
+        controls.initializeControlsB(frame);
+
         Controls.menu = this;
 
 
