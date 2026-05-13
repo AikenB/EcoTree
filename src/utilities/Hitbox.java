@@ -104,6 +104,11 @@ public class Hitbox{
             case SNAKE:
                 imagePath = Sprite.SNAKE_SPRITE;
                 break;
+
+
+            case MAINTREE:
+                imagePath = Sprite.APPLE_TREE_SPRITE_0;
+                break;    
             default:
                 imagePath = null;
             // Add more cases for other species

@@ -2,6 +2,8 @@
 import gameobjects.Animal;
 import gameobjects.Organism.Species;
 import gui.Menu;
+import tree.MainTree;
+
 import java.util.ArrayList;
 import utilities.Grid;
 
@@ -34,7 +36,9 @@ public class Main {
             Grid.createPlant(Species.GRASS, x, y);
             //Grid.addSprite(new gui.Sprite(x-2, y-2, 5, 5, "src/images/tree_1.png"));
         }
-        
+
+        // create main tree
+        Grid.createPlant(Species.MAINTREE, 64,64);
         
         Animal ant1 = Grid.createAnimal(Species.ANT, 7, 4);
         Animal ant2 = Grid.createAnimal(Species.ANT, 20, 8);

@@ -45,7 +45,9 @@ public class Organism {
         FERN,
         BERRY_BUSH,
         MOSS,
-        BUSH
+        BUSH,
+
+        MAINTREE
 
     }
     
