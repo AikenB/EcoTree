@@ -11,8 +11,9 @@ import utilities.Sprite;
 public class Map extends JPanel {
 
     // numbers to track screen translation
-    private static int deltaX = 0;
-    private static int deltaY = 0;
+    // -320/-320 centers screen on start
+    private static int deltaX = -320;
+    private static int deltaY = -320;
     private Menu m;
     private StatsScreen statsScreen;
     
@@ -72,8 +73,13 @@ public class Map extends JPanel {
         g2d.scale(scale, scale);
 
         // move screen
-        g2d.translate(deltaX,deltaY);
+        //g2d.translate(deltaX,deltaY);
 
+        // adjust in order for scale to zoom in on the center
+        double d = scale/Map.getMapHeight();
+        int adjust = (int)((Map.getMapHeight()/2)-(d/2)); 
+        g2d.translate(deltaX,deltaY);
+ 
         // rectangle outline color
         g2d.setColor(Color.BLACK);
 

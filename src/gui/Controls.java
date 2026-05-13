@@ -48,6 +48,17 @@ public class Controls {
                     // 1 = up arrow
                     // 2 = right arrow
                     // 3 = down arrow
+
+                    // adjust bounds based on scale
+
+                    //BUG: one can zoom in, move to the right as far as possible, and zoom out and the white background will show
+
+                    //double scaleFactor = Map.getScale();
+                    //int deltaXMin = (int)(scaleFactor*-620);
+                    //int deltaYMin = (int)(scaleFactor*-620);
+
+                    int deltaXMin = -620;
+                    int deltaYMin = -620;
                     if (keysPressed[0] == true)
                     {
                         if (Map.getDeltaX()+keyMovements[0] <= 0)
@@ -57,7 +68,7 @@ public class Controls {
                     }
                     if (keysPressed[1] == true)
                     {
-                        if (Map.getDeltaX()+keyMovements[1] >= -620)
+                        if (Map.getDeltaX()+keyMovements[1] >= deltaXMin)
                         {
                             Map.setDeltaX(Map.getDeltaX()+keyMovements[1]);
                         }
@@ -71,7 +82,7 @@ public class Controls {
                     }
                     if (keysPressed[3] == true)
                     {
-                        if (Map.getDeltaY()+keyMovements[3] >= -620)
+                        if (Map.getDeltaY()+keyMovements[3] >= deltaYMin)
                         {
                             Map.setDeltaY(Map.getDeltaY()+keyMovements[3]);
                         }
@@ -81,6 +92,7 @@ public class Controls {
                     // zoom in and out with keys "1" and "2"
                     if (keysPressed[4] == true)
                     {
+                        // max scale is 2
                         if (Map.getScale() < 2)
                         {
                             Map.setScale(Map.getScale() + 0.05);
