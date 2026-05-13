@@ -68,12 +68,11 @@ public class Map extends JPanel {
         //use graphics 2d ( so we can translate things during screen scrolling)
         Graphics2D g2d = (Graphics2D) g;
 
-        // move screen
-
-        g2d.translate(deltaX,deltaY);
-
         // zoom in/out
         g2d.scale(scale, scale);
+
+        // move screen
+        g2d.translate(deltaX,deltaY);
 
         // rectangle outline color
         g2d.setColor(Color.BLACK);
