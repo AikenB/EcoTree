@@ -54,6 +54,7 @@ public class Animal extends Organism {
     private void configureSpecies(Species species) {
         switch(species){
             case ANT:
+                trophicLevel = 1;
                 energy = 5;
                 foodCapacity = 10;
                 rftr = 20.0;
@@ -64,6 +65,7 @@ public class Animal extends Organism {
                 prey = new ArrayList<Species>(Arrays.asList(Species.FERN, Species.GRASS));
                 break;
             case SPIDER:
+                trophicLevel = 2;
                 energy = 15;
                 foodCapacity = 20;
                 rftr = 40.0;
@@ -74,6 +76,7 @@ public class Animal extends Organism {
                 prey.add(Species.ANT);
                 break;
             case FROG:
+                trophicLevel = 3;
                 energy = 30;
                 foodCapacity = 55;
                 rftr = 50.0;
@@ -86,6 +89,7 @@ public class Animal extends Organism {
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER));
                 break;
             case SNAKE:
+                trophicLevel = 4;
                 energy = 40;
                 foodCapacity = 75;
                 rftr = 50.0;
@@ -97,6 +101,7 @@ public class Animal extends Organism {
                 prey = new ArrayList<Species>(Arrays.asList(Species.FROG));
                 break;
             case WORM:
+                trophicLevel = 1;
                 energy = 20;
                 foodCapacity = 25;
                 rftr = 40;
@@ -110,6 +115,7 @@ public class Animal extends Organism {
 
         }
         satiety = 0.9 * foodCapacity;
+        trophicLevels.set(trophicLevel, trophicLevels.get(trophicLevel) + 1);
         
     }
     /**
@@ -121,6 +127,11 @@ public class Animal extends Organism {
          can move independently and can move at different speeds and perform different behaviors at different times*/
         executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
+            try {
+                Thread.sleep((long) (Math.random() * 1000));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             
             
             while (!Thread.currentThread().isInterrupted()) {
@@ -133,6 +144,7 @@ public class Animal extends Organism {
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
                             kill(prey);
+                            Grid.updateSpeciesList();
                         } else if (prey != null && prey.getClass() == Plant.class) {
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
@@ -167,6 +179,7 @@ public class Animal extends Organism {
                     if (satiety == 0) {
                         //animal dies if it reaches 0 satiety
                         kill(this);
+                        Grid.updateSpeciesList();
                         stopBehavior();
                     }
                     

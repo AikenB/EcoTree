@@ -11,7 +11,8 @@ public class Grid {
     public static Hitbox[][] grid = new Hitbox[128][128];
     public static CopyOnWriteArrayList<Hitbox> hitboxes = new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
-    
+    /** A list of all different species present in the grid */
+    public static CopyOnWriteArrayList<Species> speciesList = new CopyOnWriteArrayList<>();
 
     public static enum Direction{
         UP,
@@ -106,6 +107,7 @@ public class Grid {
         if (Grid.canFit(animal, x, y)){
             Hitbox hitbox = new Hitbox(animal, x, y);
             addOrganism(hitbox);
+            updateSpeciesList();
             return animal;
         }
         return null;
@@ -149,6 +151,8 @@ public class Grid {
         if (Grid.canFit(plant, x, y)){
             Hitbox hitbox = new Hitbox(plant, x, y);
             addOrganism(hitbox);
+            
+            updateSpeciesList();
             return plant;
         } 
         return null;
@@ -200,6 +204,16 @@ public class Grid {
         }
     }
 
+    public static void updateSpeciesList() {
+        // This method can be called to refresh the species list if needed
+        speciesList.clear();
+        for (Hitbox hitbox : hitboxes) {
+            Organism organism = hitbox.getOrganism();
+            if (organism != null && !speciesList.contains(organism.getSpecies())) {
+                speciesList.add(organism.getSpecies());
+            }
+        }
+    }
     
 
     

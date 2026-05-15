@@ -1,6 +1,9 @@
 package gameobjects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import utilities.Grid;
 import utilities.Hitbox;
 
@@ -12,6 +15,9 @@ public class Organism {
     public double heatToleranceBoost;
     public double coldToleranceBoost;
     protected Species species;
+    protected int trophicLevel;
+
+    public static CopyOnWriteArrayList<Integer> trophicLevels = new CopyOnWriteArrayList<Integer>(Arrays.asList(0,0,0,0,0,0));
 
     protected int energy;
 
@@ -82,7 +88,7 @@ public class Organism {
         if (organism instanceof Animal) {
             ((Animal) organism).stopBehavior();
         }
-        
+        trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
         Grid.killOrganism(organism.getHitbox());
         organism.hitbox = null; // Clear hitbox reference to help GC
     }

@@ -17,7 +17,7 @@ public class Plant extends Organism {
     private double productionRarity; //NOTE: the higher this value the harder it is to get fruit
     private boolean hasProduce;
     private ArrayList<Organism> predators;
-
+    //public static double currencyRate;
     private String SPRITE_0;
     private String SPRITE_1;
 
@@ -54,7 +54,7 @@ public class Plant extends Organism {
                 energy = 5;
                 width = 2;
                 height = 2;
-                photosynthesisEfficiency = 0.02;
+                photosynthesisEfficiency = 0.25;
                 maxProduce = 3;
                 productionRarity = 50;
                 SPRITE_0 = Sprite.FERN_SPRITE_0;
@@ -65,7 +65,7 @@ public class Plant extends Organism {
                 energy = 5;
                 width = 1;
                 height = 1;
-                photosynthesisEfficiency = 0.01;
+                photosynthesisEfficiency = 0.1;
                 maxProduce = 1;
                 productionRarity = 50;
                 SPRITE_0 = Sprite.GRASS_SPRITE_0;
@@ -75,7 +75,7 @@ public class Plant extends Organism {
                 energy = 20;
                 width = 3;
                 height = 3;
-                photosynthesisEfficiency = 0.1;
+                photosynthesisEfficiency = 2;
                 maxProduce = 8;
                 productionRarity = 100;
                 SPRITE_0 = Sprite.APPLE_TREE_SPRITE_0;
@@ -85,13 +85,14 @@ public class Plant extends Organism {
                 energy = 1000;
                 width = 10;
                 height = 10;
-                photosynthesisEfficiency = 0;
+                photosynthesisEfficiency = 1;
                 maxProduce = 0;
                 productionRarity = 0;
                 SPRITE_0 = Sprite.APPLE_TREE_SPRITE_0;
                 SPRITE_1 = Sprite.APPLE_TREE_SPRITE_1;
                 break; 
         }
+        
     }
 
     /**
@@ -225,6 +226,10 @@ public class Plant extends Organism {
         if (produce < 0) {
             produce = 0;
         }
+    }
+
+    public void setPhotosynthesisEfficiency(double photosynthesisEfficiency) {
+        this.photosynthesisEfficiency = photosynthesisEfficiency;
     }
 
 

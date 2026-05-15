@@ -1,13 +1,47 @@
 
-import gameobjects.Animal;
+import gameobjects.Organism;
 import gameobjects.Organism.Species;
+import gameobjects.Plant;
 import gui.Menu;
-import tree.MainTree;
-
 import java.util.ArrayList;
+import javax.swing.Timer;
 import utilities.Grid;
 
 public class Main {
+    
+    public static void determineCurrencyRate(){
+        int[] tLevels = new int[5];
+        for (int i = 0; i < 5; i++) {
+            tLevels[i] = Organism.trophicLevels.get(i);
+        }
+
+        if (tLevels[1] >= 5){
+            Menu.maxCurrencyRate = 10;
+        }
+        if (tLevels[1] >= 5 && tLevels[2] >= 5){
+            Menu.maxCurrencyRate = 15;
+        }
+        if (tLevels[1] >= 5 && tLevels[2] >= 5 && tLevels[3] >= 5){
+            Menu.maxCurrencyRate = 20;
+        }
+        if (tLevels[1] >= 5 && tLevels[2] >= 5 && tLevels[3] >= 5 && tLevels[4] >= 5){
+            Menu.maxCurrencyRate = 25;
+        }
+        if (tLevels[1] >= 10 
+            && tLevels[2] >= 10
+            && tLevels[3] >= 10
+            && tLevels[4] >= 10 
+            && tLevels[0] >= 5 
+            && Grid.speciesList.size() >= 7){
+
+            Menu.maxCurrencyRate = 100;
+        } else {
+            Menu.maxCurrencyRate = Menu.maxCurrencyRate * (1 + Grid.speciesList.size() * 0.05);
+        }
+        
+        
+    }
+    
     public static void main(String[] args) throws Exception {
 
         // JFrame frame = new JFrame("Menu");
@@ -33,74 +67,33 @@ public class Main {
         {
             int x = treeLocs.get(i)[1];
             int y = treeLocs.get(i)[0];
-            Grid.createPlant(Species.GRASS, x, y);
+            Plant plant = Grid.createPlant(Species.GRASS, x, y);
+            plant.setPhotosynthesisEfficiency(0);
             //Grid.addSprite(new gui.Sprite(x-2, y-2, 5, 5, "src/images/tree_1.png"));
         }
 
         // create main tree
         Grid.createPlant(Species.MAINTREE, 64,64);
         
-        Animal ant1 = Grid.createAnimal(Species.ANT, 7, 4);
-        Animal ant2 = Grid.createAnimal(Species.ANT, 20, 8);
-        Animal spider1 = Grid.createAnimal(Species.SPIDER, 10, 30);
-        Animal spider2 = Grid.createAnimal(Species.SPIDER, 15, 15);
-        Animal frog1 = Grid.createAnimal(Species.FROG, 10, 10);
-        Animal frog2 = Grid.createAnimal(Species.FROG, 10, 17);
-        Animal ant3 = Grid.createAnimal(Species.ANT, 0, 0);
-        Animal ant4 = Grid.createAnimal(Species.ANT, 20, 25);
-        Animal ant5 = Grid.createAnimal(Species.ANT, 5, 25);
-        Animal ant6 = Grid.createAnimal(Species.ANT, 5, 10);
-        Animal spider3 = Grid.createAnimal(Species.SPIDER, 3, 10);
-        Grid.createAnimal(Species.ANT, 25, 25);
-        Grid.createAnimal(Species.ANT, 27, 10);
-        Grid.createAnimal(Species.ANT, 15, 7);
-        Grid.createAnimal(Species.SPIDER, 30, 30);
-        Grid.createPlant(Species.FERN, 5,27);
-        Grid.createPlant(Species.FERN, 6,27);
-        Grid.createPlant(Species.FERN, 7,27);
-        Grid.createPlant(Species.FERN, 6,28);
-        Grid.createPlant(Species.FERN, 20,2);
-        Grid.createPlant(Species.FERN, 21,2);
-        Grid.createPlant(Species.FERN, 21,3);
-        Grid.createPlant(Species.FERN, 30,2);
-        Grid.createPlant(Species.FERN, 32,3);
-        Grid.createPlant(Species.GRASS, 30,30);
-        Grid.createPlant(Species.GRASS, 31,31);
-        Grid.createPlant(Species.GRASS, 31,20);
-        Grid.createPlant(Species.GRASS, 32,20);
-        Grid.createPlant(Species.GRASS, 32,21);
-        Grid.createPlant(Species.APPLE_TREE, 50,5);
-        Grid.createPlant(Species.APPLE_TREE, 7,45);
-        Grid.createPlant(Species.APPLE_TREE, 45,45);
-        Grid.createAnimal(Species.WORM, 35,35);
-        Grid.createAnimal(Species.WORM, 40,20);
-        Grid.createAnimal(Species.WORM, 40,22);
-        Grid.createAnimal(Species.WORM, 30,4);
-        Grid.createAnimal(Species.SNAKE, 41,20);
-        Grid.createAnimal(Species.SNAKE, 7,30);
-        //Grid.createAnimal(Species.SNAKE, 12,3);
-        Grid.createAnimal(Species.ANT,24,24);
-        Grid.createAnimal(Species.ANT,24,25);
-        Grid.createAnimal(Species.ANT,50,1);
-        Grid.createAnimal(Species.ANT,45,5);
-        Grid.createAnimal(Species.ANT,40,5);
-        Grid.createAnimal(Species.ANT,3,45);
-        Grid.createAnimal(Species.ANT,3,3);
-        Grid.createAnimal(Species.ANT,2,40);
-        Grid.createAnimal(Species.FROG,10,25);
-        Grid.createAnimal(Species.FROG,29,21);
-        Grid.createAnimal(Species.FROG, 10,35);
-        Grid.createAnimal(Species.FROG, 15,25);
+        
 
 
         
-        //Grid.printGrid();
-
-        //Grid.addSprite(new Sprite(7, 4, 5, 5, "src/images/frog.jpg"));
-
         
-        // Timer to print grid every second
         //printTimer.start();
-        
+        Timer timer = new Timer(1000, e -> {
+            
+            System.out.println(Menu.change);
+            if (Menu.change > Menu.maxCurrencyRate) {
+                Menu.atMaxRate = true;
+                Menu.money += Menu.maxCurrencyRate;
+            } else {
+                Menu.atMaxRate = false;
+            }
+            System.out.println(Menu.atMaxRate);
+            Menu.change = 0;
+            determineCurrencyRate();
+        });
+        timer.start();
     }
 }

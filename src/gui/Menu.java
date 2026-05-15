@@ -24,6 +24,9 @@ public class Menu {
     int instrWidth = 1600;
     int instrHeight = 800;
     public static double money = 0;
+    public static double maxCurrencyRate = 5;
+    public static double change = 0;
+    public static boolean atMaxRate = false;
     static Map m;
     private static JLabel moneyLabel = new JLabel("Money: " + String.valueOf(money));
     public ArrayList<JComponent> components = new ArrayList<JComponent>();
@@ -164,9 +167,17 @@ public class Menu {
             int yPos = (y - Map.getDeltaY()) / 20;
             System.out.println("(" + xPos + ", " + yPos + ")");
             try {
-                Grid.createOrganism(waitingItem.getSpecies(), xPos, yPos);
+                Organism o = Grid.createOrganism(waitingItem.getSpecies(), xPos, yPos);
+                if (o != null) {
+                    waitingItem.quantity--;
+                    waitingItem.price.setText("Quantity: " + waitingItem.quantity);
+                }
+                
             } catch (Exception e) {
                 System.out.println("thing");
+                
+                waitingItem.quantity++;
+                waitingItem.price.setText("Quantity: " + waitingItem.quantity);
             }
         }
     }
@@ -179,13 +190,19 @@ public class Menu {
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
-        shopPanel.setPreferredSize(new Dimension(480, 900));
+        shopPanel.setPreferredSize(new Dimension(480, 1500));
         components.add(shopPanel);
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
         //frame2.add(shopPanel);
         frame2.add(scroll);
         scroll.setBounds(0, 0, 500, 700);
+        
+        // Increase scroll sensitivity and make scroll bar bigger
+        JScrollBar verticalScrollBar = scroll.getVerticalScrollBar();
+        verticalScrollBar.setUnitIncrement(20); // Increase scroll sensitivity
+        verticalScrollBar.setBlockIncrement(100); // Increase block scroll sensitivity
+        verticalScrollBar.setPreferredSize(new Dimension(20, 0)); // Make scroll bar wider
         
         JButton shop = new JButton("shop");
         shopPanel.add(shop);
@@ -214,62 +231,39 @@ public class Menu {
         components.get(8).setBounds(250, 0, 250, 50);
 
         Item[] items = {
-            new Item("Grass", 0, 50.0),
-            new Item("Apple Tree", 1, 100.0),
-            new Item("Fern", 2, 75.0)};
+            new Item("Grass", 0, 10.0),
+            new Item("Fern", 1, 25.0),
+            new Item("Apple Tree", 2, 100.0),
+            new Item("Ant", 3, 15.0),
+            new Item("Spider", 4, 50.0),
+            new Item("Frog", 5, 100.0),
+            new Item("Snake", 6, 150.0)
+
+        };
 
 
         for (int i = 0; i < items.length; i++) {
+            final int index = i;
             shopPanel.add(items[i].panel);
             items[i].panel.setBounds(items[i].x, items[i].y, 250, 280);
-        }
+        
 
-        //for (int i = 0; i < items.length; i++) { // for now, this loop demands i be final for some reason
-        // we should fix it later to make it less inconvinient (though a ton of copy-pasting is possible)
-             items[0].buyButton.addActionListener(e -> {
-                if (items[0].isShop) {
-                  if (money - (items[0]).priceNumber >= 0) {
-                      money -= items[0].priceNumber;
-                      items[0].quantity++;
+            //for (int i = 0; i < items.length; i++) { // for now, this loop demands i be final for some reason
+            // we should fix it later to make it less inconvinient (though a ton of copy-pasting is possible)
+
+             items[i].buyButton.addActionListener(e -> {
+                if (items[index].isShop) {
+                  if (money - (items[index]).priceNumber >= 0) {
+                      money -= items[index].priceNumber;
+                      items[index].quantity++;
                       moneyLabel.setText(String.valueOf(money));
                   }
-                } else if (items[0].quantity > 0) {
-                    items[0].quantity--;
-                    items[0].price.setText("Quantity: " + items[0].quantity);
+                } else if (items[index].quantity > 0) {
                     waiting = true;
-                    waitingItem = items[0];
-                    // System.out.println("x: " + Controls.x);
-                    // System.out.println("Y: " + Controls.y);
+                    waitingItem = items[index];
                 }
              });
-             items[1].buyButton.addActionListener(e -> {
-                if(items[1].isShop) {
-                  if (money - (items[1]).priceNumber >= 0) {
-                      money -= items[1].priceNumber;
-                      items[1].quantity++;
-                      moneyLabel.setText(String.valueOf(money));
-                  }
-                } else if (items[1].quantity > 0) {
-                    items[1].quantity--;
-                    items[1].price.setText("Quantity: " + items[1].quantity);
-                    waiting = true;
-                    waitingItem = items[1];
-                }
-             });
-             items[2].buyButton.addActionListener(e -> {
-                if(items[2].isShop) {
-                  if (money - (items[2]).priceNumber >= 0) {
-                      money -= items[2].priceNumber;
-                      items[2].quantity++;
-                      moneyLabel.setText(String.valueOf(money));
-                  }
-                } else if (items[2].quantity > 0) {
-                    items[2].quantity--;
-                    items[2].price.setText("Quantity: " + items[2].quantity);
-                    waiting = true;
-                    waitingItem = items[2];
-                }
-             });
+        }
          //}
         
 
@@ -298,7 +292,12 @@ public class Menu {
     }
 
     public synchronized static void updateMoney(double amount) {
-        money += amount;
+        change += amount;
+        if (!atMaxRate){
+            money += amount;
+            
+        } 
         moneyLabel.setText(String.valueOf(Math.floor(money)));
+        
     }
 }

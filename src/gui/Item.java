@@ -35,12 +35,31 @@ public class Item {
         this.imageLabel = new JLabel();
         try {
             String imagePath = null;
-            if (name.equals("Grass")) {
-                imagePath = "src/images/grass_1.png";
-            } else if (name.equals("Apple Tree")) {
-                imagePath = "src/images/apple_tree_1.png";
-            } else if (name.equals("Fern")) {
-                imagePath = "src/images/fern_1.png";
+            switch (name) {
+                case "Grass":
+                    imagePath = "src/images/grass_1.png";
+                    break;
+                case "Apple Tree":
+                    imagePath = "src/images/apple_tree_1.png";
+                    break;
+                case "Fern":
+                    imagePath = "src/images/fern_1.png";
+                    break;
+                case "Ant":
+                    imagePath = "src/images/ant.png";
+                    break;
+                case "Spider":
+                    imagePath = "src/images/spider.png";
+                    break;
+                case "Frog":
+                    imagePath = "src/images/frog.png";
+                    break;
+                case "Snake":
+                    imagePath = "src/images/snake.png";
+                    break;
+                case "Worm":
+                    imagePath = "src/images/worm.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
@@ -63,14 +82,79 @@ public class Item {
         this.x = (number % 2) * 250;
         isShop = true;
         
-        if (name.equals("Grass")){
-            this.species = Species.GRASS;
-        }
-        else if (name.equals("Apple Tree")){
-            this.species = Species.APPLE_TREE;
-        }
-        else if (name.equals("Fern")){
-            this.species = Species.FERN;
+        switch (name) {
+            case "Grass":
+                this.species = Species.GRASS;
+                break;
+            case "Apple Tree":
+                this.species = Species.APPLE_TREE;
+                break;
+            case "Fern":
+                this.species = Species.FERN;
+                break;
+            case "Flower":
+                this.species = Species.FLOWER;
+                break;
+            case "Oak Tree":
+                this.species = Species.OAK_TREE;
+                break;
+            case "Pine Tree":
+                this.species = Species.PINE_TREE;
+                break;
+            case "Cactus":
+                this.species = Species.CACTUS;
+                break;
+            case "Berry Bush":
+                this.species = Species.BERRY_BUSH;
+                break;
+            case "Moss":
+                this.species = Species.MOSS;
+                break;
+            case "Bush":
+                this.species = Species.BUSH;
+                break;
+            case "Rabbit":
+                this.species = Species.RABBIT;
+                break;
+            case "Deer":
+                this.species = Species.DEER;
+                break;
+            case "Wolf":
+                this.species = Species.WOLF;
+                break;
+            case "Bear":
+                this.species = Species.BEAR;
+                break;
+            case "Cow":
+                this.species = Species.COW;
+                break;
+            case "Snake":
+                this.species = Species.SNAKE;
+                break;
+            case "Frog":
+                this.species = Species.FROG;
+                break;
+            case "Bobcat":
+                this.species = Species.BOBCAT;
+                break;
+            case "Ant":
+                this.species = Species.ANT;
+                break;
+            case "Worm":
+                this.species = Species.WORM;
+                break;
+            case "Mouse":
+                this.species = Species.MOUSE;
+                break;
+            case "Spider":
+                this.species = Species.SPIDER;
+                break;
+            case "Grasshopper":
+                this.species = Species.GRASSHOPPER;
+                break;
+            default:
+                this.species = null;
+                break;
         }
        
 

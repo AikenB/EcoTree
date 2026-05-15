@@ -29,6 +29,7 @@ public class StatsScreen extends JPopupMenu {
     JLabel satietyLabel;
     JLabel fertilityLabel;
     private Organism currentOrganism;
+    private Organism previousOrganism;
     private Timer updateTimer;
 
     
@@ -91,6 +92,7 @@ public class StatsScreen extends JPopupMenu {
             add(satietyLabel);
             add(fertilityLabel);
         }
+
         add(new JLabel("MUTATIONS:"));
         // Clear old mutation labels
         for (JLabel label : mutationLabels) {
@@ -103,7 +105,17 @@ public class StatsScreen extends JPopupMenu {
             mutationLabels.add(mutationLabel);
             add(mutationLabel);
         }
-        
+    }
+    
+    /**
+     * Checks if a new organism is being highlighted
+     */
+    private boolean isNewOrganism() {
+        if (currentOrganism != previousOrganism && currentOrganism != null) {
+            previousOrganism = currentOrganism;
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -112,11 +124,14 @@ public class StatsScreen extends JPopupMenu {
     private void initialize(Map mapPanel) {
         final StatsScreen statsScreen = this;
         currentOrganism = null;
+        previousOrganism = null;
         
-        // Timer to update stats continuously
+        // Timer to update stats only when organism changes
         updateTimer = new Timer(50, e -> {
             if (currentOrganism != null && statsScreen.isVisible()) {
-                updateStats(currentOrganism);
+                if (isNewOrganism()) {
+                    updateStats(currentOrganism);
+                }
             }
         });
         updateTimer.start();
