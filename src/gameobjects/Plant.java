@@ -81,6 +81,26 @@ public class Plant extends Organism {
                 SPRITE_0 = Sprite.APPLE_TREE_SPRITE_0;
                 SPRITE_1 = Sprite.APPLE_TREE_SPRITE_1;
                 break;
+            case BERRY_BUSH:
+                energy = 10;
+                width = 2;
+                height = 1;
+                photosynthesisEfficiency = 2;
+                maxProduce = 12;
+                productionRarity = 50;
+                SPRITE_0 = Sprite.BERRY_BUSH_SPRITE_0;
+                SPRITE_1 = Sprite.BERRY_BUSH_SPRITE_1;
+                break;
+            case MOSS:
+                energy = 3;
+                width = 1;
+                height = 1;
+                photosynthesisEfficiency = 0.05;
+                maxProduce = 1;
+                productionRarity = 25;
+                SPRITE_0 = Sprite.MOSS_SPRITE_0;
+                SPRITE_1 = Sprite.MOSS_SPRITE_1;
+                break;
             case MAINTREE:
                 energy = 1000;
                 width = 10;

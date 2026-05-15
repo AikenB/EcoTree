@@ -190,7 +190,7 @@ public class Menu {
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
-        shopPanel.setPreferredSize(new Dimension(480, 1500));
+        shopPanel.setPreferredSize(new Dimension(480, 2000));
         components.add(shopPanel);
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
@@ -232,14 +232,18 @@ public class Menu {
 
         Item[] items = {
             new Item("Grass", 0, 10.0),
-            new Item("Fern", 1, 25.0),
-            new Item("Apple Tree", 2, 100.0),
-            new Item("Ant", 3, 15.0),
-            new Item("Spider", 4, 50.0),
-            new Item("Frog", 5, 100.0),
-            new Item("Snake", 6, 150.0)
-
+            new Item("Moss", 1, 10.0),
+            new Item("Worm", 2, 20.0),
+            new Item("Fern", 3, 25.0),
+            new Item("Ant", 4, 25.0),
+            new Item("Spider", 5, 50.0),
+            new Item("Apple Tree", 6, 100.0),
+            new Item("Berry Bush", 7, 100.0),
+            new Item("Frog", 8, 100.0),
+            new Item("Mouse", 9, 100.0),
+            new Item("Snake", 10, 150.0)
         };
+        
 
 
         for (int i = 0; i < items.length; i++) {

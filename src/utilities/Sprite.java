@@ -32,6 +32,11 @@ public class Sprite {
     public static final String APPLE_TREE_SPRITE_1 = "src/images/apple_tree_1.png";
     public static final String WORM_SPRITE = "src/images/worm.png";
     public static final String SNAKE_SPRITE = "src/images/snake.png";
+    public static final String MOUSE_SPRITE = "src/images/mouse.png";
+    public static final String BERRY_BUSH_SPRITE_0 = "src/images/berry_bush_0.png";
+    public static final String BERRY_BUSH_SPRITE_1 = "src/images/berry_bush_1.png";
+    public static final String MOSS_SPRITE_0 = "src/images/moss_0.png";
+    public static final String MOSS_SPRITE_1 = "src/images/moss_1.png";
     
 
     private BufferedImage image;

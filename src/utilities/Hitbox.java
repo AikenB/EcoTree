@@ -98,11 +98,35 @@ public class Hitbox{
             case APPLE_TREE:
                 imagePath = Sprite.APPLE_TREE_SPRITE_0;
                 break;
+            case BERRY_BUSH:
+                imagePath = Sprite.BERRY_BUSH_SPRITE_0;
+                break;
+            case MOSS:
+                imagePath = Sprite.MOSS_SPRITE_0;
+                break;
+            // case FLOWER:
+            //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
+            //     break;
+            // case OAK_TREE:
+            //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
+            //     break;
+            // case PINE_TREE:
+            //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
+            //     break;
+            // case CACTUS:
+            //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
+            //     break;
+            // case BUSH:
+            //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
+            //     break;
             case WORM:
                 imagePath = Sprite.WORM_SPRITE;
                 break;
             case SNAKE:
                 imagePath = Sprite.SNAKE_SPRITE;
+                break;
+            case MOUSE:
+                imagePath = Sprite.MOUSE_SPRITE;
                 break;
 
 

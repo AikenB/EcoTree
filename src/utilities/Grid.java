@@ -122,6 +122,22 @@ public class Grid {
                 return createPlant(species, x, y);
             case APPLE_TREE:
                 return createPlant(species, x, y);
+            case MOSS:
+                return createPlant(species, x, y);
+            case FLOWER:
+                return createPlant(species, x, y);
+            case OAK_TREE:
+                return createPlant(species, x, y);
+            case PINE_TREE:
+                return createPlant(species, x, y);
+            case CACTUS:
+                return createPlant(species, x, y);
+            case BERRY_BUSH:
+                return createPlant(species, x, y);
+            case BUSH:
+                return createPlant(species, x, y);
+            case MAINTREE:
+                return createPlant(species, x, y);
             case RABBIT:
                 return createAnimal(species, x, y);
             case DEER:
@@ -135,6 +151,18 @@ public class Grid {
             case WORM:
                 return createAnimal(species, x, y);
             case SPIDER:
+                return createAnimal(species, x, y);
+            case WOLF:
+                return createAnimal(species, x, y);
+            case BEAR:
+                return createAnimal(species, x, y);
+            case BOBCAT:
+                return createAnimal(species, x, y);
+            case COW:
+                return createAnimal(species, x, y);
+            case MOUSE:
+                return createAnimal(species, x, y);
+            case GRASSHOPPER:
                 return createAnimal(species, x, y);
             default:
                 return null;

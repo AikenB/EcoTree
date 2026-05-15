@@ -60,6 +60,15 @@ public class Item {
                 case "Worm":
                     imagePath = "src/images/worm.png";
                     break;
+                case "Berry Bush":
+                    imagePath = "src/images/berry_bush_1.png";
+                    break;
+                case "Moss":
+                    imagePath = "src/images/moss_1.png";
+                    break;
+                case "Mouse":
+                    imagePath = "src/images/mouse.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {

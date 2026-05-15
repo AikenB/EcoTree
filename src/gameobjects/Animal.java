@@ -110,7 +110,19 @@ public class Animal extends Organism {
                 speed = 0.75;
                 thirstCapacity = 10.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER));
-                prey = new ArrayList<Species>(Arrays.asList(Species.APPLE_TREE));
+                prey = new ArrayList<Species>(Arrays.asList(Species.APPLE_TREE, Species.BERRY_BUSH));
+                break;
+            case MOUSE:
+                trophicLevel = 1;
+                energy = 30;
+                foodCapacity = 50;
+                rftr = 50;
+                width = 1;
+                height = 1;
+                speed = 2;
+                thirstCapacity = 15.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
+                prey = new ArrayList<Species>(Arrays.asList(Species.BERRY_BUSH, Species.FERN, Species.APPLE_TREE));
                 break;
 
         }
