@@ -123,6 +123,7 @@ public class Map extends JPanel {
     {
         this.m = m;
         this.statsScreen = new StatsScreen(this);
+        statsScreen.setFocusable(false);
         
         
         this.addMouseListener(new MouseAdapter() {
@@ -140,6 +141,15 @@ public class Map extends JPanel {
         });
 
         timer.start();
+    }
+
+    /**
+     * Controls the visibility of the stats screen
+     * @param visible true to show stats screen, false to hide it
+     */
+    public void setStatsScreenVisible(boolean visible) {
+        //statsScreen.setVisible(visible);
+        statsScreen.canOpen = visible;
     }
 }
 //BUG: holding a key and then switching directions halts movement

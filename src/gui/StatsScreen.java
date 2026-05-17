@@ -7,6 +7,7 @@ import gameobjects.Plant;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.*;
 import terrain.Map;
 import utilities.Grid;
@@ -19,6 +20,7 @@ public class StatsScreen extends JPopupMenu {
     private JLabel energyLabel;
     private ArrayList<Mutation> mutationsList;
     private ArrayList<JLabel> mutationLabels;
+    private ArrayList<JLabel> diseaseLabels;
     private ArrayList<JLabel> plantStats;
     private ArrayList<JLabel> animalStats;
     JLabel produceLabel;
@@ -31,6 +33,7 @@ public class StatsScreen extends JPopupMenu {
     private Organism currentOrganism;
     private Organism previousOrganism;
     private Timer updateTimer;
+    public boolean canOpen = true;
 
     
     
@@ -40,6 +43,7 @@ public class StatsScreen extends JPopupMenu {
         energyLabel = new JLabel("Energy: ");
         mutationsList = new ArrayList<>();
         mutationLabels = new ArrayList<>();
+        diseaseLabels = new ArrayList<>();
 
         add(speciesLabel);
         add(healthLabel);
@@ -48,7 +52,7 @@ public class StatsScreen extends JPopupMenu {
         
         
         // Adjust width and height here
-        setPreferredSize(new Dimension(150, 150));
+        setPreferredSize(new Dimension(200, 250));
         
         initialize(mapPanel);
     }
@@ -105,6 +109,23 @@ public class StatsScreen extends JPopupMenu {
             mutationLabels.add(mutationLabel);
             add(mutationLabel);
         }
+
+        add(new JLabel("DISEASES:"));
+        // Clear old disease labels
+        for (JLabel label : diseaseLabels) {
+            remove(label);
+        }
+        diseaseLabels.clear();
+        HashMap diseases = organism.getDiseases();
+        for (Object disease : diseases.keySet()) {
+            double infectionLevel = (double) diseases.get(disease);
+            if (infectionLevel >= 0.35) {
+                JLabel diseaseLabel = new JLabel(disease.toString() + ": " + String.format("%.1f", infectionLevel * 100) + "%");
+                diseaseLabels.add(diseaseLabel);
+                add(diseaseLabel);
+            
+            }
+        }
     }
     
     /**
@@ -158,7 +179,8 @@ public class StatsScreen extends JPopupMenu {
                     if (hitbox != null) {
                         currentOrganism = hitbox.getOrganism();
                         updateStats(currentOrganism);
-                        statsScreen.show(mapPanel, e.getX(), e.getY());
+                        if (canOpen)
+                            statsScreen.show(mapPanel, e.getX(), e.getY());
                     } else {
                         currentOrganism = null;
                         statsScreen.setVisible(false);

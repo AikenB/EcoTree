@@ -16,6 +16,7 @@ public class Mutation {
         COLD_TOLERANCE_BOOST,
         STORM_RESISTANCE_BOOST,
         FERTILITY_BOOST,
+        INFECTION_RESISTANCE_BOOST,
 
         //animal mutations
         SPEED_BOOST,
@@ -36,7 +37,7 @@ public class Mutation {
     public double heatToleranceBoost;
     public double coldToleranceBoost;
     public double fertilityBoost;
-
+    public double infectionResistanceBoost;
     public Type type;
 
     public double value;
@@ -46,6 +47,17 @@ public class Mutation {
     public Mutation(Type type, double value) {
         this.type = type;
         this.value = value;
+
+        // Initialize all boosts to 1.0 (no change) by default
+        this.speedBoost = 1.0;
+        this.foodCapacityBoost = 1.0;
+        this.thirstCapacityBoost = 1.0;
+        this.stormResistanceBoost = 1.0;
+        this.photosynthesisEfficiencyBoost = 1.0;
+        this.heatToleranceBoost = 1.0;
+        this.coldToleranceBoost = 1.0;
+        this.fertilityBoost = 1.0;
+        this.infectionResistanceBoost = 1.0;
 
         switch(type) {
             case SPEED_BOOST:
@@ -68,6 +80,12 @@ public class Mutation {
                 break;
             case COLD_TOLERANCE_BOOST:
                 this.coldToleranceBoost = value;
+                break;
+            case FERTILITY_BOOST:
+                this.fertilityBoost = value;
+                break;
+            case INFECTION_RESISTANCE_BOOST:
+                this.infectionResistanceBoost = value;
                 break;
         }
     }
@@ -102,6 +120,9 @@ public class Mutation {
                 break;
             case FERTILITY_BOOST:
                 name = "Fertility";
+                break;
+            case INFECTION_RESISTANCE_BOOST:
+                name = "Infection Resistance";
                 break;
             default:
                 name = "Unknown Mutation";

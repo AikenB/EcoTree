@@ -2,6 +2,7 @@ package gameobjects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import utilities.Grid;
@@ -11,11 +12,15 @@ public class Organism {
     protected ArrayList<Mutation> mutations;
 
     protected double health;
+    protected double infectionResistance;
     protected double stormResistance;
     public double heatToleranceBoost;
     public double coldToleranceBoost;
     protected Species species;
     protected int trophicLevel;
+    protected HashMap<Outbreak, Double> diseases;
+    protected double maxHealth;
+
 
     public static CopyOnWriteArrayList<Integer> trophicLevels = new CopyOnWriteArrayList<Integer>(Arrays.asList(0,0,0,0,0,0));
 
@@ -66,11 +71,14 @@ public class Organism {
 
         this.species = species;
         this.mutations = new ArrayList<>();
+        this.diseases = new HashMap<>();
         this.health = 100 + (int) (Math.random() * 40 -20); // Base health between 100 and 150
+        this.infectionResistance = 1.0; // Base infection resistance
         this.stormResistance = 1.0; // Base storm resistance
         this.heatToleranceBoost = 1.0; // Base heat tolerance
         this.coldToleranceBoost = 1.0; // Base cold tolerance
         this.energy = 10;
+        this.infectionResistance = 1.0; // Base infection resistance
 
     }
 
@@ -79,19 +87,13 @@ public class Organism {
         stormResistance *= mutation.stormResistanceBoost;
         heatToleranceBoost *= mutation.heatToleranceBoost;
         coldToleranceBoost *= mutation.coldToleranceBoost;
+        infectionResistance *= mutation.infectionResistanceBoost;
         
 
 
     }
 
-    public static void kill(Organism organism) {
-        if (organism instanceof Animal) {
-            ((Animal) organism).stopBehavior();
-        }
-        trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
-        Grid.killOrganism(organism.getHitbox());
-        organism.hitbox = null; // Clear hitbox reference to help GC
-    }
+    
 
     public ArrayList<Mutation> getMutations() {
         return mutations;
@@ -118,6 +120,10 @@ public class Organism {
 
     public int getHeight() {
         return height;
+    }
+
+    public double getInfectionResistance() {
+        return infectionResistance;
     }
 
     public Hitbox getHitbox() {
@@ -159,6 +165,68 @@ public class Organism {
         this.y = y;
     }
 
+
+
+    public HashMap<Outbreak, Double> getDiseases() {
+        return diseases;
+    }
+
+    public void addInfection(Outbreak disease, double severity) {
+        if (isInfectedWith(disease)) {
+            diseases.replace(disease, diseases.get(disease) + severity);
+            if (diseases.get(disease) > 1) {
+                    diseases.replace(disease, 1.0); 
+            }
+        } else {
+            diseases.put(disease, severity);
+             if (diseases.get(disease) > 1) {
+                    diseases.replace(disease, 1.0); 
+            }
+        }
+    }
+
+    public boolean isInfectedWith(Outbreak disease) {
+        Outbreak.type type = disease.getDiseaseType();
+        for (Outbreak d : diseases.keySet()) {
+            if (d.getDiseaseType() == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void applyDiseaseEffect(Outbreak disease) {
+        if (isInfectedWith(disease)) {
+            double severity = diseases.get(disease);
+            double magnitude = disease.getLethality() * severity * (1/infectionResistance); 
+            health -= magnitude;
+    }
+    }
+
+    public static void kill(Organism organism) {
+        if (organism instanceof Animal) {
+            ((Animal) organism).stopBehavior();
+        }
+        if (organism instanceof Plant) {
+            ((Plant) organism).stopBehavior();
+        }
+        //TODO: FOR TESTING, MUST DELETE WHEN FINISHED
+        if (organism.species == Species.ANT) {
+            //Outbreak.antcount--;
+            Outbreak.andDeaths++;
+        }
+        if (organism.species == Species.MOUSE) {
+            //Outbreak.mousecount--;
+            Outbreak.mouseDeaths++;
+        }
+        if (organism.species == Species.WORM) {
+            //Outbreak.wormcount--;
+            Outbreak.wormDeaths++;
+        }
+        trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
+        Grid.killOrganism(organism.getHitbox());
+        organism.hitbox = null; // Clear hitbox reference to help GC
+    }
     
     
 }

@@ -39,10 +39,11 @@ public class Animal extends Organism {
         super(species);
         fertility = 0;
         
-        generateMutation();
-        configureSpecies(species);
-        mass = width * height;
         
+        configureSpecies(species);
+        generateMutation();
+        mass = width * height;
+        maxHealth = health;
         // moveTimer = new Timer((int) (4000/speed), e -> move());
         // moveTimer.start();
         initializeBehavior();
@@ -127,6 +128,7 @@ public class Animal extends Organism {
 
         }
         satiety = 0.9 * foodCapacity;
+        
         trophicLevels.set(trophicLevel, trophicLevels.get(trophicLevel) + 1);
         
     }
@@ -193,6 +195,11 @@ public class Animal extends Organism {
                         kill(this);
                         Grid.updateSpeciesList();
                         stopBehavior();
+                    } else if (health <= 0) {
+                        //animal dies if it reaches 0 health
+                        kill(this);
+                        Grid.updateSpeciesList();
+                        stopBehavior();
                     }
                     
                     
@@ -235,7 +242,7 @@ public class Animal extends Organism {
         this.speed *= mutation.speedBoost;
         this.foodCapacity *= mutation.foodCapacityBoost;
         this.thirstCapacity *= mutation.thirstCapacityBoost;
-        this.rftr *= mutation.fertilityBoost;
+        this.rftr *= (2 -  mutation.fertilityBoost);
         
     }
 
@@ -245,29 +252,29 @@ public class Animal extends Organism {
      */
     public void generateMutation(){
         
-        int m1 = (int) (Math.random() * 15);
-        int m2 = (int) (Math.random() * 15);
-        int m3 = (int) (Math.random() * 15);
+        int m1 = (int) (Math.random() * 5);
+        int m2 = (int) (Math.random() * 5);
+        int m3 = (int) (Math.random() * 5);
 
         /* generate random mutations here. The mutation will be randomly selected from
         the list of possible mutations */
         if (m1 == 0){
             //selects a random mutation from the list of enums for mutations
-            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 7 + 1)];
+            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 8 + 1)];
             //generates a random multiplier between 0.75 and 1.25, rounded to 2 decimal places
-            double amplifier = Math.round(0.75 + (Math.random() * 0.5)) * 100 / 100.0;
+            double amplifier = Math.round(0.8 + (Math.random() * 0.55)) * 100 / 100.0;
             addMutation(new Mutation(type, amplifier));
         }
 
         if (m2 == 0){
-            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 7 + 1)];
-            double amplifier = Math.round((0.75 + Math.random() * 0.5) * 100) / 100.0;
+            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 8 + 1)];
+            double amplifier = Math.round((0.8 + Math.random() * 0.55) * 100) / 100.0;
             addMutation(new Mutation(type, amplifier));
         }
 
         if (m3 == 0){
-            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 7 + 1)];
-            double amplifier = Math.round((0.75 + Math.random() * 0.5) * 100) / 100.0;
+            Mutation.Type type = Mutation.Type.values()[(int) (Math.random() * 8 + 1)];
+            double amplifier = Math.round((0.8 + Math.random() * 0.55) * 100) / 100.0;
             addMutation(new Mutation(type, amplifier));
         }
 
@@ -743,7 +750,10 @@ public class Animal extends Organism {
     }
 
     public boolean canReproduce() {
-        return fertility >= rftr && satiety >= 0.6 * foodCapacity && foundPotentialMate();
+        return fertility >= rftr 
+        && satiety >= 0.6 * foodCapacity 
+        && health >= 0.5 * maxHealth
+        && foundPotentialMate();
     }
 
 

@@ -179,8 +179,10 @@ public class Grid {
         if (Grid.canFit(plant, x, y)){
             Hitbox hitbox = new Hitbox(plant, x, y);
             addOrganism(hitbox);
+            if (species != Species.MAINTREE){
+                updateSpeciesList();
+            }
             
-            updateSpeciesList();
             return plant;
         } 
         return null;

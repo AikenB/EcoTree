@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import utilities.Grid;
 import utilities.Sprite;
 
 
@@ -112,6 +113,8 @@ public class Plant extends Organism {
                 SPRITE_1 = Sprite.APPLE_TREE_SPRITE_1;
                 break; 
         }
+        trophicLevel = 0;
+        trophicLevels.set(trophicLevel, trophicLevels.get(trophicLevel) + 1);
         
     }
 
@@ -144,6 +147,11 @@ public class Plant extends Organism {
                     } else {
                         hasProduce = false;
                         Sprite.updateSprite(this, SPRITE_0);
+                    }
+                    if (health <= 0){
+                        kill(this);
+                        Grid.updateSpeciesList();
+                        stopBehavior();
                     }
 
                     

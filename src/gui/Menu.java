@@ -23,10 +23,15 @@ public class Menu {
     int introButtonHeight = 100;
     int instrWidth = 1600;
     int instrHeight = 800;
-    public static double money = 0;
+
+    //for currency
+    public static double money = 10000;//TODO: change back to 10 after testing
     public static double maxCurrencyRate = 5;
     public static double change = 0;
     public static boolean atMaxRate = false;
+    
+
+
     static Map m;
     private static JLabel moneyLabel = new JLabel("Money: " + String.valueOf(money));
     public ArrayList<JComponent> components = new ArrayList<JComponent>();
@@ -56,6 +61,8 @@ public class Menu {
         frame2 = new JFrame("Shop");
         frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame2.setSize(500, 700);
+        frame2.setFocusable(false);
+        frame2.setFocusableWindowState(false);
         frame2.setVisible(true);
         frame2.setLayout(null);
 
@@ -163,6 +170,7 @@ public class Menu {
     public void recieveClick (int x, int y) {
         if (waiting) {
             waiting = false;
+            m.setStatsScreenVisible(true);  // Show stats screen when placement completes
             int xPos = (x - Map.getDeltaX()) / 20;
             int yPos = (y - Map.getDeltaY()) / 20;
             System.out.println("(" + xPos + ", " + yPos + ")");
@@ -265,6 +273,7 @@ public class Menu {
                 } else if (items[index].quantity > 0) {
                     waiting = true;
                     waitingItem = items[index];
+                    m.setStatsScreenVisible(false);  // Hide stats screen when item is selected for placement
                 }
              });
         }

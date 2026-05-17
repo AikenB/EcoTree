@@ -49,16 +49,15 @@ public class Controls {
                     // 2 = right arrow
                     // 3 = down arrow
 
-                    // adjust bounds based on scale
+                    // Calculate bounds based on actual map size and viewport size
+                    int mapPixelWidth = Map.getMapWidth() * 20;
+                    int mapPixelHeight = Map.getMapHeight() * 20;
+                    int viewportWidth = 1920;
+                    int viewportHeight = 1080;
+                    
+                    int deltaXMin = -(mapPixelWidth - viewportWidth);
+                    int deltaYMin = -(mapPixelHeight - viewportHeight);
 
-                    //BUG: one can zoom in, move to the right as far as possible, and zoom out and the white background will show
-
-                    //double scaleFactor = Map.getScale();
-                    //int deltaXMin = (int)(scaleFactor*-620);
-                    //int deltaYMin = (int)(scaleFactor*-620);
-
-                    int deltaXMin = -620;
-                    int deltaYMin = -620;
                     if (keysPressed[0] == true)
                     {
                         if (Map.getDeltaX()+keyMovements[0] <= 0)
