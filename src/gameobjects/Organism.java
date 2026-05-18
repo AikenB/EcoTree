@@ -46,6 +46,8 @@ public class Organism {
         MOUSE,
         SPIDER,
         GRASSHOPPER,
+        SCORPION,
+        BEETLE,
 
         GRASS,
         FLOWER,
@@ -210,19 +212,7 @@ public class Organism {
         if (organism instanceof Plant) {
             ((Plant) organism).stopBehavior();
         }
-        //TODO: FOR TESTING, MUST DELETE WHEN FINISHED
-        if (organism.species == Species.ANT) {
-            //Outbreak.antcount--;
-            Outbreak.andDeaths++;
-        }
-        if (organism.species == Species.MOUSE) {
-            //Outbreak.mousecount--;
-            Outbreak.mouseDeaths++;
-        }
-        if (organism.species == Species.WORM) {
-            //Outbreak.wormcount--;
-            Outbreak.wormDeaths++;
-        }
+        
         trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
         Grid.killOrganism(organism.getHitbox());
         organism.hitbox = null; // Clear hitbox reference to help GC

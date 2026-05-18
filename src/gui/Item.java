@@ -69,6 +69,14 @@ public class Item {
                 case "Mouse":
                     imagePath = "src/images/mouse.png";
                     break;
+                case "Grasshopper":
+                    imagePath = "src/images/grasshopper.png";
+                    break;
+                case "Scorpion":
+                    imagePath = "src/images/scorpion.png";
+                    break;
+                case "Beetle":
+                    imagePath = "src/images/beetle.png";
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
@@ -160,6 +168,12 @@ public class Item {
                 break;
             case "Grasshopper":
                 this.species = Species.GRASSHOPPER;
+                break;
+            case "Scorpion":
+                this.species = Species.SCORPION;
+                break;
+            case "Beetle":
+                this.species = Species.BEETLE;
                 break;
             default:
                 this.species = null;

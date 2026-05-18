@@ -37,6 +37,9 @@ public class Sprite {
     public static final String BERRY_BUSH_SPRITE_1 = "src/images/berry_bush_1.png";
     public static final String MOSS_SPRITE_0 = "src/images/moss_0.png";
     public static final String MOSS_SPRITE_1 = "src/images/moss_1.png";
+    public static final String GRASSHOPPER_SPRITE = "src/images/grasshopper.png";
+    public static final String SCORPION_SPRITE = "src/images/scorpion.png";
+    public static final String BEETLE_SPRITE = "src/images/beetle.png";
     
 
     private BufferedImage image;

@@ -6,6 +6,7 @@ import gameobjects.Organism.Species;
 
 import java.awt.*;
 import terrain.Map;
+import utilities.Game;
 import utilities.Grid;
 
 import java.util.ArrayList;
@@ -24,16 +25,12 @@ public class Menu {
     int instrWidth = 1600;
     int instrHeight = 800;
 
-    //for currency
-    public static double money = 10000;//TODO: change back to 10 after testing
-    public static double maxCurrencyRate = 5;
-    public static double change = 0;
-    public static boolean atMaxRate = false;
+    
     
 
 
     static Map m;
-    private static JLabel moneyLabel = new JLabel("Money: " + String.valueOf(money));
+    private static JLabel moneyLabel = new JLabel("Money: " + String.valueOf(Game.money));
     public ArrayList<JComponent> components = new ArrayList<JComponent>();
     // the idea of the ArrayList is that references to different buttons and whatnot can be accessed...
     //... from the place where the buttons were initialized. This enables more modular programming, ...
@@ -198,7 +195,7 @@ public class Menu {
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
-        shopPanel.setPreferredSize(new Dimension(480, 2000));
+        shopPanel.setPreferredSize(new Dimension(480, 2500));
         components.add(shopPanel);
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
@@ -245,11 +242,14 @@ public class Menu {
             new Item("Fern", 3, 25.0),
             new Item("Ant", 4, 25.0),
             new Item("Spider", 5, 50.0),
-            new Item("Apple Tree", 6, 100.0),
-            new Item("Berry Bush", 7, 100.0),
-            new Item("Frog", 8, 100.0),
-            new Item("Mouse", 9, 100.0),
-            new Item("Snake", 10, 150.0)
+            new Item("Grasshopper", 6, 75.0),
+            new Item("Apple Tree", 7, 100.0),
+            new Item("Mouse", 8, 100.0),
+            new Item("Berry Bush", 9, 125.0),
+            new Item("Scorpion", 10, 125.0),
+            new Item("Beetle", 11, 150.0),
+            new Item("Frog", 12, 150.0),
+            new Item("Snake", 13, 200.0)
         };
         
 
@@ -265,10 +265,10 @@ public class Menu {
 
              items[i].buyButton.addActionListener(e -> {
                 if (items[index].isShop) {
-                  if (money - (items[index]).priceNumber >= 0) {
-                      money -= items[index].priceNumber;
+                  if (Game.money - (items[index]).priceNumber >= 0) {
+                      Game.money -= items[index].priceNumber;
                       items[index].quantity++;
-                      moneyLabel.setText(String.valueOf(money));
+                      moneyLabel.setText(String.valueOf(Game.money));
                   }
                 } else if (items[index].quantity > 0) {
                     waiting = true;
@@ -305,12 +305,12 @@ public class Menu {
     }
 
     public synchronized static void updateMoney(double amount) {
-        change += amount;
-        if (!atMaxRate){
-            money += amount;
+        Game.change += amount;
+        if (!Game.atMaxRate){
+            Game.money += amount;
             
         } 
-        moneyLabel.setText(String.valueOf(Math.floor(money)));
+        moneyLabel.setText(String.valueOf(Math.floor(Game.money)));
         
     }
 }

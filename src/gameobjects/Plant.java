@@ -233,6 +233,13 @@ public class Plant extends Organism {
         return cost;
     }
 
+    public double getHealth(){
+        return health;
+    }
+    public void updateHealth(double amount){
+        health += amount;
+    }
+
     public boolean hasProduce() {
         return hasProduce;
     }

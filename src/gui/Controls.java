@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import terrain.Map;
+import utilities.Game;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +28,8 @@ public class Controls {
     // 3 corresponds to down
     // 4 corresponds to the NUMBER 1
     // 5 corresponds to the NUMBER 2
-    private static boolean[] keysPressed = {false, false, false, false, false, false};
+    // 6 corresponds to the letter O (for outbreak)
+    private static boolean[] keysPressed = {false, false, false, false, false, false, false};
 
     // each keyMovement corresponds to a translation
     // ie index 0 being pressed will signify keycode 37 (left arrow) is being pressed, translating x to the left
@@ -52,8 +54,8 @@ public class Controls {
                     // Calculate bounds based on actual map size and viewport size
                     int mapPixelWidth = Map.getMapWidth() * 20;
                     int mapPixelHeight = Map.getMapHeight() * 20;
-                    int viewportWidth = 1920;
-                    int viewportHeight = 1080;
+                    int viewportWidth = 1080;
+                    int viewportHeight = 540;
                     
                     int deltaXMin = -(mapPixelWidth - viewportWidth);
                     int deltaYMin = -(mapPixelHeight - viewportHeight);
@@ -105,6 +107,13 @@ public class Controls {
                         {
                             Map.setScale(Map.getScale() - 0.05);
                         }
+                    }
+
+                    // create outbreak with O key
+                    if (keysPressed[6] == true)
+                    {
+                        Game.createOutbreak();
+                        keysPressed[6] = false;
                     }
                     frame.repaint();
                     Thread.sleep(25);
@@ -177,6 +186,12 @@ public class Controls {
                     keysPressed[5] = true;
                 }
 
+                // create outbreak with O key
+                if (e.getKeyCode() == 79)
+                {
+                    keysPressed[6] = true;
+                }
+
                     // repaint canvas with translations
             }
 
@@ -206,6 +221,10 @@ public class Controls {
                 if (e.getKeyCode() == 50)
                 {
                     keysPressed[5] = false;
+                }
+                if (e.getKeyCode() == 79)
+                {
+                    keysPressed[6] = false;
                 }
             }
             // all 3 methods must be implemented even if they are not used, hence why keyTyped is here

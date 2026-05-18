@@ -104,6 +104,12 @@ public class Hitbox{
             case MOSS:
                 imagePath = Sprite.MOSS_SPRITE_0;
                 break;
+            case GRASSHOPPER:
+                imagePath = Sprite.GRASSHOPPER_SPRITE;
+                break;
+            case SCORPION:
+                imagePath = Sprite.SCORPION_SPRITE;
+                break;
             // case FLOWER:
             //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
             //     break;
@@ -127,6 +133,9 @@ public class Hitbox{
                 break;
             case MOUSE:
                 imagePath = Sprite.MOUSE_SPRITE;
+                break;
+            case BEETLE:
+                imagePath = Sprite.BEETLE_SPRITE;
                 break;
 
 

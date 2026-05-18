@@ -72,8 +72,8 @@ public class Animal extends Organism {
                 rftr = 40.0;
                 speed = 2;
                 thirstCapacity = 10.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
-                prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.WORM));
+                predators = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.SCORPION));
+                prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.WORM, Species.GRASSHOPPER));
                 prey.add(Species.ANT);
                 break;
             case FROG:
@@ -87,7 +87,7 @@ public class Animal extends Organism {
                 
                 thirstCapacity = 20.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
-                prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER));
+                prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER, Species.BEETLE));
                 break;
             case SNAKE:
                 trophicLevel = 4;
@@ -99,7 +99,7 @@ public class Animal extends Organism {
                 speed = 2.5;
                 thirstCapacity = 25.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT));
-                prey = new ArrayList<Species>(Arrays.asList(Species.FROG));
+                prey = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.MOUSE, Species.SCORPION));
                 break;
             case WORM:
                 trophicLevel = 1;
@@ -110,7 +110,7 @@ public class Animal extends Organism {
                 height = 1;
                 speed = 0.75;
                 thirstCapacity = 10.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER));
+                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER, Species.SCORPION, Species.BEETLE));
                 prey = new ArrayList<Species>(Arrays.asList(Species.APPLE_TREE, Species.BERRY_BUSH));
                 break;
             case MOUSE:
@@ -123,8 +123,57 @@ public class Animal extends Organism {
                 speed = 2;
                 thirstCapacity = 15.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
-                prey = new ArrayList<Species>(Arrays.asList(Species.BERRY_BUSH, Species.FERN, Species.APPLE_TREE));
+                prey = new ArrayList<Species>(Arrays.asList(Species.BERRY_BUSH, Species.FERN, Species.APPLE_TREE, Species.SCORPION));
                 break;
+            case GRASSHOPPER:
+                trophicLevel = 1;
+                energy = 15;
+                foodCapacity = 25;
+                rftr = 20;
+                width = 1;
+                height = 1;
+                speed = 2;
+                thirstCapacity = 5.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.SPIDER, Species.SCORPION, Species.BEETLE));
+                prey = new ArrayList<Species>(Arrays.asList(Species.FERN, Species.GRASS,Species.APPLE_TREE,Species.BERRY_BUSH));
+                break;
+            case SCORPION:
+                trophicLevel = 3;
+                energy = 20;
+                foodCapacity = 30;
+                mass = 2;
+                rftr = 50;
+                width = 1;
+                height = 1;
+                speed = 2.0;
+                thirstCapacity = 10.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.MOUSE, Species.SNAKE, Species.BEETLE));
+                prey = new ArrayList<Species>(Arrays.asList(Species.SPIDER, Species.GRASSHOPPER,Species.WORM));
+                break;
+            case BEETLE:
+                trophicLevel = 3;
+                energy = 20;
+                mass = 2;
+                foodCapacity = 30;
+                rftr = 40;
+                width = 1;
+                height = 1;
+                speed = 2.5;
+                thirstCapacity = 10.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
+                prey = new ArrayList<Species>(Arrays.asList(Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM));
+                break;
+             default:
+                 trophicLevel = 1;
+                 energy = 20;
+                 foodCapacity = 30;
+                 rftr = 40;
+                 width = 1;
+                 height = 1;
+                 speed = 1.5;
+                 thirstCapacity = 10.0;
+                 predators = new ArrayList<Species>();
+                 prey = new ArrayList<Species>();
 
         }
         satiety = 0.9 * foodCapacity;
@@ -163,6 +212,11 @@ public class Animal extends Organism {
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
                             ((Plant) prey).updateProduce(-1);
+                            if (prey.species == Species.GRASS){
+                                ((Plant) prey).updateHealth(-(Math.random()*10 + 30));
+                            } else if (prey.species == Species.FERN){
+                                ((Plant) prey).updateHealth(-(Math.random()*10 + 15));
+                            }
                         }
                     } 
     //=====================REPRODUCTION MECHANICS===========================             
@@ -371,11 +425,12 @@ public class Animal extends Organism {
                     double d = Math.sqrt(x*x + y*y);  
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
-                    if (predators.contains(o.getSpecies())) {
+                    if (predators.contains(o.getSpecies()) && d < 10.0) { //d<10 to prevent animals from running away when predator isnt that close
                         
                         double weight = (double) (50 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
+                        
                         // System.out.println("predator:" + o.getSpecies());
                         // System.out.println("predator: X: " + w.getX() + " Y: " + w.getY());
                         // System.out.println("-------------");
@@ -419,7 +474,7 @@ public class Animal extends Organism {
                         //this is so that organisms will tend to stick with organisms of the same species
 
                         //this is to prevent the organisms from constantly following each other if there are no prey or predators around
-                        int tendency = (int) (Math.random() * 3);
+                        int tendency = (int) (Math.random() * 3) * ((preySpotted()+ 1) / 2);
                         if (tendency == 0){
                             double weight = (double) (5 / d);
                             w.orient(x, y, weight);
@@ -750,10 +805,16 @@ public class Animal extends Organism {
     }
 
     public boolean canReproduce() {
-        return fertility >= rftr 
-        && satiety >= 0.6 * foodCapacity 
-        && health >= 0.5 * maxHealth
-        && foundPotentialMate();
+
+        if (diseases.keySet().contains(Outbreak.type.FUNGUS_INFECTION)) {
+            return false;
+        } else {
+            return fertility >= rftr 
+            && satiety >= 0.8 * foodCapacity 
+            && health >= 0.5 * maxHealth
+            && foundPotentialMate();
+        }
+        
     }
 
 

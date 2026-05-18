@@ -164,6 +164,10 @@ public class Grid {
                 return createAnimal(species, x, y);
             case GRASSHOPPER:
                 return createAnimal(species, x, y);
+            case SCORPION:
+                return createAnimal(species, x, y);
+            case BEETLE:
+                return createAnimal(species, x, y);
             default:
                 return null;
         }

@@ -1,6 +1,5 @@
 
 import gameobjects.Organism.Species;
-import gameobjects.Outbreak;
 import gameobjects.Plant;
 import gui.Menu;
 import java.util.ArrayList;
@@ -45,73 +44,63 @@ public class Main {
 
         // create main tree
         Grid.createPlant(Species.MAINTREE, 64,64);
-      
+        Grid.createPlant(Species.GRASS,Grid.grid[0].length,Grid.grid.length);
 
-        //Organism mouse = Grid.createOrganism(Species.MOUSE, 10, 10);
-        //new Outbreak(mouse, Outbreak.type.CORONAVIRUS, new ArrayList<>(List.of(Species.MOUSE,Species.FERN)));
-        for (int i = 10; i < 23; i++){
-            for (int j = 10; j < 23; j++){
-                if (Math.random() < 0.5){
-                    Grid.createOrganism(Species.ANT, j, i);
-                    Outbreak.mousecount++;
-                }// } else if (Math.random() > 0.8){
-                //     Grid.createOrganism(Species.FERN, j, i);
-                // }
-            }
-        }
+        
+        // for (int i = 10; i < 23; i++){
+        //     for (int j = 10; j < 23; j++){
+        //         if (Math.random() < 0.5){
+        //             Grid.createOrganism(Species.ANT, j, i);
+        //             Outbreak.mousecount++;
+        //         }
+        //     }
+        // }
         
 
 
-        //Organism mouse2 = Grid.createOrganism(Species.MOUSE, 40, 35);
-        //new Outbreak(mouse2, Outbreak.type.FLU, new ArrayList<>(List.of(Species.MOUSE,Species.FERN)));
-        for (int i = 35; i < 48; i++){
-            for (int j = 40; j < 53; j++){
-                if (Math.random() < 0.5){
-                    Grid.createOrganism(Species.ANT, j, i);
-                    Outbreak.antcount++;
-                }// } else if (Math.random() > 0.8){
-                //     Grid.createOrganism(Species.FERN, j, i);
-                // }
-            }
-        }
-
-        //Organism mouse3 = Grid.createOrganism(Species.MOUSE, 40, 10);
-        //new Outbreak(mouse3, Outbreak.type.BACTERIAL_INFECTION, new ArrayList<>(List.of(Species.MOUSE, Species.FERN)));
-        for (int i = 10; i < 23; i++){
-            for (int j = 40; j < 53; j++){
-                if (Math.random() < 0.5){
-                    Grid.createOrganism(Species.MOUSE, j, i);
-                    Outbreak.mousecount++;
-                }
-                //  else if (Math.random() > 0.8) {
-                //     Grid.createOrganism(Species.FERN, j, i);
-                // }
-            }
-        }
-
-
-        //Organism mouse4 = Grid.createOrganism(Species.MOUSE, 10, 35);
-        //new Outbreak(mouse4, Outbreak.type.FUNGUS_INFECTION, new ArrayList<>(List.of(Species.MOUSE,Species.FERN)));
-        for (int i = 35; i < 48; i++){
-            for (int j = 10; j < 23; j++){
-                if (Math.random() < 0.5){
-                    Grid.createOrganism(Species.MOUSE, j, i);
-                    Outbreak.mousecount++;
-                }
-                //  else if (Math.random() > 0.8) {
-                //     Grid.createOrganism(Species.FERN, j, i);
-                // }
-            }
-        }
-
-        // for (int i = 0; i < 50; i++){
-        //     Grid.createOrganism(Species.GRASS, 30, i);
-        // }
-        // for (int j = 0; j < 70; j++){
-        //     Grid.createOrganism(Species.GRASS, j, 30);
+       
+        // for (int i = 35; i < 48; i++){
+        //     for (int j = 40; j < 53; j++){
+        //         if (Math.random() < 0.5){
+        //             Grid.createOrganism(Species.ANT, j, i);
+        //             Outbreak.antcount++;
+        //         }
+        //     }
         // }
 
-        
+        // for (int i = 10; i < 23; i++){
+        //     for (int j = 40; j < 53; j++){
+        //         if (Math.random() < 0.5){
+        //             Grid.createOrganism(Species.MOUSE, j, i);
+        //             Outbreak.mousecount++;
+        //         }
+                
+        //     }
+        // }
+
+        // for (int i = 35; i < 53; i++){
+        //     for (int j = 10; j < 27; j++){
+        //         if (Math.random() < 0.5){
+        //             Grid.createOrganism(Species.GRASSHOPPER, j, i);
+                    
+        //         } else if (Math.random() > 0.9){
+        //             Grid.createOrganism(Species.BERRY_BUSH, j, i);
+        //         }
+               
+        //     }
+        // }
+
+        // for (int i = 55; i < 73; i++){
+        //     for (int j = 10; j < 27; j++){
+        //         if (Math.random() < 0.5){
+        //             Grid.createOrganism(Species.GRASSHOPPER, j, i);
+                    
+        //         } else if (Math.random() > 0.9){
+        //             Grid.createOrganism(Species.BERRY_BUSH, j, i);
+        //         }
+               
+        //     }
+        // }
 
 
         
@@ -123,16 +112,16 @@ public class Main {
             //System.out.println(Outbreak.mouseDeaths + "/" + Outbreak.mousecount + " mice have died.");
             //System.out.println(Outbreak.wormDeaths + "/" + Outbreak.wormcount + " worms have died.");
             //System.out.println(Menu.change);
-            if (Menu.change > Menu.maxCurrencyRate) {
-                Menu.atMaxRate = true;
-                Menu.money += Menu.maxCurrencyRate;
+            if (Game.change > Game.maxCurrencyRate) {
+                Game.atMaxRate = true;
+                Game.money += Game.maxCurrencyRate;
             } else {
-                Menu.atMaxRate = false;
+                Game.atMaxRate = false;
             }
             
-            Menu.change = 0;
+            Game.change = 0;
             Game.determineCurrencyRate();
-            //System.out.println("***" + Menu.maxCurrencyRate);
+            //System.out.println("***" + Game.maxCurrencyRate);
             //System.out.println(Grid.speciesList);
             //System.out.println(Organism.trophicLevels);
             Game.timeElapsed++;
@@ -141,7 +130,7 @@ public class Main {
                 Game.outbreakCooldown = 0;
             }
             if (Game.isOutbreakTriggerable()){
-                int chance = (int)(Math.random() * 100);
+                int chance = (int)(Math.random() * 75);
                 if (chance == 0){
                     Game.createOutbreak();
                 }

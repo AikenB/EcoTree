@@ -3,7 +3,6 @@ package utilities;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import gameobjects.Outbreak;
-import gui.Menu;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,18 +15,25 @@ public class Game {
     public static int timeElapsed = 0;
     public static int outbreakCooldown = 0;
 
+    //for currency
+    public static double money = 10;
+    public static double maxCurrencyRate = 2.5;
+    public static double change = 0;
+    public static boolean atMaxRate = false;
+
     public static void determineCurrencyRate(){
         int[] tLevels = new int[5];
+        int biodiversity = Grid.speciesList.size(); //number of different species
         for (int i = 0; i < 5; i++) {
             tLevels[i] = Organism.trophicLevels.get(i);
         }
-        int rate = 5;
+        double rate = 2.5;
 
         if (tLevels[1] >= 10){
-            rate = 10;
+            rate = 5;
         }
         if (tLevels[1] >= 10 && tLevels[2] >= 10){
-            rate = 15;
+            rate = 10;
         }
         if (tLevels[1] >= 10 && tLevels[2] >= 10 && tLevels[3] >= 10){
             rate = 20;
@@ -43,16 +49,16 @@ public class Game {
             && Grid.speciesList.size() >= 7){
 
             rate = 100;
-            Menu.maxCurrencyRate = rate;
+            maxCurrencyRate = rate;
         } else {
-            Menu.maxCurrencyRate = rate * (1 + (Grid.speciesList.size() - 2) * 0.05);
+            maxCurrencyRate = rate * (1 + (biodiversity - 2) * 0.05);
         }
         
         
     }
 
     public static Outbreak createOutbreak(){
-        outbreakCooldown = 300;
+        outbreakCooldown = 150;
         int x = (int)(Math.random() * 3) + 1; // Random number of species to infect (1-3)
         Outbreak.type type = Outbreak.type.values()[(int)(Math.random() * 4)];
 
@@ -79,15 +85,20 @@ public class Game {
         //find random organism to infect
         ArrayList<Hitbox> potentialTargets = new ArrayList<>();
         for (Hitbox hitbox : Grid.hitboxes) {
-            if (targetSpecies.contains(hitbox.getOrganism().getSpecies()) && !(hitbox.getOrganism().getSpecies() == Species.GRASS) && !(hitbox.getOrganism().getSpecies() == Species.MAINTREE)) { //TODO: remove this after testing
+            if (targetSpecies.contains(hitbox.getOrganism().getSpecies()) && !(hitbox.getOrganism().getSpecies() == Species.MAINTREE)) { 
                 potentialTargets.add(hitbox);
             }
         }
 
         if (potentialTargets.size() > 0) {
-            Hitbox target = potentialTargets.get((int)(Math.random() * potentialTargets.size()));
-            System.out.println("target: " + target.getOrganism().getSpecies() + " at " + target.getX() + "," + target.getY());
-            return new Outbreak(target.getOrganism(), type, targetSpecies);
+            Hitbox target1 = potentialTargets.get((int)(Math.random() * potentialTargets.size()));
+            potentialTargets.remove(target1);
+            Hitbox target2 = potentialTargets.get((int)(Math.random() * potentialTargets.size()));
+            potentialTargets.remove(target2);
+            System.out.println("target: " + target1.getOrganism().getSpecies() + " at " + target1.getX() + "," + target1.getY());
+            return new Outbreak(target1.getOrganism(), type, targetSpecies);
+            // System.out.println("target: " + target2.getOrganism().getSpecies() + " at " + target2.getX() + "," + target2.getY());
+            // new Outbreak(target2.getOrganism(), type, targetSpecies);
             
         } else{
             return null; // No valid targets for outbreak
@@ -108,10 +119,12 @@ public class Game {
             Species species = hitbox.getOrganism().getSpecies();
             speciesCounts.put(species, speciesCounts.getOrDefault(species, 0) + 1);
         }
-        
+        if (speciesCounts.get(Species.GRASS) < 100 && timeElapsed <= 300){ //prevents starting grass from causing outbreak
+            speciesCounts.remove(Species.GRASS);
+        }
         // Check if any species exceeds the threshold
         for (int count : speciesCounts.values()) {
-            if (count > 35) {
+            if (count > 40) {
                 populated = true;
                 break;
             }

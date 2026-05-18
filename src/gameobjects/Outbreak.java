@@ -13,7 +13,7 @@ public class Outbreak {
     private int y;
     private double infectivity;
     private type diseaseType;
-    private final int INFECTION_RADIUS = 2;
+    private int INFECTION_RADIUS = 3;
     private int time;
     private int duration;
     private double lethality;
@@ -51,20 +51,21 @@ public class Outbreak {
 
         switch (diseaseType) {
             case CORONAVIRUS:
-                infectivity = 0.035;
-                lethality = 2.0;
+                infectivity = 0.04;
+                lethality = 4.0;
                 break;
             case FLU:
                 infectivity = 0.035;
-                lethality = 2.5;
+                lethality = 4.5;
                 break;
             case FUNGUS_INFECTION: //This virus is tuned
-                infectivity = 0.025;
-                lethality = 4.0;
+                infectivity = 0.035;
+                lethality = 6.0;
+                INFECTION_RADIUS = 4;
                 break;
             case BACTERIAL_INFECTION:
-                infectivity = 0.03;
-                lethality = 1.25;
+                infectivity = 0.04;
+                lethality = 3.25;
                 break;
         }
             
