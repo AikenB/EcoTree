@@ -249,7 +249,8 @@ public class Menu {
             new Item("Scorpion", 10, 125.0),
             new Item("Beetle", 11, 150.0),
             new Item("Frog", 12, 150.0),
-            new Item("Snake", 13, 200.0)
+            new Item("Snake", 13, 200.0),
+            new Item("Bee", 14, 200.0)
         };
         
 

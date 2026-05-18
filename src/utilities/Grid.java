@@ -1,5 +1,6 @@
 package utilities;
 import gameobjects.Animal;
+import gameobjects.Bee;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
@@ -10,6 +11,8 @@ public class Grid {
 
     public static Hitbox[][] grid = new Hitbox[128][128];
     public static CopyOnWriteArrayList<Hitbox> hitboxes = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Bee> bees = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Sprite> beeSprites = new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
     /** A list of all different species present in the grid */
     public static CopyOnWriteArrayList<Species> speciesList = new CopyOnWriteArrayList<>();
@@ -32,7 +35,7 @@ public class Grid {
         if (!hitboxes.contains(hitbox)) {
             hitboxes.add(hitbox);
             
-            sprites.add(hitbox.getSprite());
+            //sprites.add(hitbox.getSprite());
             addSprite(hitbox.getSprite());
         }
         synchronized (grid) {
@@ -114,6 +117,36 @@ public class Grid {
         
     }
 
+    public static Bee createBee(int x, int y) throws IOException {
+        //don't create a bee if one already exists there
+        for (Bee bee : bees) {
+            if (bee.getX() == x && bee.getY() == y) {
+                return null;
+            }
+        }
+        Bee bee = new Bee();
+        
+        Hitbox hitbox = new Hitbox(bee, x, y);
+        hitboxes.add(hitbox);
+        bees.add(bee);
+            
+        //sprites.add(hitbox.getSprite());
+        addSprite(hitbox.getSprite());
+        updateSpeciesList();
+        return bee;
+        
+        
+    }
+
+    public static void killBee(Bee bee) {
+        if (bee.getHitbox() != null) {
+            hitboxes.remove(bee.getHitbox());
+            bees.remove(bee);
+            beeSprites.remove(bee.getHitbox().getSprite());
+            bee.getHitbox().getOrganism().setHitbox(null); 
+        }
+    }
+
     public static Organism createOrganism(Species species, int x, int y) throws IOException {
         switch (species) {
             case FERN:
@@ -168,6 +201,8 @@ public class Grid {
                 return createAnimal(species, x, y);
             case BEETLE:
                 return createAnimal(species, x, y);
+            case BEE:
+                return createBee(x, y);
             default:
                 return null;
         }
@@ -233,8 +268,14 @@ public class Grid {
     // }
 
     public static void addSprite(Sprite sprite) {
-        if (!sprites.contains(sprite)) {
-            sprites.add(sprite);
+        if (sprite.getImagePath().equals(Sprite.BEE_SPRITE)) {
+            if (!beeSprites.contains(sprite)) {
+                beeSprites.add(sprite);
+            }
+        } else {
+            if (!sprites.contains(sprite)) {
+                sprites.add(sprite);
+            }
         }
     }
 

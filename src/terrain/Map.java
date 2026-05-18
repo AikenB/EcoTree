@@ -114,6 +114,15 @@ public class Map extends JPanel {
                     }
                 }
             }
+            if (Grid.beeSprites.size() > 0){
+
+                for (int i = 0; i < Grid.beeSprites.size(); i++){
+                    Sprite s = Grid.beeSprites.get(i);
+                    if (s != null) {
+                        g2d.drawImage(s.getImage(), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                    }
+                }
+             }
             //m.refresh();
         
 

@@ -102,6 +102,18 @@ public class Main {
         //     }
         // }
 
+        // for (int i = 35; i < 75; i++){
+        //     for (int j = 10; j < 45; j++){
+        //         if (Math.random() < 0.02){
+        //             Grid.createOrganism(Species.BERRY_BUSH, j, i);
+                    
+        //         } else if (Math.random() > 0.97){
+        //             Grid.createOrganism(Species.APPLE_TREE, j, i);
+        //         }
+               
+        //     }
+        // }
+
 
         
         

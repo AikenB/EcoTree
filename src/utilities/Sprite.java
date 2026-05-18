@@ -40,6 +40,7 @@ public class Sprite {
     public static final String GRASSHOPPER_SPRITE = "src/images/grasshopper.png";
     public static final String SCORPION_SPRITE = "src/images/scorpion.png";
     public static final String BEETLE_SPRITE = "src/images/beetle.png";
+    public static final String BEE_SPRITE = "src/images/bee.png";
     
 
     private BufferedImage image;

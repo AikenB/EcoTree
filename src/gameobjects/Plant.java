@@ -1,5 +1,6 @@
 package gameobjects;
 import gui.Menu;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -267,6 +268,51 @@ public class Plant extends Organism {
         this.photosynthesisEfficiency = photosynthesisEfficiency;
     }
 
+
+        public boolean canReproduce(){
+            for (int i = x - 3 * width; i < x + 3 * width; i++){
+                for (int j = y - 3 * height; j < y + 3 * height; j++){
+                    if (Grid.canFit(j, i,width,height)){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void reproduce(Plant parent) throws IOException {
+            // Create offspring of the same species as parent1
+            Plant offspring = new Plant(this.species);
+        
+            // Combine mutations from both parents into a gene pool
+            ArrayList<Mutation> genePool = new ArrayList<>();
+            genePool.addAll(this.getMutations());
+            genePool.addAll(parent.getMutations());
+        
+            // Randomly inherit half of the mutations from the gene pool
+            int inheritCount = genePool.size() / 2;
+            for (int i = 0; i < inheritCount; i++) {
+                int randomIndex = (int) (Math.random() * genePool.size());
+                Mutation inheritedMutation = genePool.get(randomIndex);
+                offspring.addMutation(inheritedMutation);
+                genePool.remove(randomIndex);  // Remove to avoid inheriting twice
+            }
+
+            ArrayList<int[]> possibleLocations = new ArrayList<>();
+            for (int i = x - 3 * width; i < x + 3 * width; i++){
+                for (int j = y - 3 * height; j < y + 3 * height; j++){
+                    if (Grid.canFit(j, i,width,height)){
+                        possibleLocations.add(new int[]{j, i});
+                    }
+                }
+            }
+            int index = (int) (Math.random() * possibleLocations.size());
+            int newX = possibleLocations.get(index)[0];
+            int newY = possibleLocations.get(index)[1];
+            Grid.createPlant(species, newX, newY);
+
+            
+        }
 
     
 }

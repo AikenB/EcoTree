@@ -77,6 +77,10 @@ public class Item {
                     break;
                 case "Beetle":
                     imagePath = "src/images/beetle.png";
+                    break;
+                case "Bee":
+                    imagePath = "src/images/bee.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
@@ -174,6 +178,9 @@ public class Item {
                 break;
             case "Beetle":
                 this.species = Species.BEETLE;
+                break;
+            case "Bee":
+                this.species = Species.BEE;
                 break;
             default:
                 this.species = null;

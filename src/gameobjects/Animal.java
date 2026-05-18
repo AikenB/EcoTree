@@ -17,12 +17,12 @@ public class Animal extends Organism {
     private ArrayList<Species> predators;
     private ArrayList<Species> prey;
 
-    private double speed;
-    private double foodCapacity;
-    private double satiety;
-    private double thirstCapacity;
-    private double mass;
-    private double fertility;
+    protected double speed;
+    protected double foodCapacity;
+    protected double satiety;
+    protected double thirstCapacity;
+    protected double mass;
+    protected double fertility;
     //TODO: tune this variable for each species
     /**
      * required fertility to reproduce
@@ -163,6 +163,18 @@ public class Animal extends Organism {
                 predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
                 prey = new ArrayList<Species>(Arrays.asList(Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM));
                 break;
+            case BEE:
+                trophicLevel = 1;
+                energy = 500; //energy for bees are used as its lifespan since it will have no predators
+                foodCapacity = 25;
+                rftr = 0; //bees cannot reproduce
+                width = 1;
+                height = 1;
+                speed = 10;
+                thirstCapacity = 5.0;
+                predators = new ArrayList<Species>();
+                prey = new ArrayList<Species>(Arrays.asList(Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE));
+                break;
              default:
                  trophicLevel = 1;
                  energy = 20;
@@ -208,7 +220,7 @@ public class Animal extends Organism {
                             fertility += prey.energy * 0.8;
                             kill(prey);
                             Grid.updateSpeciesList();
-                        } else if (prey != null && prey.getClass() == Plant.class) {
+                        } else if (prey != null && prey.getClass() == Plant.class && ((Plant) prey).hasProduce()) {
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
                             ((Plant) prey).updateProduce(-1);
@@ -341,7 +353,7 @@ public class Animal extends Organism {
      * used for move() method. This checks if the organism being detected as the animal scans its surroundings in its viewfield is a new organism that was not previously counted for
      * 
      */
-    private boolean isNewOrganism(ArrayList<Organism> organisms, Organism o) {
+    protected boolean isNewOrganism(ArrayList<Organism> organisms, Organism o) {
         for (Organism organism : organisms) {
             if (organism == o) {
                 return false;

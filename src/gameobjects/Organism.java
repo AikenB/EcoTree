@@ -48,6 +48,7 @@ public class Organism {
         GRASSHOPPER,
         SCORPION,
         BEETLE,
+        BEE,
 
         GRASS,
         FLOWER,
