@@ -16,8 +16,9 @@ import gameobjects.*;
 
 public class Menu {
 
-    public JFrame frame;
-    public JFrame frame2;
+    public JPanel frame;
+    public JPanel frame2;
+    public JFrame mainframe;
     int width = 1920;
     int height = 1080;
     int introButtonWidth = 600;
@@ -46,32 +47,44 @@ public class Menu {
     Item waitingItem; // the idea here is that this checks if we are waiting to recieve a click to place something.
 
     public Menu () {
-        frame = new JFrame("EcoTree");
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame.setSize(width, height);
+       
+
+        mainframe = new JFrame("EcoTree");
+        mainframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        mainframe.setSize(width + 500, height);
         Color backgroundColor = new Color(170, 240, 130); // Dark green
-        frame.getContentPane().setBackground(backgroundColor);
-        frame.setVisible(true);
-        frame.setLayout(null);
+        mainframe.getContentPane().setBackground(backgroundColor);
+        mainframe.setVisible(true);
+        mainframe.setLayout(null);
+        // mainframe.add(frame);
+        // mainframe.add(frame2);
+        // frame2.setBounds(0,0, 500, 700);
+        // frame.setBounds(500, 0, width, height);
+        frame = new JPanel();
+        frame2 = new JPanel();
+        mainframe.add(frame);
+        mainframe.add(frame2);
+        frame2.setBounds(0,0, 500, 700);
+        frame.setBounds(500, 0, width, height);
         setButtons();
 
-        frame2 = new JFrame("Shop");
-        frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame2.setSize(500, 700);
-        frame2.setFocusable(false);
-        frame2.setFocusableWindowState(false);
-        frame2.setVisible(true);
-        frame2.setLayout(null);
-
+        // frame2 = new JFrame("Shop");
+        // frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        // frame2.setSize(500, 700);
+        // frame2.setFocusable(false);
+        // frame2.setFocusableWindowState(false);
+        // frame2.setVisible(true);
+        // frame2.setLayout(null);
+        
         // initialize controls/ key listeners
         // focus screen - this is necessary in order for controls to work 
-        frame.setFocusable(true);
-        frame.requestFocusInWindow();
-        Controls.initializeControls(frame);
+        mainframe.setFocusable(true);
+        mainframe.requestFocusInWindow();
+        Controls.initializeControls(mainframe);
 
         // initialize movement
         Controls controls = new Controls();
-        controls.initializeControlsB(frame);
+        controls.initializeControlsB(mainframe);
 
         Controls.menu = this;
 
@@ -104,7 +117,7 @@ public class Menu {
         components.add(instr);
         componentsVisible.add(false);
         frame.add(instr);
-        frame.getContentPane().setComponentZOrder(instr,0);
+        frame.setComponentZOrder(instr,0);
 
         JButton closeInstr = new JButton("X");
         closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
@@ -115,7 +128,7 @@ public class Menu {
         components.add(closeInstr);
         componentsVisible.add(false);
         frame.add(closeInstr);
-        frame.getContentPane().setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
+        frame.setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
         //closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
 
 
