@@ -16,7 +16,7 @@ public class Game {
     public static int outbreakCooldown = 0;
 
     //for currency
-    public static double money = 10000;
+    public static double money = 10;
     public static double maxCurrencyRate = 2.5;
     public static double change = 0;
     public static boolean atMaxRate = false;

@@ -242,15 +242,16 @@ public class Menu {
             new Item("Fern", 3, 25.0),
             new Item("Ant", 4, 25.0),
             new Item("Spider", 5, 50.0),
-            new Item("Grasshopper", 6, 75.0),
-            new Item("Apple Tree", 7, 100.0),
-            new Item("Mouse", 8, 100.0),
-            new Item("Berry Bush", 9, 125.0),
-            new Item("Scorpion", 10, 125.0),
-            new Item("Beetle", 11, 150.0),
-            new Item("Frog", 12, 150.0),
-            new Item("Snake", 13, 200.0),
-            new Item("Bee", 14, 200.0)
+            new Item("Flower", 6, 50.0),
+            new Item("Grasshopper", 7, 75.0),
+            new Item("Apple Tree", 8, 100.0),
+            new Item("Mouse", 9, 100.0),
+            new Item("Berry Bush", 10, 125.0),
+            new Item("Scorpion", 11, 125.0),
+            new Item("Beetle", 12, 150.0),
+            new Item("Frog", 13, 150.0),
+            new Item("Snake", 14, 200.0),
+            new Item("Bee", 15, 200.0)
         };
         
 

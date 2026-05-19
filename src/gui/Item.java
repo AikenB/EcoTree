@@ -81,6 +81,9 @@ public class Item {
                 case "Bee":
                     imagePath = "src/images/bee.png";
                     break;
+                case "Flower":
+                    imagePath = "src/images/flower_1.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {

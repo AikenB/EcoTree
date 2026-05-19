@@ -161,11 +161,11 @@ public class Animal extends Organism {
                 speed = 2.5;
                 thirstCapacity = 10.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.FROG));
-                prey = new ArrayList<Species>(Arrays.asList(Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM));
+                prey = new ArrayList<Species>(Arrays.asList(Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM, Species.FLOWER));
                 break;
             case BEE:
                 trophicLevel = 1;
-                energy = 240; //energy for bees are used as its lifespan since it will have no predators
+                energy = 300; //energy for bees are used as its lifespan since it will have no predators
                 foodCapacity = 25;
                 rftr = 0; //bees cannot reproduce
                 width = 1;

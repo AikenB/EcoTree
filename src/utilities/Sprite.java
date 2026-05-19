@@ -41,6 +41,8 @@ public class Sprite {
     public static final String SCORPION_SPRITE = "src/images/scorpion.png";
     public static final String BEETLE_SPRITE = "src/images/beetle.png";
     public static final String BEE_SPRITE = "src/images/bee.png";
+    public static final String FLOWER_SPRITE_0 = "src/images/flower_0.png";
+    public static final String FLOWER_SPRITE_1 = "src/images/flower_1.png";
     
 
     private BufferedImage image;

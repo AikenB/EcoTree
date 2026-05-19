@@ -61,6 +61,10 @@ public class Bee extends Animal{
                         if (isHungry() && targetPlant.hasProduce()){
                             satiety += targetPlant.energy;
                             targetPlant.updateProduce(targetPlant.getProduce() - 1);
+                            if (targetPlant.species == Species.FLOWER){ // flowers help plants live longer by giving an energy boost
+                                energy += targetPlant.getEnergy();
+                                cooldown -= 5;
+                            }
                         }
                         if (cooldown <= 0 && isParentFound(targetPlant) && targetPlant.canReproduce()){
                             //System.out.println("found parent" + targetPlant.getSpecies());
@@ -163,7 +167,7 @@ public class Bee extends Animal{
                         double d = Math.sqrt(relativeX * relativeX + relativeY * relativeY);
                         //formula: (produce on plant) * (half of max produce) / distance from plant. 
                         //this will make the bee prefer plants that can produce a lot and have a lot of produce
-                        double weight = (plant.getProduce() * ((double) (plant.getMaxProduce()/2))) / Math.pow(d,1/4); //TODO tune if nessecary
+                        double weight = ((plant.getProduce() + 1) * ((double) (plant.getMaxProduce()/2))) / Math.pow(d,1/4); //TODO tune if nessecary
                         plantWeights.put(plant, weight);
                     }
                     

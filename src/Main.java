@@ -1,5 +1,6 @@
 
 import gameobjects.Organism.Species;
+import gameobjects.Plant;
 import gui.Menu;
 import java.util.ArrayList;
 import javax.swing.Timer;
@@ -33,11 +34,11 @@ public class Main {
         System.out.println("SIZELOCS" + treeLocs.size());
         for (int i = 0; i < treeLocs.size(); i++)
         {
-            //TODO: uncomment this when done with testing
-            // int x = treeLocs.get(i)[1];
-            // int y = treeLocs.get(i)[0];
-            // Plant plant = Grid.createPlant(Species.GRASS, x, y);
-            // plant.setPhotosynthesisEfficiency(0);
+            // TODO: uncomment this when done with testing
+            int x = treeLocs.get(i)[1];
+            int y = treeLocs.get(i)[0];
+            Plant plant = Grid.createPlant(Species.GRASS, x, y);
+            plant.setPhotosynthesisEfficiency(0);
             
         }
 
