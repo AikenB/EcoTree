@@ -57,14 +57,17 @@ public class Controls {
                     int viewportWidth = 1080;
                     int viewportHeight = 540;
                     
-                    int deltaXMin = -(mapPixelWidth - viewportWidth);
-                    int deltaYMin = -(mapPixelHeight - viewportHeight);
+                    //int deltaXMin = -(mapPixelWidth - viewportWidth);
+                    //int deltaYMin = -(mapPixelHeight - viewportHeight);
+                    int deltaYMin = -(1920-400);    
+                    int deltaXMin = -(1080-440);
 
                     if (keysPressed[0] == true)
                     {
                         if (Map.getDeltaX()+keyMovements[0] <= 0)
                         {
                             Map.setDeltaX(Map.getDeltaX()+keyMovements[0]);
+                            System.out.println("deltaX: " + Map.getDeltaX());
                         }
                     }
                     if (keysPressed[1] == true)
@@ -72,6 +75,7 @@ public class Controls {
                         if (Map.getDeltaX()+keyMovements[1] >= deltaXMin)
                         {
                             Map.setDeltaX(Map.getDeltaX()+keyMovements[1]);
+                            System.out.println("deltaX: " + Map.getDeltaX());
                         }
                     }
                     if (keysPressed[2] == true)
@@ -79,6 +83,7 @@ public class Controls {
                         if (Map.getDeltaY()+keyMovements[2] <= 0)
                         {
                             Map.setDeltaY(Map.getDeltaY()+keyMovements[2]);
+                            System.out.println("deltaY: " + Map.getDeltaY());
                         }
                     }
                     if (keysPressed[3] == true)
@@ -86,6 +91,7 @@ public class Controls {
                         if (Map.getDeltaY()+keyMovements[3] >= deltaYMin)
                         {
                             Map.setDeltaY(Map.getDeltaY()+keyMovements[3]);
+                            System.out.println("deltaY: " + Map.getDeltaY());
                         }
                     }
 

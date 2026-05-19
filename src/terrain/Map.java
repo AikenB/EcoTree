@@ -12,8 +12,8 @@ public class Map extends JPanel {
 
     // numbers to track screen translation
     // -320/-320 centers screen on start
-    private static int deltaX = -320;
-    private static int deltaY = -320;
+    private static int deltaX = -440;
+    private static int deltaY = -900;
     private Menu m;
     private StatsScreen statsScreen;
     
