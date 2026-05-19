@@ -18,7 +18,7 @@ public class Bee extends Animal{
     private ArrayList<Plant> contactedPlants;
     WeightVector moveVector;
     HashMap<Organism, Double> plantWeights;
-    private int cooldown;
+    private double cooldown;
 
     public Bee(){
         contactedPlants = new ArrayList<Plant>();
@@ -26,7 +26,7 @@ public class Bee extends Animal{
         super.stopBehavior();
         targetPlant = null;
         initializeBehavior();
-        cooldown = 25;
+        cooldown = 35;
         previousTargets = new ArrayList<Plant>();
         previousTargets.add(null);
         
@@ -38,13 +38,19 @@ public class Bee extends Animal{
             while (true) {
                 try {
                     int dt = (int)(4000/speed);
-                    cooldown -= dt/4000;
+                    cooldown -= dt/1000.0;
+                    //System.out.println(dt/4000.0);
                     if (cooldown < 0){
                         cooldown = 0;
                     }
+                    //System.out.println(cooldown);
+                    //System.out.println(contactedPlants);
                     Thread.sleep(dt); 
                     move();
                     if (touchingTarget()) {
+                        //System.out.println("Cooldown: " + cooldown + ", ContactedPlants: " + contactedPlants.size() + ", TargetSpecies: " + targetPlant.getSpecies());
+                        //boolean hasParent = isParentFound(targetPlant);
+                        //System.out.println("isParentFound: " + hasParent);
                         contactedPlants.add(targetPlant);
                         //makes sure bee doesn't go to the last 3 plants it followed
                         previousTargets.add(targetPlant);
@@ -56,16 +62,22 @@ public class Bee extends Animal{
                             satiety += targetPlant.energy;
                             targetPlant.updateProduce(targetPlant.getProduce() - 1);
                         }
-                        if (cooldown == 0 && isParentFound(targetPlant)){
-                            Plant parent2 = getParent(targetPlant);
-                            targetPlant.reproduce(parent2);
-                            contactedPlants.remove(targetPlant);
-                            contactedPlants.remove(parent2);
-                            cooldown = 25;
+                        if (cooldown <= 0 && isParentFound(targetPlant) && targetPlant.canReproduce()){
+                            //System.out.println("found parent" + targetPlant.getSpecies());
+                            int chance = (int) (Math.random() * 3);
+                            if (chance == 0){
+                                Plant parent2 = getParent(targetPlant);
+                                targetPlant.reproduce(parent2);
+                                contactedPlants.remove(targetPlant);
+                                contactedPlants.remove(parent2);
+                                //System.out.println(contactedPlants);
+                                cooldown = 25;
+                            }
+                            
                         }
                         targetPlant = null;
                     }
-                    energy--;
+                    energy-= dt/1000.0;
                     if (energy <= 0) {
                         Grid.killBee(this);
                         Grid.updateSpeciesList();
@@ -141,6 +153,7 @@ public class Bee extends Animal{
                     
                     if (hitbox != null
                     && hitbox.getOrganism() != null 
+                    && hitbox.getOrganism().species != Species.MAINTREE
                     && !previousTargets.contains(hitbox.getOrganism()) //makes sure bee doesn't target the same plant after visiting it
                     && hitbox.getOrganism() instanceof Plant //makes sure its a plant
                     && isNewOrganism(new ArrayList<Organism>(plantWeights.keySet()), hitbox.getOrganism())) { //makes sure plant is not previously spotted
@@ -361,7 +374,7 @@ public class Bee extends Animal{
      */
     private boolean isParentFound(Plant parent){
         for (Plant plant : contactedPlants) {
-            if (plant.getSpecies() == parent.getSpecies()) {
+            if (plant != parent && plant.getSpecies() == parent.getSpecies()) {
                 return true;
             }
         }

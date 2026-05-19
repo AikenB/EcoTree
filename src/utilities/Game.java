@@ -119,7 +119,8 @@ public class Game {
             Species species = hitbox.getOrganism().getSpecies();
             speciesCounts.put(species, speciesCounts.getOrDefault(species, 0) + 1);
         }
-        if (speciesCounts.get(Species.GRASS) < 100 && timeElapsed <= 300){ //prevents starting grass from causing outbreak
+        if (!speciesCounts.isEmpty() && speciesCounts.get(Species.GRASS) < 100 && timeElapsed <= 300){ //prevents starting grass from causing outbreak
+            
             speciesCounts.remove(Species.GRASS);
         }
         // Check if any species exceeds the threshold

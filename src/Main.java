@@ -1,6 +1,5 @@
 
 import gameobjects.Organism.Species;
-import gameobjects.Plant;
 import gui.Menu;
 import java.util.ArrayList;
 import javax.swing.Timer;
@@ -35,10 +34,10 @@ public class Main {
         for (int i = 0; i < treeLocs.size(); i++)
         {
             //TODO: uncomment this when done with testing
-            int x = treeLocs.get(i)[1];
-            int y = treeLocs.get(i)[0];
-            Plant plant = Grid.createPlant(Species.GRASS, x, y);
-            plant.setPhotosynthesisEfficiency(0);
+            // int x = treeLocs.get(i)[1];
+            // int y = treeLocs.get(i)[0];
+            // Plant plant = Grid.createPlant(Species.GRASS, x, y);
+            // plant.setPhotosynthesisEfficiency(0);
             
         }
 
@@ -119,7 +118,7 @@ public class Main {
         
         //printTimer.start();
         Timer timer = new Timer(1000, e -> {
-            System.out.println("outbreak cooldown: " + Game.outbreakCooldown);
+            //System.out.println("outbreak cooldown: " + Game.outbreakCooldown);
             //System.out.println(Outbreak.andDeaths + "/" + Outbreak.antcount + " ants have died.");
             //System.out.println(Outbreak.mouseDeaths + "/" + Outbreak.mousecount + " mice have died.");
             //System.out.println(Outbreak.wormDeaths + "/" + Outbreak.wormcount + " worms have died.");

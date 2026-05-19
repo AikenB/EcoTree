@@ -75,7 +75,7 @@ public class StatsScreen extends JPopupMenu {
         
         speciesLabel.setText("Species: " + organism.getSpecies());
         healthLabel.setText("Health: " + (int) organism.getHealth());
-        energyLabel.setText("Energy: " + organism.getEnergy());
+        energyLabel.setText("Energy: " + (int) organism.getEnergy());
 
         if (organism.getClass() == Plant.class) {
             Plant plant = (Plant) organism;

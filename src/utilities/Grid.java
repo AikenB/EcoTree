@@ -246,11 +246,11 @@ public class Grid {
         for (int i = y; i < y + height; i++) {
             for (int j = x; j < x + width; j++) {
                 if (i >= grid.length || j >= grid[0].length || grid[i][j] != null) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     // public static void printGrid() {

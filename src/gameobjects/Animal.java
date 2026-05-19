@@ -165,7 +165,7 @@ public class Animal extends Organism {
                 break;
             case BEE:
                 trophicLevel = 1;
-                energy = 500; //energy for bees are used as its lifespan since it will have no predators
+                energy = 240; //energy for bees are used as its lifespan since it will have no predators
                 foodCapacity = 25;
                 rftr = 0; //bees cannot reproduce
                 width = 1;
@@ -417,6 +417,12 @@ public class Animal extends Organism {
         //create list of organisms in sight to avoid counting the same organism multiple times
         ArrayList<Organism> organismsInSight = new ArrayList<>();
 
+        double closestPredatorDistance = Double.MAX_VALUE;
+        WeightVector closestPredatorVector = new WeightVector(0,0);
+        double highestPreyWeight = Double.MIN_VALUE;
+        double closestPreyDistance = Double.MAX_VALUE;
+        WeightVector closestPreyVector = new WeightVector(0,0);
+
         //scan viewfield
         for (int i = 0; i < viewField.length; i++) {
             for (int j = 0; j < viewField[i].length; j++) {
@@ -435,13 +441,20 @@ public class Animal extends Organism {
                     int x =  j - 17;      
                     int y = i - 17;    
                     double d = Math.sqrt(x*x + y*y);  
+                    double weight = 0;
+                    
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies()) && d < 10.0) { //d<10 to prevent animals from running away when predator isnt that close
                         
-                        double weight = (double) (50 / Math.sqrt(d));
+                        weight = (double) (50 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
+
+                        if (d < closestPredatorDistance) {
+                            
+                            closestPredatorVector = w;
+                        }
                         
                         // System.out.println("predator:" + o.getSpecies());
                         // System.out.println("predator: X: " + w.getX() + " Y: " + w.getY());
@@ -455,17 +468,17 @@ public class Animal extends Organism {
                             //FOR DEALING WITH PLANTS
                             if (o.getClass() == Plant.class && ((Plant) o).hasProduce()) {
                                 
-                                double weight = (double) (5 * o.energy / (Math.pow(d,1/4)));
+                                weight = (double) (5 * o.energy / (Math.pow(d,1/4)));
                                 w.orient(x, y, weight);
                             } else if (o.getClass() == Plant.class && !((Plant) o).hasProduce()) {
                                 //makes the animal less motivated to go towards plants that don't have produce
                                 int tendency = (int) (Math.random() * 3 * preySpotted());
                                 if (tendency == 0){
-                                    double weight = (double) (o.energy / (Math.pow(d,1/4)));
+                                    weight = (double) (o.energy / (Math.pow(d,1/4)));
                                     w.orient(x, y, weight);
                                 }
                             } else { //FOR DEALING WITH ANIMALS WHEN ANIMAL IS HUNGRY
-                                double weight = (double) (o.energy / (Math.pow(d,1/4)));
+                                weight = (double) (o.energy / (Math.pow(d,1/4)));
                                 w.orient(x, y, weight);
                             }
                         } 
@@ -473,9 +486,9 @@ public class Animal extends Organism {
                         else {
                             //makes organisms less motivated to follow prey if they aren't hungry
                             //since this calculation will be done for each prey spotted, it will be scaled with the amount of prey spotted to prevent itself from constantly following prey
-                            int tendency = (int) (Math.random() * 3 * preySpotted());
+                            int tendency = (int) (Math.random() * 2 * preySpotted());
                             if (tendency == 0){
-                                double weight = (double) (o.energy / (Math.pow(d,1/4)));
+                                weight = (double) (o.energy / (Math.pow(d,1/4)));
                                 w.orient(x, y, weight);
                             }
                         }
@@ -488,12 +501,17 @@ public class Animal extends Organism {
                         //this is to prevent the organisms from constantly following each other if there are no prey or predators around
                         int tendency = (int) (Math.random() * 3) * ((preySpotted()+ 1) / 2);
                         if (tendency == 0){
-                            double weight = (double) (5 / d);
+                            weight = (double) (5 / d);
                             w.orient(x, y, weight);
                         }
                         
                         
                         //System.err.printf("  Ally %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
+                    }
+                    if (weight > highestPreyWeight && prey.contains(o.getSpecies())) {
+                        closestPreyVector = w;
+                        closestPreyDistance = d;
+                        highestPreyWeight = weight;
                     }
                     //add the vector contribution to the movement vector
                     movementVector = movementVector.add(w);
@@ -504,10 +522,21 @@ public class Animal extends Organism {
         // System.out.println("this species: " + this.getSpecies());
         // System.out.println("movement vector: X: " + v.getX() + " Y: " + v.getY());
         // System.out.println("-----***------");
-        Grid.Direction direction = getDirection(movementVector);
-        
-        //makes sure that it has a valid direction to move in, if it doesn't it will move in a random valid direction
-        if (movementVector.getWeight() != 0) {
+        //if the animal may be surrounded by prey it will just go to the closest
+        if (preySpotted() > 7){
+            
+            if (closestPredatorDistance < closestPreyDistance){
+                movementVector = closestPredatorVector;
+            } else {
+                movementVector = closestPreyVector;
+            }
+            
+            Grid.Direction direction = getDirection(movementVector);
+            safeMove(direction);
+        } else if (movementVector.getWeight() != 0){
+            //makes sure that it has a valid direction to move in, if it doesn't it will move in a random valid direction
+       
+            Grid.Direction direction = getDirection(movementVector);
             safeMove(direction);
         } else {
             Grid.Direction randomD = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];

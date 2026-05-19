@@ -301,8 +301,8 @@ public class Plant extends Organism {
             ArrayList<int[]> possibleLocations = new ArrayList<>();
             for (int i = x - 3 * width; i < x + 3 * width; i++){
                 for (int j = y - 3 * height; j < y + 3 * height; j++){
-                    if (Grid.canFit(j, i,width,height)){
-                        possibleLocations.add(new int[]{j, i});
+                    if (Grid.canFit(i, j,width,height)){
+                        possibleLocations.add(new int[]{i, j});
                     }
                 }
             }
