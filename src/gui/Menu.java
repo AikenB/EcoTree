@@ -49,7 +49,7 @@ public class Menu {
         frame = new JFrame("EcoTree");
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setSize(width, height);
-        Color backgroundColor = new Color(170, 240, 130); // Dark green
+        Color backgroundColor = new Color(238, 238, 238); // Light gray
         frame.getContentPane().setBackground(backgroundColor);
         frame.setVisible(true);
         frame.setLayout(null);

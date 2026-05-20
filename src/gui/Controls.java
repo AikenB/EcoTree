@@ -57,11 +57,9 @@ public class Controls {
                     int viewportWidth = 1080;
                     int viewportHeight = 540;
                     
-                    //int deltaXMin = -(mapPixelWidth - viewportWidth);
-                    //int deltaYMin = -(mapPixelHeight - viewportHeight);
-                    int deltaYMin = -(1920-400);    
-                    int deltaXMin = -(1080-440);
-
+                    int deltaXMin = -(mapPixelWidth - viewportWidth);
+                    int deltaYMin = -(mapPixelHeight - viewportHeight);
+                    
                     if (keysPressed[0] == true)
                     {
                         if (Map.getDeltaX()+keyMovements[0] <= 0)

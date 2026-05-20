@@ -2,6 +2,7 @@
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
 import gui.Menu;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.Timer;
 import utilities.Game;
@@ -138,13 +139,27 @@ public class Main {
             //System.out.println(Organism.trophicLevels);
             Game.timeElapsed++;
             Game.outbreakCooldown--;
+            Game.invasiveCooldown--;
             if (Game.outbreakCooldown < 0){
                 Game.outbreakCooldown = 0;
             }
+            //System.out.println(Game.invasiveCooldown);
+
+            //for outbreaks
             if (Game.isOutbreakTriggerable()){
                 int chance = (int)(Math.random() * 75);
                 if (chance == 0){
                     Game.createOutbreak();
+                }
+            }
+
+            //for invasive species events
+            if (Game.invasiveCooldown <= 0 && Game.timeElapsed > 30){//TODO: change time requirement when done testing
+                try {
+                    Game.createInvasiveSpeciesEvent();
+                    
+                } catch (IOException ee) {
+                    ee.printStackTrace();
                 }
             }
         });
