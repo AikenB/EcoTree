@@ -207,7 +207,7 @@ public class Menu {
 
         JPanel shopPanel = new JPanel();
         JScrollPane scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         //JScrollBar bar = shopPanel.createVerticalScrollBar();
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
