@@ -180,7 +180,7 @@ public class Menu {
     }
     public void recieveClick (int x, int y) {
         if (waiting) {
-            waiting = false;
+            //waiting = false;
             m.setStatsScreenVisible(true);  // Show stats screen when placement completes
             int xPos = (x - Map.getDeltaX()) / 20;
             int yPos = (y - Map.getDeltaY()) / 20;
@@ -189,6 +189,9 @@ public class Menu {
                 Organism o = Grid.createOrganism(waitingItem.getSpecies(), xPos, yPos);
                 if (o != null) {
                     waitingItem.quantity--;
+                    if (waitingItem.quantity < 1) {
+                        waiting = false;
+                    }
                     waitingItem.price.setText("Quantity: " + waitingItem.quantity);
                 }
                 
@@ -285,6 +288,7 @@ public class Menu {
             // we should fix it later to make it less inconvinient (though a ton of copy-pasting is possible)
 
              items[i].buyButton.addActionListener(e -> {
+                System.out.println("is shop- " + items[index].isShop);
                 if (items[index].isShop) {
                   if (Game.money - (items[index]).priceNumber >= 0) {
                       Game.money -= items[index].priceNumber;
@@ -302,6 +306,7 @@ public class Menu {
         
 
         shop.addActionListener(e -> {
+            waiting = false;
             label.setText("Shop");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForShop();
@@ -310,6 +315,7 @@ public class Menu {
         });
 
         inventory.addActionListener(e -> {
+            waiting = false;
             label.setText("Inventory");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForInventory();

@@ -135,7 +135,7 @@ public class Controls {
             public void mousePressed(MouseEvent e)
             {
                 frame.requestFocusInWindow();
-                System.out.println("requesting");
+                //System.out.println("requesting");
                 panel.requestFocusInWindow();
                 // focus window on left click
                 pressed = true;
