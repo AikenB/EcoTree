@@ -1,6 +1,7 @@
 package gui;
 
 import gameobjects.Animal;
+import gameobjects.Bee;
 import gameobjects.Mutation;
 import gameobjects.Organism;
 import gameobjects.Plant;
@@ -85,8 +86,15 @@ public class StatsScreen extends JPopupMenu {
             add(produceLabel);
             add(maxProduceLabel);
             add(photosynthesisEfficiencyLabel);
-        } else if (organism.getClass() == Animal.class) {
-            Animal animal = (Animal) organism;
+        } else if (organism instanceof Animal) {
+            Animal animal;
+            if (organism.getClass() == Animal.class){
+                animal = (Animal) organism;
+            }
+            else{
+                animal = (Bee) organism;
+            }
+                
             foodCapacityLabel = new JLabel("Food Capacity: " + animal.getFoodCapacity());
             speedLabel = new JLabel("Speed: " + animal.getSpeed());
             satietyLabel = new JLabel("Satiety: " + (int) animal.getSatietyPercentage() + "%");

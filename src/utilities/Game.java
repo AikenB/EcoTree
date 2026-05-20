@@ -1,8 +1,11 @@
 package utilities;
 
+import gameobjects.Animal;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import gameobjects.Outbreak;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +16,19 @@ import java.util.Map;
  */
 public class Game {
     public static int timeElapsed = 0;
-    public static int outbreakCooldown = 0;
+    public static int outbreakCooldown = 300;
+    public static int timePerInvasiveEvent = 30;
+    public static int invasiveCooldown = timePerInvasiveEvent; //TODO: change
 
     //for currency
     public static double money = 10;
     public static double maxCurrencyRate = 2.5;
     public static double change = 0;
     public static boolean atMaxRate = false;
+
+    //count counting how many organisms of each invasive species can spawn during an invasive species event
+    private static HashMap<Species, Integer> invasiveSpeciesCounts = new HashMap<>();
+    private static ArrayList<Species> invasiveSpecies = new ArrayList<Species>(List.of(Species.ANT, Species.SPIDER, Species.GRASSHOPPER, Species.SCORPION, Species.BEETLE, Species.SNAKE, Species.FROG, Species.MOUSE));
 
     public static void determineCurrencyRate(){
         int[] tLevels = new int[5];
@@ -74,7 +83,7 @@ public class Game {
         //creates a sorted arraylist of the species ranked by population (descending)
         List<Map.Entry<Species, Integer>> sortedSpecies = new ArrayList<>(speciesCounts.entrySet());
         sortedSpecies.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-        
+
         // Get top x species
         ArrayList<Species> targetSpecies = new ArrayList<>();
         for (int i = 0; i < Math.min(x, sortedSpecies.size()); i++) {
@@ -132,6 +141,103 @@ public class Game {
         }
         
         return populated && outbreakCooldown <= 0;
+    }
+
+
+
+    public static void createInvasiveSpeciesEvent() throws IOException {
+        Game.invasiveCooldown = timePerInvasiveEvent; //TODO: change
+        //width and length of the spawn area for the swarm of the invasive animals
+        int width = (int)(Math.random() * 2) + 4;
+        int height = (int)(Math.random() * 2) + 4;
+        ArrayList<int[]> potentialLocations = new ArrayList<>();
+
+        //check along top and bottom edges of map
+        for (int x = 0; x < Grid.grid[0].length - width; x++){
+            if (Grid.canFit(x,0, width, height)){
+                potentialLocations.add(new int[]{x,0});
+            }
+            if (Grid.canFit(x,Grid.grid.length - height, width, height)){
+                potentialLocations.add(new int[]{x,Grid.grid.length - height});
+            }
+            
+        }
+
+        //check along the remaining left and right edges of the map
+        for (int y = Grid.grid.length - height; y < Grid.grid.length -  2 * height; y++){
+            if (Grid.canFit(0,y, width, height)){
+                potentialLocations.add(new int[]{0,y});
+            }
+            if (Grid.canFit(Grid.grid[0].length - width,y, width, height)){
+                potentialLocations.add(new int[]{Grid.grid[0].length - width,y});
+            }
+        }
+
+        //System.out.println(potentialLocations.size());
+
+        if (potentialLocations.isEmpty()) {
+            return;  //skip if there are no valid spawn locations
+        }
+        int i = (int)(Math.random() * potentialLocations.size());
+        int x = potentialLocations.get(i)[0];
+        int y = potentialLocations.get(i)[1];
+        initializeInvasiveSpeciesCounts(width, height);
+        Species species = invasiveSpecies.get((int)(Math.random() * invasiveSpecies.size()));
+        System.out.println(species);
+        int count = invasiveSpeciesCounts.get(species);
+        System.out.println(count);
+        Animal testAnimal = new Animal(species);
+        int animalWidth = testAnimal.getWidth();
+        int animalHeight = testAnimal.getHeight();
+        testAnimal.stopBehavior(); //this animal is just used to get width and height
+        //int possibleTries = width * height;
+        while (count > 0){
+            //xx represents x position of the animal to be spawned, yy represents y position
+            //this checks each potential spot in the spawn area to see if it can fit the animal there
+
+            int checkX = x + (int)(Math.random() * width);
+            int checkY = y + (int)(Math.random() * height);
+            if (Grid.canFit(checkX, checkY, animalWidth, animalHeight)){
+                Grid.createOrganism(species, checkX, checkY);
+                count--;
+            }
+            //possibleTries--;
+            // if (possibleTries <= 0){
+            //     break; //prevents infinite loop in case there are more animals to spawn than available space
+            // }
+            // if (count <= 0){
+            //     break; //breaks loop once all animals have been spawned
+            // }
+            // for (int xx = x; xx < x + width; xx++){
+            //     for (int yy = y; yy < y + height; yy++){
+            //         if (count > 0 && Grid.canFit(xx, yy, animalWidth, animalHeight)){
+            //             try {
+            //                 Grid.createOrganism(species, xx, yy);
+            //             } catch (IOException e) {
+            //                 e.printStackTrace();
+            //             }
+            //             count--;
+            //         }
+            //     }
+            // }
+        }
+
+    }
+    
+    private static void initializeInvasiveSpeciesCounts(int w, int h){
+        int area = w * h;
+
+        //most species are going to cover 75% of the spawn area
+        invasiveSpeciesCounts.put(Species.ANT, (int)(3.0/4 * area)); 
+        invasiveSpeciesCounts.put(Species.SPIDER, (int)(3.0/4 * area)); 
+        invasiveSpeciesCounts.put(Species.GRASSHOPPER, (int)(3.0/4 * area)); 
+        invasiveSpeciesCounts.put(Species.SCORPION, (int)(3.0/8 * area)); 
+        invasiveSpeciesCounts.put(Species.BEETLE, (int)(3.0/4 * area)); 
+        invasiveSpeciesCounts.put(Species.SNAKE, (int)(Math.min(area/6,(3.0/12 * area)))); 
+        invasiveSpeciesCounts.put(Species.FROG, (int)(3.0/16 * area));
+        invasiveSpeciesCounts.put(Species.MOUSE, (int)(3.0/4 * area));
+    
+
     }
 
     
