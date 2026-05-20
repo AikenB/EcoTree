@@ -16,8 +16,9 @@ import gameobjects.*;
 
 public class Menu {
 
-    public JFrame frame;
-    public JFrame frame2;
+    public JPanel frame;
+    public JPanel frame2;
+    public JFrame mainframe;
     int width = 1920;
     int height = 1080;
     int introButtonWidth = 600;
@@ -46,32 +47,45 @@ public class Menu {
     Item waitingItem; // the idea here is that this checks if we are waiting to recieve a click to place something.
 
     public Menu () {
-        frame = new JFrame("EcoTree");
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame.setSize(width, height);
+       
+
+        mainframe = new JFrame("EcoTree");
+        mainframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        mainframe.setSize(width + 500, height);
         Color backgroundColor = new Color(170, 240, 130); // Dark green
-        frame.getContentPane().setBackground(backgroundColor);
-        frame.setVisible(true);
-        frame.setLayout(null);
+        mainframe.getContentPane().setBackground(backgroundColor);
+        mainframe.setVisible(true);
+        mainframe.setLayout(null);
+        // mainframe.add(frame);
+        // mainframe.add(frame2);
+        // frame2.setBounds(0,0, 500, 700);
+        // frame.setBounds(500, 0, width, height);
+        frame = new JPanel(new BorderLayout());
+        frame.setFocusable(false);
+        frame2 = new JPanel(null);
+        mainframe.add(frame);
+        mainframe.add(frame2);
+        frame2.setBounds(0,0, 500, 700);
+        frame.setBounds(500, 0, width, height);
         setButtons();
 
-        frame2 = new JFrame("Shop");
-        frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame2.setSize(500, 700);
-        frame2.setFocusable(false);
-        frame2.setFocusableWindowState(false);
-        frame2.setVisible(true);
-        frame2.setLayout(null);
-
+        // frame2 = new JFrame("Shop");
+        // frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        // frame2.setSize(500, 700);
+        // frame2.setFocusable(false);
+        // frame2.setFocusableWindowState(false);
+        // frame2.setVisible(true);
+        // frame2.setLayout(null);
+        
         // initialize controls/ key listeners
         // focus screen - this is necessary in order for controls to work 
-        frame.setFocusable(true);
+        mainframe.setFocusable(true);
         frame.requestFocusInWindow();
-        Controls.initializeControls(frame);
+        Controls.initializeControls(mainframe, frame);
 
         // initialize movement
         Controls controls = new Controls();
-        controls.initializeControlsB(frame);
+        controls.initializeControlsB(mainframe);
 
         Controls.menu = this;
 
@@ -104,7 +118,7 @@ public class Menu {
         components.add(instr);
         componentsVisible.add(false);
         frame.add(instr);
-        frame.getContentPane().setComponentZOrder(instr,0);
+        frame.setComponentZOrder(instr,0);
 
         JButton closeInstr = new JButton("X");
         closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
@@ -115,7 +129,7 @@ public class Menu {
         components.add(closeInstr);
         componentsVisible.add(false);
         frame.add(closeInstr);
-        frame.getContentPane().setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
+        frame.setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
         //closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
 
 
@@ -129,7 +143,7 @@ public class Menu {
                 componentsVisible.set(0, false);
                 componentsVisible.set(1,false);
                 m = new Map(this);
-                m.setBounds(0,0,1920, 1080);
+                m.setBounds(0,000,1920, 1080);
                 frame.add(m);
                 //System.out.println("something");
                 frame.repaint();
@@ -166,7 +180,7 @@ public class Menu {
     }
     public void recieveClick (int x, int y) {
         if (waiting) {
-            waiting = false;
+            //waiting = false;
             m.setStatsScreenVisible(true);  // Show stats screen when placement completes
             int xPos = (x - Map.getDeltaX()) / 20;
             int yPos = (y - Map.getDeltaY()) / 20;
@@ -175,6 +189,9 @@ public class Menu {
                 Organism o = Grid.createOrganism(waitingItem.getSpecies(), xPos, yPos);
                 if (o != null) {
                     waitingItem.quantity--;
+                    if (waitingItem.quantity < 1) {
+                        waiting = false;
+                    }
                     waitingItem.price.setText("Quantity: " + waitingItem.quantity);
                 }
                 
@@ -190,7 +207,7 @@ public class Menu {
 
         JPanel shopPanel = new JPanel();
         JScrollPane scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         //JScrollBar bar = shopPanel.createVerticalScrollBar();
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
@@ -200,23 +217,32 @@ public class Menu {
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
         //frame2.add(shopPanel);
-        frame2.add(scroll);
-        scroll.setBounds(0, 0, 500, 700);
+        
+        frame2.add(scroll,BorderLayout.CENTER);
+        frame2.setLayout(null);
+        scroll.setBounds(0, 150, 500, 700 - 150);
         
         // Increase scroll sensitivity and make scroll bar bigger
         JScrollBar verticalScrollBar = scroll.getVerticalScrollBar();
         verticalScrollBar.setUnitIncrement(20); // Increase scroll sensitivity
         verticalScrollBar.setBlockIncrement(100); // Increase block scroll sensitivity
         verticalScrollBar.setPreferredSize(new Dimension(20, 0)); // Make scroll bar wider
+
+        JPanel nonscroll = new JPanel(null);
+        frame2.add(nonscroll, BorderLayout.CENTER);
+        nonscroll.setBounds(0,0,500, 150);
+        nonscroll.setVisible(true);
         
         JButton shop = new JButton("shop");
-        shopPanel.add(shop);
-        shopPanel.setComponentZOrder(shop,0);
+        shop.setFocusable(false);
+        nonscroll.add(shop);
+        nonscroll.setComponentZOrder(shop,0);
         components.add(shop);
         componentsVisible.add(true);
         components.get(5).setBounds(50, 50, 100, 50);
         
         JButton inventory = new JButton("inventory");
+        inventory.setFocusable(false);
         components.add(inventory);
         shopPanel.add(inventory);
         shopPanel.setComponentZOrder(shop,0);
@@ -224,6 +250,7 @@ public class Menu {
         components.get(6).setBounds(200, 50, 100, 50);
 
         JLabel label = new JLabel("Shop");
+        label.setFocusable(false);
         components.add(label);
         componentsVisible.add(true);
         shopPanel.add(label);
@@ -234,6 +261,7 @@ public class Menu {
         componentsVisible.add(true);
         shopPanel.add(moneyLabel);
         components.get(8).setBounds(250, 0, 250, 50);
+        moneyLabel.setFocusable(false);
 
         Item[] items = {
             new Item("Grass", 0, 10.0),
@@ -266,6 +294,7 @@ public class Menu {
             // we should fix it later to make it less inconvinient (though a ton of copy-pasting is possible)
 
              items[i].buyButton.addActionListener(e -> {
+                System.out.println("is shop- " + items[index].isShop);
                 if (items[index].isShop) {
                   if (Game.money - (items[index]).priceNumber >= 0) {
                       Game.money -= items[index].priceNumber;
@@ -283,13 +312,16 @@ public class Menu {
         
 
         shop.addActionListener(e -> {
+            waiting = false;
             label.setText("Shop");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForShop();
             }
+            frame.requestFocus();
         });
 
         inventory.addActionListener(e -> {
+            waiting = false;
             label.setText("Inventory");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForInventory();

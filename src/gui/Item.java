@@ -30,6 +30,7 @@ public class Item {
         this.price = new JLabel("Price: " + String.valueOf(price));
         this.priceNumber = price;
         this.buyButton = new JButton("buy");
+        this.buyButton.setFocusable(false);
         panel.add(this.name);
         
         this.imageLabel = new JLabel();
