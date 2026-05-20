@@ -60,8 +60,9 @@ public class Menu {
         // mainframe.add(frame2);
         // frame2.setBounds(0,0, 500, 700);
         // frame.setBounds(500, 0, width, height);
-        frame = new JPanel();
-        frame2 = new JPanel();
+        frame = new JPanel(new BorderLayout());
+        frame.setFocusable(false);
+        frame2 = new JPanel(new BorderLayout());
         mainframe.add(frame);
         mainframe.add(frame2);
         frame2.setBounds(0,0, 500, 700);
@@ -79,8 +80,8 @@ public class Menu {
         // initialize controls/ key listeners
         // focus screen - this is necessary in order for controls to work 
         mainframe.setFocusable(true);
-        mainframe.requestFocusInWindow();
-        Controls.initializeControls(mainframe);
+        frame.requestFocusInWindow();
+        Controls.initializeControls(mainframe, frame);
 
         // initialize movement
         Controls controls = new Controls();
@@ -142,7 +143,7 @@ public class Menu {
                 componentsVisible.set(0, false);
                 componentsVisible.set(1,false);
                 m = new Map(this);
-                m.setBounds(0,0,1920, 1080);
+                m.setBounds(0,000,1920, 1080);
                 frame.add(m);
                 //System.out.println("something");
                 frame.repaint();
@@ -213,7 +214,8 @@ public class Menu {
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
         //frame2.add(shopPanel);
-        frame2.add(scroll);
+        
+        frame2.add(scroll,BorderLayout.CENTER);
         scroll.setBounds(0, 0, 500, 700);
         
         // Increase scroll sensitivity and make scroll bar bigger
@@ -223,6 +225,7 @@ public class Menu {
         verticalScrollBar.setPreferredSize(new Dimension(20, 0)); // Make scroll bar wider
         
         JButton shop = new JButton("shop");
+        shop.setFocusable(false);
         shopPanel.add(shop);
         shopPanel.setComponentZOrder(shop,0);
         components.add(shop);
@@ -230,6 +233,7 @@ public class Menu {
         components.get(5).setBounds(50, 50, 100, 50);
         
         JButton inventory = new JButton("inventory");
+        inventory.setFocusable(false);
         components.add(inventory);
         shopPanel.add(inventory);
         shopPanel.setComponentZOrder(shop,0);
@@ -237,6 +241,7 @@ public class Menu {
         components.get(6).setBounds(200, 50, 100, 50);
 
         JLabel label = new JLabel("Shop");
+        label.setFocusable(false);
         components.add(label);
         componentsVisible.add(true);
         shopPanel.add(label);
@@ -247,6 +252,7 @@ public class Menu {
         componentsVisible.add(true);
         shopPanel.add(moneyLabel);
         components.get(8).setBounds(250, 0, 250, 50);
+        moneyLabel.setFocusable(false);
 
         Item[] items = {
             new Item("Grass", 0, 10.0),
@@ -300,6 +306,7 @@ public class Menu {
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForShop();
             }
+            frame.requestFocus();
         });
 
         inventory.addActionListener(e -> {
