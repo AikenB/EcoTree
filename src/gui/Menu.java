@@ -62,7 +62,7 @@ public class Menu {
         // frame.setBounds(500, 0, width, height);
         frame = new JPanel(new BorderLayout());
         frame.setFocusable(false);
-        frame2 = new JPanel(new BorderLayout());
+        frame2 = new JPanel(null);
         mainframe.add(frame);
         mainframe.add(frame2);
         frame2.setBounds(0,0, 500, 700);
@@ -219,18 +219,24 @@ public class Menu {
         //frame2.add(shopPanel);
         
         frame2.add(scroll,BorderLayout.CENTER);
-        scroll.setBounds(0, 0, 500, 700);
+        frame2.setLayout(null);
+        scroll.setBounds(0, 150, 500, 700 - 150);
         
         // Increase scroll sensitivity and make scroll bar bigger
         JScrollBar verticalScrollBar = scroll.getVerticalScrollBar();
         verticalScrollBar.setUnitIncrement(20); // Increase scroll sensitivity
         verticalScrollBar.setBlockIncrement(100); // Increase block scroll sensitivity
         verticalScrollBar.setPreferredSize(new Dimension(20, 0)); // Make scroll bar wider
+
+        JPanel nonscroll = new JPanel(null);
+        frame2.add(nonscroll, BorderLayout.CENTER);
+        nonscroll.setBounds(0,0,500, 150);
+        nonscroll.setVisible(true);
         
         JButton shop = new JButton("shop");
         shop.setFocusable(false);
-        shopPanel.add(shop);
-        shopPanel.setComponentZOrder(shop,0);
+        nonscroll.add(shop);
+        nonscroll.setComponentZOrder(shop,0);
         components.add(shop);
         componentsVisible.add(true);
         components.get(5).setBounds(50, 50, 100, 50);
