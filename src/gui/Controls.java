@@ -131,7 +131,7 @@ public class Controls {
         });
     }
     
-    public static void initializeControls(JFrame frame)
+    public static void initializeControls(JFrame frame, JPanel panel)
     {
         frame.addMouseListener(new MouseAdapter()
         {
@@ -139,6 +139,8 @@ public class Controls {
             public void mousePressed(MouseEvent e)
             {
                 frame.requestFocusInWindow();
+                //System.out.println("requesting");
+                panel.requestFocusInWindow();
                 // focus window on left click
                 pressed = true;
                 // x = e.getX();

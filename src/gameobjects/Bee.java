@@ -21,9 +21,9 @@ public class Bee extends Animal{
     private double cooldown;
 
     public Bee(){
-        contactedPlants = new ArrayList<Plant>();
         super(Species.BEE);
         super.stopBehavior();
+        contactedPlants = new ArrayList<Plant>();
         targetPlant = null;
         initializeBehavior();
         cooldown = 35;
