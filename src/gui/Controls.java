@@ -59,8 +59,8 @@ public class Controls {
                     
                     //int deltaXMin = -(mapPixelWidth - viewportWidth);
                     //int deltaYMin = -(mapPixelHeight - viewportHeight);
-                    int deltaYMin = -(1920-400);    
-                    int deltaXMin = -(1080-440);
+                    int deltaYMin = -(2560-1140);    
+                    int deltaXMin = -(2560-1420);
 
                     if (keysPressed[0] == true)
                     {
