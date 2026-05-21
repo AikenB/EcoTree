@@ -220,7 +220,7 @@ public class Menu {
         
         frame2.add(scroll,BorderLayout.CENTER);
         frame2.setLayout(null);
-        scroll.setBounds(0, 150, 500, 700 - 150);
+        scroll.setBounds(0, 0, 500, 700);
         
         // Increase scroll sensitivity and make scroll bar bigger
         JScrollBar verticalScrollBar = scroll.getVerticalScrollBar();
