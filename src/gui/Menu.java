@@ -52,7 +52,7 @@ public class Menu {
         mainframe = new JFrame("EcoTree");
         mainframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         mainframe.setSize(width + 500, height);
-        Color backgroundColor = new Color(170, 240, 130); // Dark green
+        Color backgroundColor = new Color(238, 238, 238); // Dark green
         mainframe.getContentPane().setBackground(backgroundColor);
         mainframe.setVisible(true);
         mainframe.setLayout(null);
@@ -65,7 +65,7 @@ public class Menu {
         frame2 = new JPanel(null);
         mainframe.add(frame);
         mainframe.add(frame2);
-        frame2.setBounds(0,0, 500, 700);
+        frame2.setBounds(0,0, 500, 900);
         frame.setBounds(500, 0, width, height);
         setButtons();
 
@@ -220,7 +220,7 @@ public class Menu {
         
         frame2.add(scroll,BorderLayout.CENTER);
         frame2.setLayout(null);
-        scroll.setBounds(0, 0, 500, 700);
+        scroll.setBounds(0, 150, 500, 900 - 150);
         
         // Increase scroll sensitivity and make scroll bar bigger
         JScrollBar verticalScrollBar = scroll.getVerticalScrollBar();
@@ -233,28 +233,48 @@ public class Menu {
         nonscroll.setBounds(0,0,500, 150);
         nonscroll.setVisible(true);
         
-        JButton shop = new JButton("shop");
-        shop.setFocusable(false);
-        nonscroll.add(shop);
-        nonscroll.setComponentZOrder(shop,0);
-        components.add(shop);
+        // JButton shop = new JButton("shop");
+        // nonscroll.add(shop);
+        // shop.setFocusable(false);
+        // shop.setVisible(true);
+        // //nonscroll.setComponentZOrder(shop,0);
+        // //frame2.setComponentZOrder(nonscroll,0);
+        components.add(null);
         componentsVisible.add(true);
-        components.get(5).setBounds(50, 50, 100, 50);
+        // //components.get(5).setBounds(50, 50, 100, 50);
+        // shop.setBounds(100, 0, 100, 100);
+        
         
         JButton inventory = new JButton("inventory");
         inventory.setFocusable(false);
-        components.add(inventory);
-        shopPanel.add(inventory);
-        shopPanel.setComponentZOrder(shop,0);
+        components.add(null);
+        nonscroll.add(inventory);
+        //shopPanel.setComponentZOrder(shop,0);
         componentsVisible.add(true);
-        components.get(6).setBounds(200, 50, 100, 50);
+        inventory.setBounds(200, 50, 100, 50);
+
+        
 
         JLabel label = new JLabel("Shop");
         label.setFocusable(false);
         components.add(label);
         componentsVisible.add(true);
-        shopPanel.add(label);
+        nonscroll.add(label);
         components.get(7).setBounds(0, 100, 500, 50);   
+
+        JButton shop = new JButton("shop");
+        nonscroll.add(shop);
+        shop.setFocusable(false);
+        shop.setBounds(50,50,100,50);
+        shop.setVisible(true);
+        
+        //nonscroll.setComponentZOrder(test, 0);
+        // test.setLayout(null);
+        // nonscroll.setLayout(null);
+        // frame2.setLayout(null);
+        // mainframe.setLayout(null);
+        //frame2.setComponentZOrder(nonscroll, 0);
+        //mainframe.setComponentZOrder(frame2, 0);
         
         
         components.add(moneyLabel);
