@@ -103,7 +103,8 @@ public class Item {
         this.imageLabel.setBounds(90, 60, 70, 70);
         this.price.setBounds(50, 150, 150, 50);
         this.buyButton.setBounds(50, 200, 150, 50);
-        this.y = 200 +  280 * (number / 2); // does the integer division to determine which row. 
+        this.y = 280 * (number / 2); // does the integer division to determine which row. 
+        // this.y = 200 +  280 * (number / 2); 
         this.x = (number % 2) * 250;
         isShop = true;
         
