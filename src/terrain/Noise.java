@@ -1,4 +1,6 @@
 package terrain;
+import java.util.ArrayList;
+
 import utilities.WeightVector;
 public class Noise {
     // p = partition size, generally is a power of 2
@@ -109,6 +111,7 @@ public class Noise {
                 weightedNoise *= 0.5;
 
                 output[i][j] = (int)(255*weightedNoise);
+
                 if (output[i][j] > 255)
                 {
                     output[i][j] = 255;
@@ -119,6 +122,57 @@ public class Noise {
                 }
             }
         }
+
+        //TESTING
+        int max = output[0][0];
+        int min = output[0][0];
+        for (int a = 0; a < output.length; a++ )
+        {
+            for (int b = 0; b < output[0].length; b++)
+            {
+                if (output[a][b] > max)
+                    max = output[a][b];
+                if (output[a][b] < min)
+                    min = output[a][b];
+            }
+        }
+        System.out.println(max);
+        System.out.println(min);
+        // normalize/rescale based on max and min
+        for (int a = 0; a < output.length; a++ )
+        {
+            for (int b = 0; b < output[0].length; b++)
+            {
+                output[a][b] = (output[a][b]-min) / (max-min);
+            }
+        }
+
+
+
+        // print statements for TESTING
+
+        ArrayList<Integer> noiseValues = new ArrayList<Integer>();
+        for (int i =0; i < 255; i++)
+        {
+            noiseValues.add(0);
+        }
+        // count frequency for each noise value from 0 to 255
+        for (int i = 0; i < output.length; i++)
+        {
+            for (int j = 0; j < output[0].length; j++)
+            {
+                int index = output[i][j];
+                noiseValues.set(index,noiseValues.get(index)+1);
+            }
+        }
+        // print all noise frequencies
+
+        for (int i =0; i < noiseValues.size(); i++)
+        {
+            System.out.println(i + " freq: " + noiseValues.get(i) );
+        }
+
+        // TESTING
 
         return output;
     }
