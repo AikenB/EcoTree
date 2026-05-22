@@ -896,25 +896,6 @@ public class Animal extends Organism {
     
 
     
-    
-
-
-    // public String toString() {
-    //     if (species == Species.ANT) {
-    //         return "A";
-    //     } else if (species == Species.SPIDER) {
-    //         return "S";
-    //     } else if (species == Species.FROG) {
-    //         return "F";
-    //     } else {
-    //         return "O";
-    //     }
-    // }
-
-
-    
-
-    
 
     
 
