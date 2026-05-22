@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.*;
 import terrain.Map;
 import utilities.Game;
+import utilities.Sprite;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,6 +40,8 @@ public class Controls {
     private ExecutorService executor;
 
     ArrayList<Integer> movements = new ArrayList<Integer>();
+
+    static Sprite placementGhost = null;
 
     public void initializeControlsB(JFrame frame)
     {
@@ -147,6 +151,7 @@ public class Controls {
                 pressed = true;
                 // x = e.getX();
                 // y = e.getY();
+                //placementGhost = new Sprite(e.getX(), e.getY(), );
                 menu.recieveClick(e.getX(), e.getY());
             }
         });
@@ -158,6 +163,17 @@ public class Controls {
             {       
                 pressed = false;
             }
+        });
+
+        // detect mouse all the time, to place sprite
+        frame.addMouseMotionListener(new MouseMotionAdapter() {
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                if (true) {
+                    System.out.println("bob");
+                }
+            }   
         });
 
         frame.addKeyListener(new KeyListener() 
