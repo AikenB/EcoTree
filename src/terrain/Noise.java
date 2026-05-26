@@ -143,7 +143,7 @@ public class Noise {
         {
             for (int b = 0; b < output[0].length; b++)
             {
-                output[a][b] = (output[a][b]-min) / (max-min);
+                output[a][b] = min + (int)((output[a][b]-min)*(max-min)/(max-min));
             }
         }
 
