@@ -93,6 +93,9 @@ public class Menu {
     }
     public void setButtons() {
 
+        // width adjusts based on screen size  
+        width = mainframe.getContentPane().getWidth();
+
         JButton start = new JButton("Start");
         start.setBounds(width/2 - introButtonWidth/2, 50, introButtonWidth, introButtonHeight);
         components.add(start);
