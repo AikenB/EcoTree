@@ -5,7 +5,9 @@ import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
+import utilities.Hitbox;
 
 public class Grid {
 
@@ -289,7 +291,12 @@ public class Grid {
             }
         }
     }
-    
+    public static ArrayList<Hitbox> getHitboxes()
+    {
+        // this is a special ArrayList constructor that takes in a "collection", or group of things
+        ArrayList<Hitbox> newList = new ArrayList<>(hitboxes);
+        return newList;
+    }
 
     
 }
