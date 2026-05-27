@@ -2,6 +2,8 @@
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
 import gui.Menu;
+import tree.MainTree;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.Timer;
@@ -46,7 +48,6 @@ public class Main {
         // create main tree
         Grid.createPlant(Species.MAINTREE, 64,64);
         Grid.createPlant(Species.GRASS,Grid.grid[0].length,Grid.grid.length);
-
         
         // for (int i = 10; i < 23; i++){
         //     for (int j = 10; j < 23; j++){
