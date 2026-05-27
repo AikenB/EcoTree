@@ -39,6 +39,9 @@ public class MainTree extends Plant {
         executor.submit(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
+                    int totalOrganisms = 0;
+                    double diversityIndex = 0;
+                    
                     ArrayList<Hitbox> newList = Grid.getHitboxes();
                     ArrayList<Species> speciesList = Grid.getSpeciesList();
                     // create parallel list with the count of each species
@@ -47,9 +50,11 @@ public class MainTree extends Plant {
                     {
                         speciesCounts.add(0);
                     }
+
+                    // loop through each hitbox and get the organism
                     for (int i = 0; i < newList.size(); i++)
                     {
-                        // loop through each hitbox and get the organism
+                        totalOrganisms++;
                         Organism h = newList.get(i).getOrganism();
 
                         // find the index of the species in the species list
