@@ -26,6 +26,8 @@ public class MainTree extends Plant {
     }
 
 
+
+
     public void initializeBehavior(){
 
         executor = Executors.newSingleThreadExecutor();
@@ -191,3 +193,55 @@ public class MainTree extends Plant {
 
 
 }
+
+
+//#region KYLE'S CODE
+//sorry kyle I am commenting this out cuz I need to test my code you can make a new branch and delete my code on that branch to test your code
+
+// package tree;
+
+// import java.util.concurrent.ExecutorService;
+// import java.util.concurrent.Executors;
+
+// import javax.swing.JFrame;
+
+// import gameobjects.Organism;
+// import gameobjects.Plant;
+// import utilities.Game;
+
+// public class MainTree extends Plant {
+//     // default health
+    
+    
+    
+//     public MainTree()
+//     {
+
+//         super(Organism.Species.MAINTREE);
+
+//     }
+//     private ExecutorService executor;  
+//     public void initializeTree(JFrame frame)
+//     {
+//         executor = Executors.newSingleThreadExecutor();
+//         executor.submit(() -> {
+//             while (!Thread.currentThread().isInterrupted()) {
+//                 try {
+//                     // calculate diversity index
+//                     double diversityIndex = 0;
+//                     double sum = 0;
+
+                    
+
+//                     // every second
+//                     Thread.sleep(1000);
+//                 }
+//                  catch (Exception e) {
+//                     System.err.println(e);
+//                     e.printStackTrace();
+                    
+//                 }
+//             } 
+//         });
+//     }
+// }
