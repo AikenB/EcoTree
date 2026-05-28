@@ -48,23 +48,23 @@ public class Main {
        //Grid.createPlant(Species.FERN,Grid.grid[0].length,Grid.grid.length);
 
         
-        for (int i = 10; i < 23; i++){
-            for (int j = 10; j < 23; j++){
-                if (Math.random() < 0.5){
-                    Grid.createOrganism(Species.GRASSHOPPER, j, i);
+        // for (int i = 10; i < 23; i++){
+        //     for (int j = 10; j < 23; j++){
+        //         if (Math.random() < 0.5){
+        //             Grid.createOrganism(Species.GRASSHOPPER, j, i);
                    
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
 
-        for (int i = 45; i < 58; i++){
-            for (int j = 45; j < 58; j++){
-                if (Math.random() < 0.1){
-                    Grid.createOrganism(Species.FERN, j, i);
+        // for (int i = 45; i < 58; i++){
+        //     for (int j = 45; j < 58; j++){
+        //         if (Math.random() < 0.1){
+        //             Grid.createOrganism(Species.FERN, j, i);
                    
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
         
 
 

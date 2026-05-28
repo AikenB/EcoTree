@@ -1,10 +1,14 @@
 package gui;
 
 import javax.swing.*;
+import javax.imageio.ImageIO;
 
 import gameobjects.Organism.Species;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import terrain.Map;
 import utilities.Game;
 import utilities.Grid;
@@ -16,9 +20,10 @@ import gameobjects.*;
 
 public class Menu {
 
-    public JPanel frame;
-    public JPanel frame2;
-    public JFrame mainframe;
+    public JPanel gamePanel; //used for map
+    public JPanel panel2;
+    public JFrame mainFrame;
+    public JPanel introPanel; //used for start screen
     int width = 1920;
     int height = 1080;
     int introButtonWidth = 600;
@@ -49,24 +54,29 @@ public class Menu {
     public Menu () {
        
 
-        mainframe = new JFrame("EcoTree");
-        mainframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        mainframe.setSize(width + 500, height);
+        mainFrame = new JFrame("EcoTree");
+        mainFrame.setIconImage(new ImageIcon("src/images/main_tree_1.png").getImage());
+        introPanel = createBackgroundPanel();
+        introPanel.setLayout(null);
+        
+        mainFrame.add(introPanel);
+        mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        mainFrame.setSize(width + 500, height);
         Color backgroundColor = new Color(238, 238, 238); // Dark green
-        mainframe.getContentPane().setBackground(backgroundColor);
-        mainframe.setVisible(true);
-        mainframe.setLayout(null);
+        mainFrame.getContentPane().setBackground(backgroundColor);
+        mainFrame.setVisible(true);
+        //mainframe.setLayout(null);
         // mainframe.add(frame);
         // mainframe.add(frame2);
         // frame2.setBounds(0,0, 500, 700);
         // frame.setBounds(500, 0, width, height);
-        frame = new JPanel(new BorderLayout());
-        frame.setFocusable(false);
-        frame2 = new JPanel(null);
-        mainframe.add(frame);
-        mainframe.add(frame2);
-        frame2.setBounds(0,0, 500, 900);
-        frame.setBounds(500, 0, width, height);
+        gamePanel = new JPanel(new BorderLayout());
+        gamePanel.setFocusable(false);
+        panel2 = new JPanel(null);
+        mainFrame.add(gamePanel);
+        mainFrame.add(panel2);
+        panel2.setBounds(0,0, 500, 900);
+        gamePanel.setBounds(500, 0, width, height);
         setButtons();
 
         // frame2 = new JFrame("Shop");
@@ -79,13 +89,13 @@ public class Menu {
         
         // initialize controls/ key listeners
         // focus screen - this is necessary in order for controls to work 
-        mainframe.setFocusable(true);
-        frame.requestFocusInWindow();
-        Controls.initializeControls(mainframe, frame);
+        mainFrame.setFocusable(true);
+        gamePanel.requestFocusInWindow();
+        Controls.initializeControls(mainFrame, gamePanel);
 
         // initialize movement
         Controls controls = new Controls();
-        controls.initializeControlsB(mainframe);
+        controls.initializeControlsB(mainFrame);
 
         Controls.menu = this;
 
@@ -94,19 +104,27 @@ public class Menu {
     public void setButtons() {
 
         // width adjusts based on screen size  
-        width = mainframe.getContentPane().getWidth();
+        width = mainFrame.getContentPane().getWidth();
 
         JButton start = new JButton("Start");
         start.setBounds(width/2 - introButtonWidth/2, 50, introButtonWidth, introButtonHeight);
+        start.setBackground(new Color(34, 102, 34));
+        start.setForeground(Color.WHITE);
+        // start.setOpaque(true);
+        // start.setFocusPainted(false);
         components.add(start);
         componentsVisible.add(true);
-        frame.add(start);
+        introPanel.add(start);
         
         JButton instrButton = new JButton("Instructions");
         instrButton.setBounds(width/2 - introButtonWidth/2, 50*2 + introButtonHeight, introButtonWidth, introButtonHeight);
+        instrButton.setBackground(new Color(34, 102, 34));
+        instrButton.setForeground(Color.WHITE);
+        // instrButton.setOpaque(true);
+        // instrButton.setFocusPainted(false);
         components.add(instrButton);
         componentsVisible.add(true);
-        frame.add(instrButton);
+        introPanel.add(instrButton);
 
         JLabel instr = new JLabel("This is a \n description of instructions\nto this game");
         instr.setBounds(width/2 - instrWidth/2, 150, instrWidth, instrHeight);
@@ -120,8 +138,8 @@ public class Menu {
         //instr.setComponentZOrder(instr, 0);
         components.add(instr);
         componentsVisible.add(false);
-        frame.add(instr);
-        frame.setComponentZOrder(instr,0);
+        introPanel.add(instr);
+        introPanel.setComponentZOrder(instr,0);
 
         JButton closeInstr = new JButton("X");
         closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
@@ -131,8 +149,8 @@ public class Menu {
         //closeInstr.setComponentZOrder(instr, 0);
         components.add(closeInstr);
         componentsVisible.add(false);
-        frame.add(closeInstr);
-        frame.setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
+        introPanel.add(closeInstr);
+        introPanel.setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
         //closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
 
 
@@ -145,11 +163,12 @@ public class Menu {
             if (!componentsVisible.get(2)) {
                 componentsVisible.set(0, false);
                 componentsVisible.set(1,false);
+                mainFrame.remove(introPanel);
                 m = new Map(this);
                 m.setBounds(0,000,1920, 1080);
-                frame.add(m);
+                gamePanel.add(m);
                 //System.out.println("something");
-                frame.repaint();
+                gamePanel.repaint();
                 refresh();
                 setupGame();
                 //Map.loadMap();
@@ -223,8 +242,8 @@ public class Menu {
         components.get(4).setOpaque(false);
         //frame2.add(shopPanel);
         
-        frame2.add(scroll,BorderLayout.CENTER);
-        frame2.setLayout(null);
+        panel2.add(scroll,BorderLayout.CENTER);
+        panel2.setLayout(null);
         scroll.setBounds(0, 150, 500, 900 - 150);
         
         // Increase scroll sensitivity and make scroll bar bigger
@@ -234,7 +253,7 @@ public class Menu {
         verticalScrollBar.setPreferredSize(new Dimension(20, 0)); // Make scroll bar wider
 
         JPanel nonscroll = new JPanel(null);
-        frame2.add(nonscroll, BorderLayout.CENTER);
+        panel2.add(nonscroll, BorderLayout.CENTER);
         nonscroll.setBounds(0,0,500, 150);
         nonscroll.setVisible(true);
         
@@ -342,7 +361,7 @@ public class Menu {
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForShop();
             }
-            frame.requestFocus();
+            gamePanel.requestFocus();
         });
 
         inventory.addActionListener(e -> {
@@ -371,5 +390,30 @@ public class Menu {
         } 
         moneyLabel.setText(String.valueOf(Math.floor(Game.money)));
         
+    }
+
+    private JPanel createBackgroundPanel() {
+        return new JPanel() {
+            private BufferedImage backgroundImage;
+            private BufferedImage backgroundLogo;
+
+            {
+                try {
+                    backgroundImage = ImageIO.read(new File("src/images/background.png"));
+                    backgroundLogo = ImageIO.read(new File("src/images/introLogo.png"));
+                } catch (IOException e) {
+                    System.err.println("Error loading background image: " + e.getMessage());
+                }
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backgroundImage != null) {
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                    g.drawImage(backgroundLogo, getWidth() / 2 - backgroundLogo.getWidth() / 2, 0, this);
+                }
+            }
+        };
     }
 }
