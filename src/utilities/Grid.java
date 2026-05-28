@@ -1,6 +1,7 @@
 package utilities;
 import gameobjects.Animal;
 import gameobjects.Bee;
+import gameobjects.MainTree;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
@@ -214,7 +215,13 @@ public class Grid {
      */
     public static Plant createPlant(Species species, int x, int y) throws IOException {
         
-        Plant plant = new Plant(species);
+        Plant plant;
+        if (species == Species.MAINTREE) {
+            plant = new MainTree();
+        } else {
+            plant = new Plant(species);
+        }
+        
         if (Grid.canFit(plant, x, y)){
             Hitbox hitbox = new Hitbox(plant, x, y);
             addOrganism(hitbox);

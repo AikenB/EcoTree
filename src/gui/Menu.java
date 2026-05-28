@@ -168,7 +168,9 @@ public class Menu {
 
     public void refresh () {
         for (int i = 0; i < components.size(); i++) {
-            components.get(i).setVisible(componentsVisible.get(i));
+            if (components.get(i) != null) {
+                components.get(i).setVisible(componentsVisible.get(i));
+            }
             //frame.add(components.get()
         }
         //components.get(8).setText("Money: " + String.getValueOf);
@@ -184,7 +186,7 @@ public class Menu {
             m.setStatsScreenVisible(true);  // Show stats screen when placement completes
             int xPos = (x - Map.getDeltaX()) / 20;
             int yPos = (y - Map.getDeltaY()) / 20;
-            System.out.println("(" + xPos + ", " + yPos + ")");
+            //System.out.println("(" + xPos + ", " + yPos + ")");
             try {
                 Organism o = Grid.createOrganism(waitingItem.getSpecies(), xPos, yPos);
                 if (o != null) {
@@ -196,7 +198,7 @@ public class Menu {
                 }
                 
             } catch (Exception e) {
-                System.out.println("thing");
+                //System.out.println("thing");
                 
                 waitingItem.quantity++;
                 waitingItem.price.setText("Quantity: " + waitingItem.quantity);
@@ -314,7 +316,7 @@ public class Menu {
             // we should fix it later to make it less inconvinient (though a ton of copy-pasting is possible)
 
              items[i].buyButton.addActionListener(e -> {
-                System.out.println("is shop- " + items[index].isShop);
+                //System.out.println("is shop- " + items[index].isShop);
                 if (items[index].isShop) {
                   if (Game.money - (items[index]).priceNumber >= 0) {
                       Game.money -= items[index].priceNumber;

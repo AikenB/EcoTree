@@ -17,7 +17,7 @@ import java.util.Map;
 public class Game {
     public static int timeElapsed = 0;
     public static int outbreakCooldown = 300;
-    public static int timePerInvasiveEvent = 30;
+    public static int timePerInvasiveEvent = 90;
     public static int invasiveCooldown = timePerInvasiveEvent; //TODO: change
 
     //for currency
@@ -183,9 +183,9 @@ public class Game {
         int y = potentialLocations.get(i)[1];
         initializeInvasiveSpeciesCounts(width, height);
         Species species = invasiveSpecies.get((int)(Math.random() * invasiveSpecies.size()));
-        System.out.println(species);
+        //System.out.println(species);
         int count = invasiveSpeciesCounts.get(species);
-        System.out.println(count);
+        //System.out.println(count);
         Animal testAnimal = new Animal(species);
         int animalWidth = testAnimal.getWidth();
         int animalHeight = testAnimal.getHeight();

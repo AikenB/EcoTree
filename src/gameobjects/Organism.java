@@ -147,6 +147,10 @@ public class Organism {
     public void setHitbox(Hitbox hitbox) {
         this.hitbox = hitbox;
     }
+
+    public int getTrophicLevel() {
+        return trophicLevel;
+    }
     
     public Species getSpecies() {
         return species;
@@ -217,6 +221,72 @@ public class Organism {
         trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
         Grid.killOrganism(organism.getHitbox());
         organism.hitbox = null; // Clear hitbox reference to help GC
+    }
+
+    public static int getTrophicLevel(Species species) {
+        switch (species) {
+            case GRASS:
+                return 0;
+            case FLOWER:
+                return 0;
+            case APPLE_TREE:
+                return 0;
+            // case OAK_TREE:
+            // case PINE_TREE:
+            // case CACTUS:
+            case FERN:
+                return 0;
+            case BERRY_BUSH:
+                return 0;
+            case MOSS:
+                return 0;
+            // case BUSH:
+            //     return 0;
+            
+            // case RABBIT:
+            // case DEER:
+            // case COW:
+            //     return 1;
+
+            // case WOLF:
+            // case BOBCAT:
+            //     return 2;
+
+            // case BEAR:
+            //     return 3;
+
+            case SNAKE:
+                return 4;
+
+            case FROG:
+                return 3;
+
+            case ANT:
+                return 1;
+            case WORM:
+                return 1;
+            case MOUSE:
+                return 1;
+            case SPIDER:
+                return 2;
+            case GRASSHOPPER:
+                return 1;
+            case SCORPION:
+                return 3;
+            case BEETLE:
+                return 3;
+
+            case BEE:
+                return 1;
+
+            case MAINTREE:
+                return 0;
+
+            
+            
+
+        }
+        return -1; // Default for unknown species
     }
     
     

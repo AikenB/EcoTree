@@ -28,8 +28,8 @@ public class Main {
         
         
 
-        Grid grid = new Grid();
-
+        //Grid grid = new Grid();
+        Grid.createPlant(Species.MAINTREE, 64,64);
         // tree gen
         ArrayList<int[]> treeLocs = terrain.Generation.getTreeLocations();
         System.out.println("SIZELOCS" + treeLocs.size());
@@ -44,18 +44,27 @@ public class Main {
         }
 
         // create main tree
-        Grid.createPlant(Species.MAINTREE, 64,64);
-        Grid.createPlant(Species.GRASS,Grid.grid[0].length,Grid.grid.length);
+        
+       //Grid.createPlant(Species.FERN,Grid.grid[0].length,Grid.grid.length);
 
         
-        // for (int i = 10; i < 23; i++){
-        //     for (int j = 10; j < 23; j++){
-        //         if (Math.random() < 0.5){
-        //             Grid.createOrganism(Species.ANT, j, i);
-        //             Outbreak.mousecount++;
-        //         }
-        //     }
-        // }
+        for (int i = 10; i < 23; i++){
+            for (int j = 10; j < 23; j++){
+                if (Math.random() < 0.5){
+                    Grid.createOrganism(Species.GRASSHOPPER, j, i);
+                   
+                }
+            }
+        }
+
+        for (int i = 45; i < 58; i++){
+            for (int j = 45; j < 58; j++){
+                if (Math.random() < 0.1){
+                    Grid.createOrganism(Species.FERN, j, i);
+                   
+                }
+            }
+        }
         
 
 

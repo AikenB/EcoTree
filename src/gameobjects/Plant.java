@@ -11,7 +11,7 @@ import utilities.Sprite;
 
 public class Plant extends Organism {
     
-    private double photosynthesisEfficiency;
+    protected  double photosynthesisEfficiency;
     private double cost;
     
     private int produce;
@@ -114,13 +114,14 @@ public class Plant extends Organism {
                 SPRITE_1 = Sprite.FLOWER_SPRITE_1;
                 break;
             case MAINTREE:
-                energy = 1000;
+                health = 1000;
+                energy = 0;
                 width = 10;
                 height = 10;
                 photosynthesisEfficiency = 1;
                 maxProduce = 0;
                 productionRarity = 0;
-                SPRITE_0 = Sprite.APPLE_TREE_SPRITE_0;
+                SPRITE_0 = Sprite.APPLE_TREE_SPRITE_1;
                 SPRITE_1 = Sprite.APPLE_TREE_SPRITE_1;
                 break; 
         }

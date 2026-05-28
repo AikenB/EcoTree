@@ -146,7 +146,7 @@ public class Hitbox{
 
 
             case MAINTREE:
-                imagePath = Sprite.APPLE_TREE_SPRITE_0;
+                imagePath = Sprite.MAINTREE_SPRITE_1;
                 break;    
             default:
                 imagePath = null;

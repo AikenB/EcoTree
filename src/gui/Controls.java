@@ -65,7 +65,7 @@ public class Controls {
                         if (Map.getDeltaX()+keyMovements[0] <= 0)
                         {
                             Map.setDeltaX(Map.getDeltaX()+keyMovements[0]);
-                            System.out.println("deltaX: " + Map.getDeltaX());
+                            //System.out.println("deltaX: " + Map.getDeltaX());
                         }
                     }
                     if (keysPressed[1] == true)
@@ -73,7 +73,7 @@ public class Controls {
                         if (Map.getDeltaX()+keyMovements[1] >= deltaXMin)
                         {
                             Map.setDeltaX(Map.getDeltaX()+keyMovements[1]);
-                            System.out.println("deltaX: " + Map.getDeltaX());
+                            //System.out.println("deltaX: " + Map.getDeltaX());
                         }
                     }
                     if (keysPressed[2] == true)
@@ -81,7 +81,7 @@ public class Controls {
                         if (Map.getDeltaY()+keyMovements[2] <= 0)
                         {
                             Map.setDeltaY(Map.getDeltaY()+keyMovements[2]);
-                            System.out.println("deltaY: " + Map.getDeltaY());
+                            //System.out.println("deltaY: " + Map.getDeltaY());
                         }
                     }
                     if (keysPressed[3] == true)
@@ -89,7 +89,7 @@ public class Controls {
                         if (Map.getDeltaY()+keyMovements[3] >= deltaYMin)
                         {
                             Map.setDeltaY(Map.getDeltaY()+keyMovements[3]);
-                            System.out.println("deltaY: " + Map.getDeltaY());
+                            //System.out.println("deltaY: " + Map.getDeltaY());
                         }
                     }
 
