@@ -23,11 +23,6 @@ public class Noise {
                     // each vector in vectorArr gets a random x and y value
                     int randInt = (int)(Math.random()*8);
                     vectorArr[i][j] = new WeightVector(randomVectors[randInt][0],randomVectors[randInt][1]);
-                    // TEST WITH RANDOM VECTORS
-                    /* 
-                    double randomAngle = Math.random() * Math.PI * 2;
-                    vectorArr[i][j] = new WeightVector(Math.cos(randomAngle), Math.sin(randomAngle));
-                    */
 
                 }
             }
