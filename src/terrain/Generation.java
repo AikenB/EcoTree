@@ -99,20 +99,28 @@ public class Generation {
         }
         int[][] skyOutput = Noise.octaveNoiseLayer(sky.length,sky[0].length);
 
-        for (int i = 0; i < sky.length; i++) {
-            for (int j = 0; j < sky[0].length; j++) {
-                System.out.print("("+land[i][j].getRed() + (int) sky[i][j]+ "," + land[i][j].getGreen() + (int) sky[i][j] + "," + land[i][j].getBlue() + (int) sky[i][j]+ ")");
-                //sky[i][j] = skyOutput[i][j];
-                //land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], land[i][j].getGreen() + (int) sky[i][j], land[i][j].getBlue() + (int) sky[i][j]);
-            }
-            System.out.println();
-        }
+        // for (int i = 0; i < sky.length; i++) {
+        //     for (int j = 0; j < sky[0].length; j++) {
+        //         System.out.print("("+land[i][j].getRed() + (int) sky[i][j]+ "," + land[i][j].getGreen() + (int) sky[i][j] + "," + land[i][j].getBlue() + (int) sky[i][j]+ ")");
+        //         //sky[i][j] = skyOutput[i][j];
+        //         //land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], land[i][j].getGreen() + (int) sky[i][j], land[i][j].getBlue() + (int) sky[i][j]);
+        //     }
+        //     System.out.println();
+        // }
         
         for (int i = 0; i < sky.length; i++) {
             for (int j = 0; j < sky[0].length; j++) {
                 sky[i][j] = skyOutput[i][j];
-                System.out.print("("+land[i][j].getRed() + (int) sky[i][j]+ "," + land[i][j].getGreen() + (int) sky[i][j] + "," + land[i][j].getBlue() + (int) sky[i][j]+ ")");
-                land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], land[i][j].getGreen() + (int) sky[i][j], land[i][j].getBlue() + (int) sky[i][j]);
+                System.out.print("("+(land[i][j].getRed() + (int) sky[i][j])+ "," + (land[i][j].getGreen() + (int) sky[i][j]) + "," + (land[i][j].getBlue() + (int) sky[i][j])+ ")");
+                int green = 0;
+                if (land[i][j].getGreen() + (int) sky[i][j] <= 255) {
+                    green = land[i][j].getGreen() + (int) sky[i][j];
+                } else {
+                    green = 255;
+                }
+                if ((int) sky[i][j] < 120) {
+                    land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], green, land[i][j].getBlue() + (int) sky[i][j]);
+                }
             }
             System.out.println();
         }

@@ -21,28 +21,28 @@ public class Sprite {
     private String imagePath;
 
     //constants for sprite image paths
-    public static final String FROG_SPRITE = "src/images/frog.png";
-    public static final String SPIDER_SPRITE = "src/images/spider.png";
-    public static final String ANT_SPRITE = "src/images/ant.png";
-    public static final String FERN_SPRITE_0 = "src/images/fern_0.png";
-    public static final String FERN_SPRITE_1 = "src/images/fern_1.png";
-    public static final String GRASS_SPRITE_0 = "src/images/grass_0.png";
-    public static final String GRASS_SPRITE_1 = "src/images/grass_1.png";
-    public static final String APPLE_TREE_SPRITE_0 = "src/images/apple_tree_0.png";
-    public static final String APPLE_TREE_SPRITE_1 = "src/images/apple_tree_1.png";
-    public static final String WORM_SPRITE = "src/images/worm.png";
-    public static final String SNAKE_SPRITE = "src/images/snake.png";
-    public static final String MOUSE_SPRITE = "src/images/mouse.png";
-    public static final String BERRY_BUSH_SPRITE_0 = "src/images/berry_bush_0.png";
-    public static final String BERRY_BUSH_SPRITE_1 = "src/images/berry_bush_1.png";
-    public static final String MOSS_SPRITE_0 = "src/images/moss_0.png";
-    public static final String MOSS_SPRITE_1 = "src/images/moss_1.png";
-    public static final String GRASSHOPPER_SPRITE = "src/images/grasshopper.png";
-    public static final String SCORPION_SPRITE = "src/images/scorpion.png";
-    public static final String BEETLE_SPRITE = "src/images/beetle.png";
-    public static final String BEE_SPRITE = "src/images/bee.png";
-    public static final String FLOWER_SPRITE_0 = "src/images/flower_0.png";
-    public static final String FLOWER_SPRITE_1 = "src/images/flower_1.png";
+    public static final String FROG_SPRITE = "EcoTree/src/images/frog.png";
+    public static final String SPIDER_SPRITE = "EcoTree/src/images/spider.png";
+    public static final String ANT_SPRITE = "EcoTree/src/images/ant.png";
+    public static final String FERN_SPRITE_0 = "EcoTree/src/images/fern_0.png";
+    public static final String FERN_SPRITE_1 = "EcoTree/src/images/fern_1.png";
+    public static final String GRASS_SPRITE_0 = "EcoTree/src/images/grass_0.png";
+    public static final String GRASS_SPRITE_1 = "EcoTree/src/images/grass_1.png";
+    public static final String APPLE_TREE_SPRITE_0 = "EcoTree/src/images/apple_tree_0.png";
+    public static final String APPLE_TREE_SPRITE_1 = "EcoTree/src/images/apple_tree_1.png";
+    public static final String WORM_SPRITE = "EcoTree/src/images/worm.png";
+    public static final String SNAKE_SPRITE = "EcoTree/src/images/snake.png";
+    public static final String MOUSE_SPRITE = "EcoTree/src/images/mouse.png";
+    public static final String BERRY_BUSH_SPRITE_0 = "EcoTree/src/images/berry_bush_0.png";
+    public static final String BERRY_BUSH_SPRITE_1 = "EcoTree/src/images/berry_bush_1.png";
+    public static final String MOSS_SPRITE_0 = "EcoTree/src/images/moss_0.png";
+    public static final String MOSS_SPRITE_1 = "EcoTree/src/images/moss_1.png";
+    public static final String GRASSHOPPER_SPRITE = "EcoTree/src/images/grasshopper.png";
+    public static final String SCORPION_SPRITE = "EcoTree/src/images/scorpion.png";
+    public static final String BEETLE_SPRITE = "EcoTree/src/images/beetle.png";
+    public static final String BEE_SPRITE = "EcoTree/src/images/bee.png";
+    public static final String FLOWER_SPRITE_0 = "EcoTree/src/images/flower_0.png";
+    public static final String FLOWER_SPRITE_1 = "EcoTree/src/images/flower_1.png";
     
 
     private BufferedImage image;
