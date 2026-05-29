@@ -110,6 +110,12 @@ public class Hitbox{
             case SCORPION:
                 imagePath = Sprite.SCORPION_SPRITE;
                 break;
+            case BOBCAT:
+                imagePath = Sprite.BOBCAT_SPRITE;
+                break;
+            case BEAR:
+                imagePath = Sprite.BEAR_SPRITE;
+                break;
             // case FLOWER:
             //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
             //     break;

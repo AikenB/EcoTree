@@ -83,7 +83,7 @@ public class MainTree extends Plant {
             }
             
         }
-        plantWeightFactor *= 10;
+        plantWeightFactor *= 5;
 
         System.out.println("plantWeightFactor: " + plantWeightFactor);
         
@@ -169,6 +169,7 @@ public class MainTree extends Plant {
                     }
                 }
             }
+            System.out.println("Species: " + species + " Weight: " + weight + " Count: " + count);
             if (count >= checkThreshold) {
                 ecosystemHealthFactor -= 10;
             }

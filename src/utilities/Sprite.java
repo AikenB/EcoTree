@@ -43,6 +43,8 @@ public class Sprite {
     public static final String BEE_SPRITE = "src/images/bee.png";
     public static final String FLOWER_SPRITE_0 = "src/images/flower_0.png";
     public static final String FLOWER_SPRITE_1 = "src/images/flower_1.png";
+    public static final String BOBCAT_SPRITE = "src/images/bobcat.png";
+    public static final String BEAR_SPRITE = "src/images/bear.png";
     public static final String MAINTREE_SPRITE_0 = "src/images/maintree_0.png";
     public static final String MAINTREE_SPRITE_1 = "src/images/main_tree_1.png";
     

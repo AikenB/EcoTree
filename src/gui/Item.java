@@ -46,6 +46,9 @@ public class Item {
                 case "Fern":
                     imagePath = "src/images/fern_1.png";
                     break;
+                case "Bear":
+                    imagePath = "src/images/bear.png";
+                    break;
                 case "Ant":
                     imagePath = "src/images/ant.png";
                     break;
@@ -85,6 +88,8 @@ public class Item {
                 case "Flower":
                     imagePath = "src/images/flower_1.png";
                     break;
+                case "Bobcat":
+                    imagePath = "src/images/bobcat.png";
             }
             
             if (imagePath != null && new File(imagePath).exists()) {

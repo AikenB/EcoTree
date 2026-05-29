@@ -24,6 +24,8 @@ public class Menu {
     public JPanel panel2;
     public JFrame mainFrame;
     public JPanel introPanel; //used for start screen
+    JPanel shopPanel;
+    JScrollPane scroll;
     int width = 1920;
     int height = 1080;
     int introButtonWidth = 600;
@@ -76,6 +78,7 @@ public class Menu {
         mainFrame.add(gamePanel);
         mainFrame.add(panel2);
         panel2.setBounds(0,0, 500, 900);
+        
         gamePanel.setBounds(500, 0, width, height);
         setButtons();
 
@@ -229,14 +232,15 @@ public class Menu {
     }
     public void setupGame() {
 
-        JPanel shopPanel = new JPanel();
-        JScrollPane scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+        shopPanel = new JPanel();
+        scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            
         //JScrollBar bar = shopPanel.createVerticalScrollBar();
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
-        shopPanel.setPreferredSize(new Dimension(480, 2500));
+        shopPanel.setPreferredSize(new Dimension(480, 2750));
         components.add(shopPanel);
         componentsVisible.add(true);
         components.get(4).setOpaque(false);
@@ -323,7 +327,9 @@ public class Menu {
             new Item("Beetle", 12, 150.0),
             new Item("Frog", 13, 150.0),
             new Item("Snake", 14, 200.0),
-            new Item("Bee", 15, 200.0)
+            new Item("Bee", 15, 200.0),
+            new Item("Bobcat", 16, 200.0),
+            new Item("Bear", 17, 250.0)
         };
         
 
