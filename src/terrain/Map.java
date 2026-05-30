@@ -1,9 +1,12 @@
 package terrain;
 
+import gui.DayNightCycle;
 import gui.Menu;
 import gui.StatsScreen;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import javax.swing.*;
 import utilities.Grid;
 import utilities.Sprite;
@@ -97,7 +100,7 @@ public class Map extends JPanel {
                 // draw each square in the grid
                 g2d.drawRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight);       
                 // setting colors using generation
-                g2d.setColor(terrain.Generation.terrainValues()[j][i]);
+                g2d.setColor(darken(terrain.Generation.terrainValues()[j][i], (float) DayNightCycle.dayTimeLevel));
                 g2d.fillRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight); 
 
             }
@@ -110,7 +113,7 @@ public class Map extends JPanel {
                 for (int i = 0; i < Grid.sprites.size(); i++){
                     Sprite s = Grid.sprites.get(i);
                     if (s != null) {
-                        g2d.drawImage(s.getImage(), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
                     }
                 }
             }
@@ -119,10 +122,12 @@ public class Map extends JPanel {
                 for (int i = 0; i < Grid.beeSprites.size(); i++){
                     Sprite s = Grid.beeSprites.get(i);
                     if (s != null) {
-                        g2d.drawImage(s.getImage(), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
                     }
                 }
              }
+             //Menu.dayNightLayer.repaint();
+             
             //m.refresh();
         
 
@@ -160,6 +165,34 @@ public class Map extends JPanel {
         //statsScreen.setVisible(visible);
         statsScreen.canOpen = visible;
     }
+
+    public Color darken(Color color, float darknessFactor) {
+        float factor = 1 - darknessFactor; 
+        int r = Math.min(255, (int)(color.getRed()   * factor));
+        int g = Math.min(255, (int)(color.getGreen() * factor));
+        int b = Math.min(255, (int)(color.getBlue()  * factor));
+        return new Color(r, g, b);
+    }
+    // public BufferedImage darken(BufferedImage image, float darknessFactor) {
+    //     //float factor = 1 - darknessFactor; 
+    
+    //     BufferedImage darkened = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+    //     for (int y = 0; y < image.getHeight(); y++) {
+    //         for (int x = 0; x < image.getWidth(); x++) {
+    //             Color c = new Color(image.getRGB(x, y));
+                
+    //             Color newColor = darken(c, darknessFactor);
+    //             darkened.setRGB(x, y, newColor.getRGB());
+    //         }
+    //     }
+    //     return darkened;
+    // }
+    public BufferedImage darken(BufferedImage image, float darknessfactor) {
+        RescaleOp op = new RescaleOp(1 - darknessfactor, 0, null);
+        return op.filter(image, null);
+    }
+
+    
 }
 //BUG: holding a key and then switching directions halts movement
 //how to reproduce: 

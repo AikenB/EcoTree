@@ -224,7 +224,7 @@ public class Animal extends Organism {
                  prey = new ArrayList<Species>();
 
         }
-        satiety = 0.9 * foodCapacity;
+        satiety = 0.5 * foodCapacity;
         mass = width * height;
         if (species == Species.BOBCAT || species == Species.DEER){
             mass = 4;
@@ -492,7 +492,7 @@ public class Animal extends Organism {
                         w.doubleOrthogonalize();
 
                         if (d < closestPredatorDistance) {
-                            
+                            closestPredatorDistance = d;
                             closestPredatorVector = w;
                         }
                         
@@ -500,6 +500,7 @@ public class Animal extends Organism {
                         // System.out.println("predator: X: " + w.getX() + " Y: " + w.getY());
                         // System.out.println("-------------");
                         //System.err.printf("  Predator %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, final angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
+                        movementVector = movementVector.add(w);
                     }
                     else if (prey.contains(o.getSpecies())) {
 
@@ -512,7 +513,7 @@ public class Animal extends Organism {
                                 w.orient(x, y, weight);
                             } else if (o.getClass() == Plant.class && !((Plant) o).hasProduce()) {
                                 //makes the animal less motivated to go towards plants that don't have produce
-                                int tendency = (int) (Math.random() * 3 * preySpotted());
+                                int tendency = (int) (Math.random() * 2 * preySpotted());
                                 if (tendency == 0){
                                     weight = (double) (o.energy / (Math.pow(d,1/4)));
                                     w.orient(x, y, weight);
@@ -540,7 +541,7 @@ public class Animal extends Organism {
 
                         //this is to prevent the organisms from constantly following each other if there are no prey or predators around
                         int tendency = (int) (Math.random() * 5) * ((preySpotted()+ 1) / 2);
-                        if (tendency == 0){
+                        if (tendency == 0 && d <= 15){
                             weight = (double) (5 / d);
                             w.orient(x, y, weight);
                         }
@@ -919,7 +920,7 @@ public class Animal extends Organism {
             return false;
         } else {
             return fertility >= rftr 
-            && satiety >= 0.8 * foodCapacity 
+            && satiety >= 0.9 * foodCapacity 
             && health >= 0.5 * maxHealth
             && foundPotentialMate();
         }
@@ -961,17 +962,13 @@ public class Animal extends Organism {
         return (satiety / foodCapacity) * 100;
     }
 
-    public static ArrayList<Species> getPredatorsList(Species species){
-        Animal temp = new Animal(species);
-        temp.stopBehavior();
-        return temp.predators;
+    public ArrayList<Species> getPredators() {
+        return predators;
     }
-
-    public static ArrayList<Species> getPreyList(Species species){
-        Animal temp = new Animal(species);
-        temp.stopBehavior();
-        return temp.prey;
+    public ArrayList<Species> getPrey() {
+        return prey;
     }
+    
 
     
 

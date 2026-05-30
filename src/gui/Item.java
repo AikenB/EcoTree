@@ -1,11 +1,13 @@
 package gui;
 
+import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 public class Item {
@@ -15,6 +17,8 @@ public class Item {
 
     public JPanel panel;
     public JLabel name;
+    public JLabel preyList;
+    public JLabel predatorList;
     public JLabel imageLabel;
     public JLabel price;
     public JButton buyButton;
@@ -32,6 +36,7 @@ public class Item {
         panel.setBackground(new Color(139, 69, 19));
         panel.setOpaque(true);
         this.name = new JLabel(name);
+        
         this.name.setForeground(Color.BLACK);
         this.name.setHorizontalAlignment(JLabel.CENTER);
         this.price = new JLabel("Price: " + String.valueOf(price));
@@ -137,6 +142,7 @@ public class Item {
         this.imageLabel.setBounds(90, 60, 70, 70);
         this.price.setBounds(50, 150, 150, 50);
         this.buyButton.setBounds(50, 200, 150, 50);
+        
         this.y = 280 * (number / 2); // does the integer division to determine which row. 
         // this.y = 200 +  280 * (number / 2); 
         this.x = (number % 2) * 250;
@@ -217,7 +223,18 @@ public class Item {
                 this.species = null;
                 break;
         }
-       
+        preyList = new JLabel("<html>Prey: " + formatList(Organism.getPreyList(species)));
+        predatorList = new JLabel("<html>Predators: " + formatList(Organism.getPredatorList(species)));
+        this.preyList.setBounds(0, 50, 250, 20);
+        this.predatorList.setBounds(0, 30, 250, 30);
+        this.preyList.setFont(this.preyList.getFont().deriveFont(7f));
+        this.predatorList.setFont(this.predatorList.getFont().deriveFont(7f));
+        this.preyList.setHorizontalAlignment(JLabel.LEFT);
+        this.predatorList.setHorizontalAlignment(JLabel.LEFT);
+        preyList.setForeground(Color.BLACK);
+        predatorList.setForeground(Color.BLACK);
+        panel.add(this.preyList);
+        panel.add(this.predatorList);
 
 
     }
@@ -238,5 +255,32 @@ public class Item {
 
     public Species getSpecies() {
         return species;
+    }
+
+    private String formatList(ArrayList<Species> list) {
+        if (list == null || list.isEmpty()) {
+            return "None";
+        }
+        String result = "";
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Species species = list.get(i);
+            if (count >= 5){
+                result += "<br>";
+                count = 0;
+            }
+            if (i != list.size() -1){
+                result += species.toString() + ", ";
+            } else {
+                result += species.toString();
+            }
+            count++;
+        }
+        return result + "<html>";
+    }
+
+    public void setListsVisible(boolean visible) {
+        this.preyList.setVisible(visible);
+        this.predatorList.setVisible(visible);
     }
 }

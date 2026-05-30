@@ -49,21 +49,25 @@ public class MainTree extends Plant {
                         health = maxHealth;
                     }
                     System.out.println("Health rate: " + calculateHealthRate());
-                    if (health >= maxHealth){
-                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_1);
-                    }
-                    if (health < maxHealth){
-                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_2);
-                    }
-                    if (health < maxHealth * 0.75){
-                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_3);
-                    }
-                    if (health < maxHealth * 0.5){
-                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_4);
-                    }
                     if (health < maxHealth * 0.25){
                         Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_5);
                     }
+                    else if (health < maxHealth * 0.5){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_4);
+                    }
+                    else if (health < maxHealth * 0.75){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_3);
+                    }
+                    else if (health < maxHealth){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_2);
+                    }
+                    else if (health >= maxHealth){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_1);
+                    }
+                    
+                    
+                    
+                    
 
                     if (health <= 0){
                         kill(this);
@@ -194,7 +198,7 @@ public class MainTree extends Plant {
                     }
                 }
             }
-            //System.out.println("Species: " + species + " Weight: " + weight + " Count: " + count);
+            System.out.println("Species: " + species + " Weight: " + weight + " Count: " + count);
             if (count >= checkThreshold) {
                 ecosystemHealthFactor -= 10;
             }

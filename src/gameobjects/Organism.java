@@ -285,6 +285,32 @@ public class Organism {
         }
         return -1; // Default for unknown species
     }
+
+    public static ArrayList<Species> getPredatorList(Species species){
+        if (species == Species.GRASS){
+            return new ArrayList<Species>(Arrays.asList(Species.ANT, Species.GRASSHOPPER, Species.BEETLE, Species.DEER));
+        } else if (species == Species.FLOWER){
+            return new ArrayList<Species>(Arrays.asList(Species.BEE, Species.BEETLE, Species.DEER));
+        } else if (species == Species.APPLE_TREE){
+            return new ArrayList<Species>(Arrays.asList(Species.BEE,Species.DEER, Species.GRASSHOPPER, Species.MOUSE, Species.WORM));
+        } else if (species == Species.FERN){
+            return new ArrayList<Species>(Arrays.asList(Species.ANT, Species.BEETLE, Species.DEER, Species.GRASSHOPPER, Species.MOUSE));
+        } else if (species == Species.BERRY_BUSH){
+            return new ArrayList<Species>(Arrays.asList(Species.BEAR, Species.BEE,Species.DEER, Species.GRASSHOPPER, Species.MOUSE, Species.WORM));
+        } else if (species == Species.MOSS){
+            return new ArrayList<Species>(Arrays.asList(Species.BEETLE, Species.DEER));
+        } else {
+            Animal temp = new Animal(species);
+            temp.stopBehavior();
+            return temp.getPredators();
+        }
+    }
+
+    public static ArrayList<Species> getPreyList(Species species){
+        Animal temp = new Animal(species);
+        temp.stopBehavior();
+        return temp.getPrey();
+    }
     
     
 }

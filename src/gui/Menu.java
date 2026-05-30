@@ -21,17 +21,26 @@ import gameobjects.*;
 
 public class Menu {
 
-    public JPanel gamePanel; //used for map
-    public JPanel panel2;
-    public JFrame mainFrame;
-    public JPanel introPanel; //used for start screen
-    JPanel shopPanel;
-    JScrollPane scroll;
+    //GUYS STOP MAKING THE UI COMPONENTS LOCAL VARIABLES ALL THE TIME
+    //-Aiken
+    private JPanel gamePanel; //used for map
+    private JPanel panel2;
+    private JFrame mainFrame;
+    private JPanel introPanel; //used for start screen
+    public DayNightCycle dayNightLayer;
+    private JLabel catalogLabel;
+    private JButton inventory;
+    private JPanel shopPanel;
+    private JScrollPane scroll;
+    private JButton shopButton;
+    private JButton toggleListsVisibleButton;
+    
+    
     int width = 1920;
     int height = 1080;
     int introButtonWidth = 600;
     int introButtonHeight = 100;
-    int instrWidth = 1600;
+    int instrWidth = 1000;
     int instrHeight = 800;
 
     
@@ -53,6 +62,7 @@ public class Menu {
     // this is a parallel array to manage whether items are hidden or not.
 
     boolean waiting;
+    public boolean listsVisible = true; // for predator/prey lists on items in shop/inventory
     Item waitingItem; // the idea here is that this checks if we are waiting to recieve a click to place something.
 
     public Menu () {
@@ -75,6 +85,7 @@ public class Menu {
         // frame2.setBounds(0,0, 500, 700);
         // frame.setBounds(500, 0, width, height);
         gamePanel = new JPanel(new BorderLayout());
+        
         gamePanel.setFocusable(false);
         panel2 = new JPanel(null);
         panel2.setBackground(new Color(139, 69, 19));
@@ -135,10 +146,24 @@ public class Menu {
         componentsVisible.add(true);
         introPanel.add(instrButton);
 
-        JLabel instr = new JLabel("This is a \n description of instructions\nto this game");
+        JLabel instr = new JLabel("<html> <br><br><br><br>INSTRUCTIONS:" +
+        "<br><br><br> - Use arrow keys to move around the map" +
+        "<br><br> - The goal of the game is to create a thriving ecosystem with biodiversity. This can be done by placing plants near the EcoTree and having various species of different trophic levels" +
+        "<br><br> - When animal species become overpopulated relative to the other animals in the ecosystem, your EcoTree will become unhealthy and lose health" +
+        "<br><br> - When your EcoTree's health reaches 0, the game is over" +
+        "<br><br> - Place organisms on the map by buying them and then selecting them from the inventory" +
+        "<br><br> - Organisms have different predators and prey depending on their species (plants have no prey)" +
+        "<br><br> - Earn more money by placing more plants. Plants with a higher photosynthesis rate produce more money" +
+        "<br><br> - The rate of money you can earn is capped based on the diversity of your ecosystem. Introduce more animals of different trophic levels to earn money faster!" +
+        "<br><br> - When animals become overpopulated in general (not relative to other animals in the ecosystem), outbreaks have the chance of occuring" +
+        "<br><br> - Animals can reproduce under certain conditions, such as being well fed and being near another member of their species" +
+        "<br><br> - Bees are special animals that will fly to other plants and help them reproduce"
+        );
         instr.setBounds(width/2 - instrWidth/2, 150, instrWidth, instrHeight);
         instr.setOpaque(true);
         instr.setBackground(new Color(200,220,225));
+        instr.setVerticalAlignment(JLabel.TOP);
+        instr.setHorizontalAlignment(JLabel.LEFT);
         // instr.setEditable(false);
         // instr.setOpaque(false);
         // instr.setFocusable(false);
@@ -177,9 +202,12 @@ public class Menu {
                 m.setBounds(0,000,1920, 1080);
                 gamePanel.add(m);
                 //System.out.println("something");
-                gamePanel.repaint();
+                
                 refresh();
                 setupGame();
+                dayNightLayer = new DayNightCycle(); //start daylight cycle
+                
+                
                 //Map.loadMap();
             }
 
@@ -293,7 +321,7 @@ public class Menu {
         // shop.setBounds(100, 0, 100, 100);
         
         
-        JButton inventory = new JButton("Inventory");
+        inventory = new JButton("Inventory");
         inventory.setFocusable(false);
         components.add(null);
         nonscroll.add(inventory);
@@ -305,8 +333,13 @@ public class Menu {
         inventory.setBounds(200, 50, 100, 50);
 
         
+        
+        //shopPanel.setComponentZOrder(shop,0);
+        componentsVisible.add(true);
+        inventory.setBounds(200, 50, 100, 50);
+        
 
-        JLabel catalogLabel = new JLabel("Shop");
+        catalogLabel = new JLabel("Shop");
         catalogLabel.setForeground(Color.WHITE);
         // label.setForeground(new Color(100, 150, 0));
         catalogLabel.setFocusable(false);
@@ -315,14 +348,25 @@ public class Menu {
         nonscroll.add(catalogLabel);
         components.get(7).setBounds(0, 100, 500, 50);   
 
-        JButton shop = new JButton("Shop");
-        shop.setBackground(new Color(100, 150, 0));
-        shop.setForeground(Color.WHITE);
-        nonscroll.add(shop);
-        shop.setFocusable(false);
-        shop.setBounds(50,50,100,50);
-        shop.setVisible(true);
+        shopButton = new JButton("Shop");
+        shopButton.setBackground(new Color(100, 150, 0));
+        shopButton.setForeground(Color.WHITE);
+        nonscroll.add(shopButton);
+        shopButton.setFocusable(false);
+        shopButton.setBounds(50,50,100,50);
+        shopButton.setVisible(true);
         
+        toggleListsVisibleButton = new JButton("Toggle Predator/Prey Lists");
+        toggleListsVisibleButton.setFocusable(false);
+        components.add(null);
+        nonscroll.add(toggleListsVisibleButton);
+        toggleListsVisibleButton.setBackground(new Color(100, 150, 0));
+        toggleListsVisibleButton.setForeground(Color.WHITE);
+        toggleListsVisibleButton.setFont(toggleListsVisibleButton.getFont().deriveFont(8f));
+        componentsVisible.add(true);
+        toggleListsVisibleButton.setBounds(200, 120, 150, 20);
+
+
         //nonscroll.setComponentZOrder(test, 0);
         // test.setLayout(null);
         // nonscroll.setLayout(null);
@@ -390,7 +434,7 @@ public class Menu {
          //}
         
 
-        shop.addActionListener(e -> {
+        shopButton.addActionListener(e -> {
             waiting = false;
             catalogLabel.setText("Shop");
             for (int i = 0; i < items.length; i++) {
@@ -404,6 +448,13 @@ public class Menu {
             catalogLabel.setText("Inventory");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForInventory();
+            }
+        });
+
+        toggleListsVisibleButton.addActionListener(e -> {
+            listsVisible = !listsVisible;
+            for (int i = 0; i < items.length; i++) {
+                items[i].setListsVisible(listsVisible);
             }
         });
 

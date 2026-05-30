@@ -19,6 +19,7 @@ public class StatsScreen extends JPopupMenu {
     private JLabel speciesLabel;
     private JLabel healthLabel;
     private JLabel energyLabel;
+    private JLabel trophicLevelLabel;
     private ArrayList<Mutation> mutationsList;
     private ArrayList<JLabel> mutationLabels;
     private ArrayList<JLabel> diseaseLabels;
@@ -42,6 +43,7 @@ public class StatsScreen extends JPopupMenu {
         speciesLabel = new JLabel("Species: ");
         healthLabel = new JLabel("Health: ");
         energyLabel = new JLabel("Energy: ");
+        trophicLevelLabel = new JLabel("Trophic Level: ");
         mutationsList = new ArrayList<>();
         mutationLabels = new ArrayList<>();
         diseaseLabels = new ArrayList<>();
@@ -49,6 +51,7 @@ public class StatsScreen extends JPopupMenu {
         add(speciesLabel);
         add(healthLabel);
         add(energyLabel);
+        add(trophicLevelLabel);
         add(new JLabel("MUTATIONS:"));
         
         
@@ -72,11 +75,12 @@ public class StatsScreen extends JPopupMenu {
         add(speciesLabel);
         add(healthLabel);
         add(energyLabel);
-        
+        add(trophicLevelLabel);
         
         speciesLabel.setText("Species: " + organism.getSpecies());
         healthLabel.setText("Health: " + (int) organism.getHealth());
         energyLabel.setText("Energy: " + (int) organism.getEnergy());
+        trophicLevelLabel.setText("Trophic Level: " + (organism.getTrophicLevel() + 1));
 
         if (organism.getClass() == Plant.class) {
             Plant plant = (Plant) organism;
