@@ -29,11 +29,17 @@ public class DayNightCycle{
                         isDay = !isDay;
                     }
                     if (time <= 4){
+                        //System.out.println(isDay);
                         if (isDay && Game.timeElapsed > 5){
 
-                            setDayTimeLevel(Math.min(0.4 - time/10, 1));
+                            setDayTimeLevel(Math.max(0, Math.min((4/7.0) - (time/7.0), 1)));
+                            //System.out.println("DAYTIMELEVEL" + dayTimeLevel);
+                            //System.out.println("xxxx " + (4/7.0 - time/7.0));
+                            //System.out.println("TIME " + time);
                         } else if (!isDay){
-                            setDayTimeLevel(Math.min(time/10, 1));
+                            setDayTimeLevel(Math.max(0, Math.min(time/7.0, 1)));
+                            //System.out.println("DAYTIMELEVEL" + dayTimeLevel);
+                            //System.out.println("xxxx " + (time/7.0));
                         }
                     }
                     
