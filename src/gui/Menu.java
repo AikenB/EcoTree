@@ -293,7 +293,7 @@ public class Menu {
         // shop.setBounds(100, 0, 100, 100);
         
         
-        JButton inventory = new JButton("inventory");
+        JButton inventory = new JButton("Inventory");
         inventory.setFocusable(false);
         components.add(null);
         nonscroll.add(inventory);
@@ -306,15 +306,16 @@ public class Menu {
 
         
 
-        JLabel label = new JLabel("Shop");
+        JLabel catalogLabel = new JLabel("Shop");
+        catalogLabel.setForeground(Color.WHITE);
         // label.setForeground(new Color(100, 150, 0));
-        label.setFocusable(false);
-        components.add(label);
+        catalogLabel.setFocusable(false);
+        components.add(catalogLabel);
         componentsVisible.add(true);
-        nonscroll.add(label);
+        nonscroll.add(catalogLabel);
         components.get(7).setBounds(0, 100, 500, 50);   
 
-        JButton shop = new JButton("shop");
+        JButton shop = new JButton("Shop");
         shop.setBackground(new Color(100, 150, 0));
         shop.setForeground(Color.WHITE);
         nonscroll.add(shop);
@@ -352,10 +353,11 @@ public class Menu {
             new Item("Scorpion", 11, 125.0),
             new Item("Beetle", 12, 150.0),
             new Item("Frog", 13, 150.0),
-            new Item("Snake", 14, 200.0),
-            new Item("Bee", 15, 200.0),
-            new Item("Bobcat", 16, 200.0),
-            new Item("Bear", 17, 250.0)
+            new Item("Deer", 14, 175.0),
+            new Item("Snake", 15, 200.0),
+            new Item("Bee", 16, 200.0),
+            new Item("Bobcat", 17, 200.0),
+            new Item("Bear", 18, 250.0)
         };
         
 
@@ -375,7 +377,8 @@ public class Menu {
                   if (Game.money - (items[index]).priceNumber >= 0) {
                       Game.money -= items[index].priceNumber;
                       items[index].quantity++;
-                      moneyLabel.setText(String.valueOf(Game.money));
+                      String moneyText = String.valueOf((int) Math.floor(Game.money));
+                      moneyLabel.setText("Money: " + moneyText);
                   }
                 } else if (items[index].quantity > 0) {
                     waiting = true;
@@ -389,7 +392,7 @@ public class Menu {
 
         shop.addActionListener(e -> {
             waiting = false;
-            label.setText("Shop");
+            catalogLabel.setText("Shop");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForShop();
             }
@@ -398,7 +401,7 @@ public class Menu {
 
         inventory.addActionListener(e -> {
             waiting = false;
-            label.setText("Inventory");
+            catalogLabel.setText("Inventory");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForInventory();
             }

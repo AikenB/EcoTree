@@ -45,9 +45,12 @@ public class Sprite {
     public static final String FLOWER_SPRITE_1 = "src/images/flower_1.png";
     public static final String BOBCAT_SPRITE = "src/images/bobcat.png";
     public static final String BEAR_SPRITE = "src/images/bear.png";
-    public static final String MAINTREE_SPRITE_0 = "src/images/maintree_0.png";
+    public static final String DEER_SPRITE = "src/images/deer.png";
     public static final String MAINTREE_SPRITE_1 = "src/images/main_tree_1.png";
-    
+    public static final String MAINTREE_SPRITE_2 = "src/images/main_tree_2.png";
+    public static final String MAINTREE_SPRITE_3 = "src/images/main_tree_3.png";
+    public static final String MAINTREE_SPRITE_4 = "src/images/main_tree_4.png";
+    public static final String MAINTREE_SPRITE_5 = "src/images/main_tree_5.png";
 
     private BufferedImage image;
     public Sprite(int x, int y, int width, int height, String imagePath) throws IOException {

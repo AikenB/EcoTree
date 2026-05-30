@@ -111,6 +111,10 @@ public class Item {
                     break;
                 case "Bobcat":
                     imagePath = "src/images/bobcatshopicon.png";
+                    break;
+                case "Deer":
+                    imagePath = "src/images/deer.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {

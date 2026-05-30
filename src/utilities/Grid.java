@@ -290,6 +290,16 @@ public class Grid {
             }
         }
     }
+
+    // public static Direction[] getDirectionsList(){
+    //     Direction[] directions = new Direction[8];
+    //     int index = 0;
+    //     for (int i = 0; i < Direction.values().length; i++){
+    //         directions[index] = Direction.values()[i];
+    //         index++;
+    //     }
+    //     return directions;
+    // }
     
 
     

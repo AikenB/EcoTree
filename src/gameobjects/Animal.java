@@ -99,7 +99,7 @@ public class Animal extends Organism {
                 speed = 2.5;
                 thirstCapacity = 25.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT));
-                prey = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.MOUSE, Species.SCORPION));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.MOUSE, Species.SCORPION));
                 break;
             case WORM:
                 trophicLevel = 1;
@@ -134,7 +134,7 @@ public class Animal extends Organism {
                 height = 1;
                 speed = 2;
                 thirstCapacity = 5.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.SPIDER, Species.SCORPION, Species.BEETLE, Species.BEAR));
+                predators = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.SPIDER, Species.SCORPION, Species.BEETLE, Species.BEAR));
                 prey = new ArrayList<Species>(Arrays.asList(Species.FERN, Species.GRASS,Species.APPLE_TREE,Species.BERRY_BUSH));
                 break;
             case SCORPION:
@@ -160,7 +160,7 @@ public class Animal extends Organism {
                 height = 1;
                 speed = 2.5;
                 thirstCapacity = 10.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.BEAR));
+                predators = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.BEAR));
                 prey = new ArrayList<Species>(Arrays.asList(Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM, Species.FLOWER));
                 break;
             case BEE:
@@ -185,7 +185,7 @@ public class Animal extends Organism {
                 speed = 3.0;
                 thirstCapacity = 30.0;
                 predators = new ArrayList<Species>();
-                prey = new ArrayList<Species>(Arrays.asList(Species.MOUSE, Species.SNAKE, Species.FROG));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.MOUSE, Species.SNAKE, Species.FROG));
                 break;
             case BEAR:
                 trophicLevel = 4;
@@ -198,6 +198,18 @@ public class Animal extends Organism {
                 thirstCapacity = 50.0;
                 predators = new ArrayList<Species>();
                 prey = new ArrayList<Species>(Arrays.asList(Species.MOUSE, Species.BERRY_BUSH, Species.ANT, Species.GRASSHOPPER, Species.BEETLE, Species.FROG));
+                break;
+            case DEER:
+                trophicLevel = 3;
+                energy = 50;
+                foodCapacity = 75;
+                rftr = 70.0;
+                width = 3;
+                height = 3;
+                speed = 2.5;
+                thirstCapacity = 30.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
+                prey = new ArrayList<Species>(Arrays.asList(Species.GRASS, Species.FERN, Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.MOSS, Species.BEETLE, Species.GRASSHOPPER));
                 break;
              default:
                  trophicLevel = 1;
@@ -214,9 +226,10 @@ public class Animal extends Organism {
         }
         satiety = 0.9 * foodCapacity;
         mass = width * height;
-        if (species == Species.BOBCAT){
+        if (species == Species.BOBCAT || species == Species.DEER){
             mass = 4;
         }
+        
         trophicLevels.set(trophicLevel, trophicLevels.get(trophicLevel) + 1);
         
     }
@@ -616,18 +629,46 @@ public class Animal extends Organism {
         /*if the animal can't move in the specific direction, iterate through 
         each possible direction until it finds one that is available*/
         if (!canMove(d)) {
+            //System.out.println("cant move in intended direction: " + d);
             //if the animal can move in A direction:
             if (canMove()){
                 //check each direction until it finds a direction where it can move int
-                for (int i = (d.ordinal() + 1) % 8; i != d.ordinal() + 8; i++) {
-                    Grid.Direction newDirection = Grid.Direction.values()[i % 8];
+                // for (int i = (d.ordinal() + 1) % 8; i != d.ordinal() + 8; i++) {
+                //     Grid.Direction newDirection = Grid.Direction.values()[i % 8];
+                //     if (canMove(newDirection)) {
+                //         //if it can move in this direction, then call the method again. This time it should not run through this loop again
+                //         safeMove(newDirection);
+                //         return;
+                //     }
+                // }
+
+                //this algorithm makes it so that if the organism can't move its original intended direction it will check the closest directions around it until it finds one it can move in
+                int i = d.ordinal();
+                //System.out.println("intended direction: " + d);
+                int k = 1;
+                for (int j = 0; j < 7; j++){
+                    i += k * (int) Math.pow(-1, j);
+                    //System.out.println("i: " + i + " k: " + k * (int) Math.pow(-1, j));
+                    k++;
+                    //makes i go in the order of 1, -2, 3, -4
+                    //this is so that it checks the next closest directions around the initial direction
+                    
+                    int index = (i) % 8;
+                    //System.out.println("index" + index);
+                    if (index < 0) {
+                        index = 8 + index;
+                    }
+                    Grid.Direction newDirection = Grid.Direction.values()[index];
+                    //System.out.println(newDirection + " " + j);
                     if (canMove(newDirection)) {
+                        //System.out.println("moved in direction: " + newDirection);
                         //if it can move in this direction, then call the method again. This time it should not run through this loop again
                         safeMove(newDirection);
                         return;
                     }
                 }
             }
+            //System.out.println("not moving");
             //if it can't then it won't move at all
             
         }

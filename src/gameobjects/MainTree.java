@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import utilities.Grid;
 import utilities.Hitbox;
+import utilities.Sprite;
 
 public class MainTree extends Plant {
     
@@ -48,6 +49,22 @@ public class MainTree extends Plant {
                         health = maxHealth;
                     }
                     System.out.println("Health rate: " + calculateHealthRate());
+                    if (health >= maxHealth){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_1);
+                    }
+                    if (health < maxHealth){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_2);
+                    }
+                    if (health < maxHealth * 0.75){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_3);
+                    }
+                    if (health < maxHealth * 0.5){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_4);
+                    }
+                    if (health < maxHealth * 0.25){
+                        Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_5);
+                    }
+
                     if (health <= 0){
                         kill(this);
                         Grid.updateSpeciesList();
@@ -141,9 +158,7 @@ public class MainTree extends Plant {
         //eliminate the 2 least populous species
         //the purpose of this is to prevent discouraging the player from introducing new species to the ecosystem to eat the overpopulated species
         int cutoffAmount = 2; 
-        if (speciesWeights.size() <= 2){
-            cutoffAmount = 0;
-        } else if (speciesWeights.size() <= 3){
+        if (speciesWeights.size() <= 3){
             cutoffAmount = 1;
         }
         for (int i = 0; i < Math.min(speciesWeights.size(),cutoffAmount); i++){
@@ -179,7 +194,7 @@ public class MainTree extends Plant {
                     }
                 }
             }
-            System.out.println("Species: " + species + " Weight: " + weight + " Count: " + count);
+            //System.out.println("Species: " + species + " Weight: " + weight + " Count: " + count);
             if (count >= checkThreshold) {
                 ecosystemHealthFactor -= 10;
             }
