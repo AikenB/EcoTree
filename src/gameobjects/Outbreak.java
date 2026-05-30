@@ -27,6 +27,7 @@ public class Outbreak {
     public static int mouseDeaths = 0;
     public static int wormDeaths = 0;
     private int infectedCount = 0;
+    
     public static enum type {
 
         CORONAVIRUS,

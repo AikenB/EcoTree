@@ -1,9 +1,13 @@
 package gui;
 
 import gameobjects.Organism.Species;
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 public class Item {
     // public double price;
     // public String name;
@@ -25,12 +29,29 @@ public class Item {
     public Item (String name, int number, double price) {
         panel = new JPanel();
         panel.setLayout(null);
+        panel.setBackground(new Color(139, 69, 19));
+        panel.setOpaque(true);
         this.name = new JLabel(name);
+        this.name.setForeground(Color.BLACK);
         this.name.setHorizontalAlignment(JLabel.CENTER);
         this.price = new JLabel("Price: " + String.valueOf(price));
+        this.price.setForeground(Color.BLACK);
         this.priceNumber = price;
         this.buyButton = new JButton("buy");
         this.buyButton.setFocusable(false);
+        buyButton.setBackground(new Color(100, 150, 0));
+        buyButton.setForeground(Color.WHITE);
+        buyButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+        buyButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buyButton.setBorder(new LineBorder(Color.YELLOW, 2));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buyButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+            }
+        });
         panel.add(this.name);
         
         this.imageLabel = new JLabel();
@@ -89,12 +110,16 @@ public class Item {
                     imagePath = "src/images/flower_1.png";
                     break;
                 case "Bobcat":
-                    imagePath = "src/images/bobcat.png";
+                    imagePath = "src/images/bobcatshopicon.png";
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
                 ImageIcon icon = new ImageIcon(imagePath);
-                Image scaledImage = icon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+                int width = 70;
+                // if (species == Species.BOBCAT){
+                //     width = 100;
+                // }
+                Image scaledImage = icon.getImage().getScaledInstance(width, 70, Image.SCALE_SMOOTH);
                 this.imageLabel.setIcon(new ImageIcon(scaledImage));
             }
         } catch (Exception e) {
@@ -144,21 +169,13 @@ public class Item {
             case "Bush":
                 this.species = Species.BUSH;
                 break;
-            case "Rabbit":
-                this.species = Species.RABBIT;
-                break;
             case "Deer":
                 this.species = Species.DEER;
-                break;
-            case "Wolf":
-                this.species = Species.WOLF;
                 break;
             case "Bear":
                 this.species = Species.BEAR;
                 break;
-            case "Cow":
-                this.species = Species.COW;
-                break;
+            
             case "Snake":
                 this.species = Species.SNAKE;
                 break;

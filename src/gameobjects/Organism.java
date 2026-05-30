@@ -33,11 +33,8 @@ public class Organism {
     protected Hitbox hitbox; 
 
     public static enum Species {
-        RABBIT,
         DEER,
-        WOLF,
         BEAR,
-        COW,
         SNAKE,
         FROG,
         BOBCAT,

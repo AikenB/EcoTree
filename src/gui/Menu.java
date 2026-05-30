@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.imageio.ImageIO;
 
 import gameobjects.Organism.Species;
@@ -39,6 +40,7 @@ public class Menu {
 
     static Map m;
     private static JLabel moneyLabel = new JLabel("Money: " + String.valueOf(Game.money));
+    
     public ArrayList<JComponent> components = new ArrayList<JComponent>();
     // the idea of the ArrayList is that references to different buttons and whatnot can be accessed...
     //... from the place where the buttons were initialized. This enables more modular programming, ...
@@ -75,12 +77,16 @@ public class Menu {
         gamePanel = new JPanel(new BorderLayout());
         gamePanel.setFocusable(false);
         panel2 = new JPanel(null);
+        panel2.setBackground(new Color(139, 69, 19));
+        panel2.setOpaque(true);
         mainFrame.add(gamePanel);
         mainFrame.add(panel2);
         panel2.setBounds(0,0, 500, 900);
         
+        moneyLabel.setForeground(Color.YELLOW);
         gamePanel.setBounds(500, 0, width, height);
         setButtons();
+
 
         // frame2 = new JFrame("Shop");
         // frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -234,16 +240,19 @@ public class Menu {
 
         shopPanel = new JPanel();
         scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setBackground(new Color(139, 69, 19));
+        scroll.getViewport().setBackground(new Color(139, 69, 19));
             
         //JScrollBar bar = shopPanel.createVerticalScrollBar();
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
-        shopPanel.setPreferredSize(new Dimension(480, 2750));
+        shopPanel.setPreferredSize(new Dimension(480, 3000));
+        shopPanel.setBackground(new Color(139, 69, 19));
+        shopPanel.setOpaque(true);
         components.add(shopPanel);
         componentsVisible.add(true);
-        components.get(4).setOpaque(false);
         //frame2.add(shopPanel);
         
         panel2.add(scroll,BorderLayout.CENTER);
@@ -255,11 +264,22 @@ public class Menu {
         verticalScrollBar.setUnitIncrement(20); // Increase scroll sensitivity
         verticalScrollBar.setBlockIncrement(100); // Increase block scroll sensitivity
         verticalScrollBar.setPreferredSize(new Dimension(20, 0)); // Make scroll bar wider
-
+        // verticalScrollBar.setBackground(new Color(101, 50, 15));
+        // verticalScrollBar.setForeground(new Color(80, 40, 10));
+        verticalScrollBar.setBorder(null);
+        verticalScrollBar.setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(80, 40, 10);
+                this.trackColor = new Color(101, 50, 15);
+            }
+        });
         JPanel nonscroll = new JPanel(null);
         panel2.add(nonscroll, BorderLayout.CENTER);
         nonscroll.setBounds(0,0,500, 150);
         nonscroll.setVisible(true);
+        nonscroll.setBackground(new Color(139, 69, 19));
+        nonscroll.setOpaque(true);
         
         // JButton shop = new JButton("shop");
         // nonscroll.add(shop);
@@ -277,6 +297,9 @@ public class Menu {
         inventory.setFocusable(false);
         components.add(null);
         nonscroll.add(inventory);
+        inventory.setBackground(new Color(100, 150, 0));
+        inventory.setForeground(Color.WHITE);
+        
         //shopPanel.setComponentZOrder(shop,0);
         componentsVisible.add(true);
         inventory.setBounds(200, 50, 100, 50);
@@ -284,6 +307,7 @@ public class Menu {
         
 
         JLabel label = new JLabel("Shop");
+        // label.setForeground(new Color(100, 150, 0));
         label.setFocusable(false);
         components.add(label);
         componentsVisible.add(true);
@@ -291,6 +315,8 @@ public class Menu {
         components.get(7).setBounds(0, 100, 500, 50);   
 
         JButton shop = new JButton("shop");
+        shop.setBackground(new Color(100, 150, 0));
+        shop.setForeground(Color.WHITE);
         nonscroll.add(shop);
         shop.setFocusable(false);
         shop.setBounds(50,50,100,50);
@@ -307,8 +333,8 @@ public class Menu {
         
         components.add(moneyLabel);
         componentsVisible.add(true);
-        shopPanel.add(moneyLabel);
-        components.get(8).setBounds(250, 0, 250, 50);
+        nonscroll.add(moneyLabel);
+        moneyLabel.setBounds(310, 50, 180, 50);
         moneyLabel.setFocusable(false);
 
         Item[] items = {
@@ -394,7 +420,8 @@ public class Menu {
             Game.money += amount;
             
         } 
-        moneyLabel.setText(String.valueOf(Math.floor(Game.money)));
+        String moneyText = String.valueOf((int) Math.floor(Game.money));
+        moneyLabel.setText("Money: " + moneyText);
         
     }
 

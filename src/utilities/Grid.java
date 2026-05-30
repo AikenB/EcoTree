@@ -172,8 +172,6 @@ public class Grid {
                 return createPlant(species, x, y);
             case MAINTREE:
                 return createPlant(species, x, y);
-            case RABBIT:
-                return createAnimal(species, x, y);
             case DEER:
                 return createAnimal(species, x, y);
             case ANT:
@@ -186,13 +184,9 @@ public class Grid {
                 return createAnimal(species, x, y);
             case SPIDER:
                 return createAnimal(species, x, y);
-            case WOLF:
-                return createAnimal(species, x, y);
             case BEAR:
                 return createAnimal(species, x, y);
             case BOBCAT:
-                return createAnimal(species, x, y);
-            case COW:
                 return createAnimal(species, x, y);
             case MOUSE:
                 return createAnimal(species, x, y);

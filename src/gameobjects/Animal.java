@@ -920,6 +920,18 @@ public class Animal extends Organism {
         return (satiety / foodCapacity) * 100;
     }
 
+    public static ArrayList<Species> getPredatorsList(Species species){
+        Animal temp = new Animal(species);
+        temp.stopBehavior();
+        return temp.predators;
+    }
+
+    public static ArrayList<Species> getPreyList(Species species){
+        Animal temp = new Animal(species);
+        temp.stopBehavior();
+        return temp.prey;
+    }
+
     
 
     
