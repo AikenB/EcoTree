@@ -123,7 +123,7 @@ public class Animal extends Organism {
                 speed = 2;
                 thirstCapacity = 15.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT, Species.BEAR));
-                prey = new ArrayList<Species>(Arrays.asList(Species.BERRY_BUSH, Species.FERN, Species.APPLE_TREE, Species.SCORPION));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS, Species.BERRY_BUSH, Species.FERN, Species.APPLE_TREE, Species.SCORPION));
                 break;
             case GRASSHOPPER:
                 trophicLevel = 1;
@@ -135,7 +135,7 @@ public class Animal extends Organism {
                 speed = 2;
                 thirstCapacity = 5.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.SPIDER, Species.SCORPION, Species.BEETLE, Species.BEAR));
-                prey = new ArrayList<Species>(Arrays.asList(Species.FERN, Species.GRASS,Species.APPLE_TREE,Species.BERRY_BUSH));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS, Species.FERN, Species.GRASS,Species.APPLE_TREE,Species.BERRY_BUSH));
                 break;
             case SCORPION:
                 trophicLevel = 3;
@@ -161,7 +161,7 @@ public class Animal extends Organism {
                 speed = 2.5;
                 thirstCapacity = 10.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.BEAR));
-                prey = new ArrayList<Species>(Arrays.asList(Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM, Species.FLOWER));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS,Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM, Species.FLOWER));
                 break;
             case BEE:
                 trophicLevel = 1;
@@ -173,7 +173,7 @@ public class Animal extends Organism {
                 speed = 10;
                 thirstCapacity = 5.0;
                 predators = new ArrayList<Species>();
-                prey = new ArrayList<Species>(Arrays.asList(Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS, Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE));
                 break;
             case BOBCAT:
                 trophicLevel = 4;
@@ -209,7 +209,7 @@ public class Animal extends Organism {
                 speed = 2.5;
                 thirstCapacity = 30.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
-                prey = new ArrayList<Species>(Arrays.asList(Species.GRASS, Species.FERN, Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.MOSS, Species.BEETLE, Species.GRASSHOPPER));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS, Species.GRASS, Species.FERN, Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.MOSS, Species.BEETLE, Species.GRASSHOPPER));
                 break;
              default:
                  trophicLevel = 1;
@@ -487,7 +487,7 @@ public class Animal extends Organism {
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
                     if (predators.contains(o.getSpecies()) && d < 10.0) { //d<10 to prevent animals from running away when predator isnt that close
                         
-                        weight = (double) (250 / Math.sqrt(d));
+                        weight = (double) (250.0 / Math.sqrt(d));
                         w.orient(x, y, weight);
                         w.doubleOrthogonalize();
 
@@ -509,17 +509,17 @@ public class Animal extends Organism {
                             //FOR DEALING WITH PLANTS
                             if (o.getClass() == Plant.class && ((Plant) o).hasProduce()) {
                                 
-                                weight = (double) (5 * o.energy / (Math.pow(d,1/4)));
+                                weight = (double) (5.0 * o.energy / (Math.pow(d,4)));
                                 w.orient(x, y, weight);
                             } else if (o.getClass() == Plant.class && !((Plant) o).hasProduce()) {
                                 //makes the animal less motivated to go towards plants that don't have produce
                                 int tendency = (int) (Math.random() * 2 * preySpotted());
                                 if (tendency == 0){
-                                    weight = (double) (o.energy / (Math.pow(d,1/4)));
+                                    weight = (double) (o.energy / (Math.pow(d,4)));
                                     w.orient(x, y, weight);
                                 }
                             } else { //FOR DEALING WITH ANIMALS WHEN ANIMAL IS HUNGRY
-                                weight = (double) (o.energy / (Math.pow(d,1/4)));
+                                weight = (double) (o.energy / (Math.pow(d,4)));
                                 w.orient(x, y, weight);
                             }
                         } 
@@ -529,7 +529,7 @@ public class Animal extends Organism {
                             //since this calculation will be done for each prey spotted, it will be scaled with the amount of prey spotted to prevent itself from constantly following prey
                             int tendency = (int) (Math.random() * 2 * preySpotted());
                             if (tendency == 0){
-                                weight = (double) (o.energy / (Math.pow(d,1/4)));
+                                weight = (double) (o.energy / (Math.pow(d,4)));
                                 w.orient(x, y, weight);
                             }
                         }
@@ -542,7 +542,7 @@ public class Animal extends Organism {
                         //this is to prevent the organisms from constantly following each other if there are no prey or predators around
                         int tendency = (int) (Math.random() * 5) * ((preySpotted()+ 1) / 2);
                         if (tendency == 0 && d <= 15){
-                            weight = (double) (5 / d);
+                            weight = 5.0 / d;
                             w.orient(x, y, weight);
                         }
                         

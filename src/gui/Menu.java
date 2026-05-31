@@ -398,10 +398,11 @@ public class Menu {
             new Item("Beetle", 12, 150.0),
             new Item("Frog", 13, 150.0),
             new Item("Deer", 14, 175.0),
-            new Item("Snake", 15, 200.0),
-            new Item("Bee", 16, 200.0),
-            new Item("Bobcat", 17, 200.0),
-            new Item("Bear", 18, 250.0)
+            new Item("Dragonfruit Cactus", 15, 175.0),
+            new Item("Snake", 16, 200.0),
+            new Item("Bee", 17, 200.0),
+            new Item("Bobcat", 18, 200.0),
+            new Item("Bear", 19, 250.0)
         };
         
 

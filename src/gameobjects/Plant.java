@@ -1,4 +1,5 @@
 package gameobjects;
+import gui.DayNightCycle;
 import gui.Menu;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -113,6 +114,16 @@ public class Plant extends Organism {
                 SPRITE_0 = Sprite.FLOWER_SPRITE_0;
                 SPRITE_1 = Sprite.FLOWER_SPRITE_1;
                 break;
+            case DRAGONFRUIT_CACTUS:
+                energy = 20;
+                width = 3;
+                height = 4;
+                photosynthesisEfficiency = 1.5;
+                maxProduce = 5;
+                productionRarity = 75;
+                SPRITE_0 = Sprite.DRAGONFRUIT_CACTUS_SPRITE_0;
+                SPRITE_1 = Sprite.DRAGONFRUIT_CACTUS_SPRITE_1;
+                break;
             case MAINTREE:
                 health = 1000;
                 energy = 0;
@@ -148,6 +159,13 @@ public class Plant extends Organism {
                     // t++;
                     Thread.sleep(dt);
                     Menu.updateMoney(photosynthesisEfficiency);
+                    if (species == Species.DRAGONFRUIT_CACTUS){ //dragonfruit trees will produce more fruit at night
+                        if (!DayNightCycle.isDay){
+                            productionRarity = 25;
+                        } else {
+                            productionRarity = 85;
+                        }
+                    }
                     int chance = (int) (Math.random() * (int)(productionRarity));
                     if (chance == 0 && produce < maxProduce){
                         produce++;

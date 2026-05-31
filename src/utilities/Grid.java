@@ -196,6 +196,8 @@ public class Grid {
                 return createAnimal(species, x, y);
             case BEETLE:
                 return createAnimal(species, x, y);
+            case DRAGONFRUIT_CACTUS:
+                return createPlant(species, x, y);
             case BEE:
                 return createBee(x, y);
             default:

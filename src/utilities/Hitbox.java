@@ -152,7 +152,9 @@ public class Hitbox{
             case FLOWER:
                 imagePath = Sprite.FLOWER_SPRITE_0;
                 break;
-
+            case DRAGONFRUIT_CACTUS:
+                imagePath = Sprite.DRAGONFRUIT_CACTUS_SPRITE_0;
+                break;
 
             case MAINTREE:
                 imagePath = Sprite.MAINTREE_SPRITE_1;

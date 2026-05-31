@@ -57,6 +57,7 @@ public class Organism {
         BERRY_BUSH,
         MOSS,
         BUSH,
+        DRAGONFRUIT_CACTUS,
 
         MAINTREE
 
@@ -237,6 +238,7 @@ public class Organism {
                 return 0;
             case MOSS:
                 return 0;
+            case DRAGONFRUIT_CACTUS:
             // case BUSH:
             //     return 0;
             
@@ -299,6 +301,8 @@ public class Organism {
             return new ArrayList<Species>(Arrays.asList(Species.BEAR, Species.BEE,Species.DEER, Species.GRASSHOPPER, Species.MOUSE, Species.WORM));
         } else if (species == Species.MOSS){
             return new ArrayList<Species>(Arrays.asList(Species.BEETLE, Species.DEER));
+        } else if (species == Species.DRAGONFRUIT_CACTUS){
+            return new ArrayList<Species>(Arrays.asList(Species.BEE, Species.BEETLE, Species.DEER, Species.GRASSHOPPER, Species.MOUSE));
         } else {
             Animal temp = new Animal(species);
             temp.stopBehavior();

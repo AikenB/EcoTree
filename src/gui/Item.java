@@ -120,6 +120,9 @@ public class Item {
                 case "Deer":
                     imagePath = "src/images/deer.png";
                     break;
+                case "Dragonfruit Cactus":
+                    imagePath = "src/images/dragonfruit_cactus_1.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
@@ -215,6 +218,9 @@ public class Item {
                 break;
             case "Beetle":
                 this.species = Species.BEETLE;
+                break;
+            case "Dragonfruit Cactus":
+                this.species = Species.DRAGONFRUIT_CACTUS;
                 break;
             case "Bee":
                 this.species = Species.BEE;
