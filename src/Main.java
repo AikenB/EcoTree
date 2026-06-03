@@ -1,7 +1,7 @@
 
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
-import gui.Menu;
+import gui.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.Timer;
@@ -22,7 +22,7 @@ public class Main {
         // initialize terrain generation before drawing map
         terrain.Generation.initialize();
 
-        Menu menu = new Menu();
+        Screen menu = new Screen();
         
         //Map.loadMap();
         
@@ -30,6 +30,10 @@ public class Main {
 
         //Grid grid = new Grid();
         Grid.createPlant(Species.MAINTREE, 64,64);
+        // Grid.createPlant(Species.GRASS, 0, 0);
+        // Grid.createPlant(Species.GRASS, 0, Grid.grid.length - 1);
+        // Grid.createPlant(Species.GRASS, Grid.grid[0].length - 1, 0);
+        // Grid.createPlant(Species.GRASS, Grid.grid[0].length - 1, Grid.grid.length - 1);
         // tree gen
         ArrayList<int[]> treeLocs = terrain.Generation.getTreeLocations();
         System.out.println("SIZELOCS" + treeLocs.size());

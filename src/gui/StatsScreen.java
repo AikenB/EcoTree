@@ -1,7 +1,7 @@
 package gui;
 
 import gameobjects.Animal;
-import gameobjects.Bee;
+import gameobjects.FlyingAnimal;
 import gameobjects.Mutation;
 import gameobjects.Organism;
 import gameobjects.Plant;
@@ -96,7 +96,8 @@ public class StatsScreen extends JPopupMenu {
                 animal = (Animal) organism;
             }
             else{
-                animal = (Bee) organism;
+                animal = (FlyingAnimal) organism;
+                add(new JLabel("id: " + ((FlyingAnimal) organism).getUniqueID()));
             }
                 
             foodCapacityLabel = new JLabel("Food Capacity: " + animal.getFoodCapacity());
@@ -188,7 +189,14 @@ public class StatsScreen extends JPopupMenu {
                 if (gridX >= 0 && gridX < Map.getMapWidth() && gridY >= 0 && gridY < Map.getMapHeight()) {
                     Hitbox hitbox = Grid.grid[gridY][gridX];
                     
-                    if (hitbox != null) {
+                    
+                    if (hoveringOverFlyingOrganism(gridX, gridY)) {
+                        currentOrganism = getFlyingOrganismAt(gridX, gridY);
+                        updateStats(currentOrganism);
+                        if (canOpen)
+                            statsScreen.show(mapPanel, e.getX(), e.getY());
+                    } 
+                    else if (hitbox != null) {
                         currentOrganism = hitbox.getOrganism();
                         updateStats(currentOrganism);
                         if (canOpen)
@@ -203,5 +211,24 @@ public class StatsScreen extends JPopupMenu {
                 }
             }
         });
+    }
+
+    private boolean hoveringOverFlyingOrganism(int x, int y) {
+        for (FlyingAnimal animal : Grid.flyingAnimals) {
+            if (animal.getX() == x && animal.getY() == y) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private Organism getFlyingOrganismAt(int x, int y) {
+        for (FlyingAnimal animal : Grid.flyingAnimals) {
+            if (animal.getX() == x && animal.getY() == y) {
+                return animal;
+            }
+        }
+        return null;
     }
 }

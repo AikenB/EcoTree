@@ -88,5 +88,9 @@ public class WeightVector {
         theta = Math.atan2(y, x);  // Just recalculate theta, don't call orient()
     }
 
+    public String toString() {
+        return "<" + x + ", " + y + ">, weight: " + weight + ", theta: " + theta;
+    }
+
     
 }

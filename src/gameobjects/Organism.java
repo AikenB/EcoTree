@@ -46,6 +46,7 @@ public class Organism {
         SCORPION,
         BEETLE,
         BEE,
+        HUMMINGBIRD,
 
         GRASS,
         FLOWER,
@@ -58,6 +59,7 @@ public class Organism {
         MOSS,
         BUSH,
         DRAGONFRUIT_CACTUS,
+        MOONFLOWER,
 
         MAINTREE
 
@@ -215,6 +217,13 @@ public class Organism {
         if (organism instanceof Plant) {
             ((Plant) organism).stopBehavior();
         }
+        if (organism instanceof FlyingAnimal) {
+            ((FlyingAnimal) organism).stopBehavior();
+            trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
+            Grid.killFlyingAnimal((FlyingAnimal) organism);
+            organism.hitbox = null; // Clear hitbox reference to help GC
+            return;
+        }
         
         trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
         Grid.killOrganism(organism.getHitbox());
@@ -239,6 +248,9 @@ public class Organism {
             case MOSS:
                 return 0;
             case DRAGONFRUIT_CACTUS:
+                return 0;
+            case MOONFLOWER:
+                return 0;
             // case BUSH:
             //     return 0;
             
@@ -303,6 +315,8 @@ public class Organism {
             return new ArrayList<Species>(Arrays.asList(Species.BEETLE, Species.DEER));
         } else if (species == Species.DRAGONFRUIT_CACTUS){
             return new ArrayList<Species>(Arrays.asList(Species.BEE, Species.BEETLE, Species.DEER, Species.GRASSHOPPER, Species.MOUSE));
+        } else if (species == Species.MOONFLOWER){
+            return new ArrayList<Species>(Arrays.asList(Species.BEETLE));
         } else {
             Animal temp = new Animal(species);
             temp.stopBehavior();

@@ -9,7 +9,7 @@ public class DayNightCycle{
     //private Color dayColor = new Color(0,0,0,1);
     private ExecutorService executor;
     private double dt = 20;
-    private double dayNightCycleDuration = 60; // Duration of a full day-night cycle in seconds
+    private double dayNightCycleDuration = 120; // Duration of a full day-night cycle in seconds
     private double time = 0; // Current time in the cycle (in seconds)
     public static boolean isDay = true;
     public static double dayTimeLevel = 0; // 0 is day, 1 is night

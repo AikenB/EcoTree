@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import gui.Controls;
 import gameobjects.*;
 
-public class Menu {
+public class Screen {
 
     //GUYS STOP MAKING THE UI COMPONENTS LOCAL VARIABLES ALL THE TIME
     //-Aiken
@@ -65,7 +65,7 @@ public class Menu {
     public boolean listsVisible = true; // for predator/prey lists on items in shop/inventory
     Item waitingItem; // the idea here is that this checks if we are waiting to recieve a click to place something.
 
-    public Menu () {
+    public Screen () {
        
 
         mainFrame = new JFrame("EcoTree");
@@ -391,18 +391,20 @@ public class Menu {
             new Item("Spider", 5, 50.0),
             new Item("Flower", 6, 50.0),
             new Item("Grasshopper", 7, 75.0),
-            new Item("Apple Tree", 8, 100.0),
-            new Item("Mouse", 9, 100.0),
-            new Item("Berry Bush", 10, 125.0),
-            new Item("Scorpion", 11, 125.0),
-            new Item("Beetle", 12, 150.0),
-            new Item("Frog", 13, 150.0),
-            new Item("Deer", 14, 175.0),
-            new Item("Dragonfruit Cactus", 15, 175.0),
-            new Item("Snake", 16, 200.0),
-            new Item("Bee", 17, 200.0),
-            new Item("Bobcat", 18, 200.0),
-            new Item("Bear", 19, 250.0)
+            new Item("Moonflower", 8, 75.0),
+            new Item("Apple Tree", 9, 100.0),
+            new Item("Mouse", 10, 100.0),
+            new Item("Berry Bush", 11, 125.0),
+            new Item("Scorpion", 12, 125.0),
+            new Item("Beetle", 13, 150.0),
+            new Item("Hummingbird", 14, 150.0),
+            new Item("Frog", 15, 150.0),
+            new Item("Deer", 16, 175.0),
+            new Item("Dragonfruit Cactus", 17, 175.0),
+            new Item("Snake", 18, 200.0),
+            new Item("Bee", 19, 200.0),
+            new Item("Bobcat", 20, 200.0),
+            new Item("Bear", 21, 250.0)
         };
         
 

@@ -1,7 +1,7 @@
 package terrain;
 
 import gui.DayNightCycle;
-import gui.Menu;
+import gui.Screen;
 import gui.StatsScreen;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,7 +17,7 @@ public class Map extends JPanel {
     // -320/-320 centers screen on start
     private static int deltaX = -440;
     private static int deltaY = -900;
-    private Menu m;
+    private Screen m;
     private StatsScreen statsScreen;
     
 
@@ -108,24 +108,19 @@ public class Map extends JPanel {
 
         
         
-            if (Grid.sprites.size() > 0){
-
-                for (int i = 0; i < Grid.sprites.size(); i++){
-                    Sprite s = Grid.sprites.get(i);
-                    if (s != null) {
-                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
-                    }
+            // Render sprites with thread-safe iteration
+            for (Sprite s : Grid.sprites) {
+                if (s != null) {
+                    g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
                 }
             }
-            if (Grid.beeSprites.size() > 0){
-
-                for (int i = 0; i < Grid.beeSprites.size(); i++){
-                    Sprite s = Grid.beeSprites.get(i);
-                    if (s != null) {
-                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
-                    }
+            
+            // Render bee sprites with thread-safe iteration
+            for (Sprite s : Grid.flyingAnimalSprites) {
+                if (s != null) {
+                    g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
                 }
-             }
+            }
              //Menu.dayNightLayer.repaint();
              
             //m.refresh();
@@ -133,7 +128,7 @@ public class Map extends JPanel {
 
     }
     // testing this by changing it to a constructor
-    public Map(Menu m)
+    public Map(Screen m)
     {
         this.m = m;
         this.statsScreen = new StatsScreen(this);
@@ -147,11 +142,10 @@ public class Map extends JPanel {
             }
         });
         
-        Timer timer = new Timer(100, e -> {
+        // Render at 60 FPS for smooth animation (16.67ms per frame)
+        Timer timer = new Timer(16, e -> {
             repaint();
-            revalidate();
-            //m.refresh();
-            //m.frame.setComponentZOrder(m.components.get(4),0);
+            // Removed revalidate() to reduce layout thrashing
         });
 
         timer.start();

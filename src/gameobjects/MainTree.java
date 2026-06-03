@@ -1,7 +1,7 @@
 package gameobjects;
 
 import gameobjects.Organism.Species;
-import gui.Menu;
+import gui.Screen;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -20,6 +20,7 @@ public class MainTree extends Plant {
     {
 
         super(Organism.Species.MAINTREE);
+
         maxHealth = health;
         super.stopBehavior();
         initializeBehavior();
@@ -32,10 +33,10 @@ public class MainTree extends Plant {
     public void initializeBehavior(){
 
         executor = Executors.newSingleThreadExecutor();
-        System.out.println("MainTree initializeBehavior called");
+        //System.out.println("MainTree initializeBehavior called");
 
         executor.submit(() -> {
-            System.out.println("MainTree executor started");
+            //System.out.println("MainTree executor started");
             
             while (!Thread.currentThread().isInterrupted()) {
                 try {
@@ -43,12 +44,12 @@ public class MainTree extends Plant {
                     int dt = 1000;
                     // t++;
                     Thread.sleep(dt);
-                    Menu.updateMoney(photosynthesisEfficiency);
+                    Screen.updateMoney(photosynthesisEfficiency);
                     health += calculateHealthRate();
                     if (health > maxHealth) {
                         health = maxHealth;
                     }
-                    System.out.println("Health rate: " + calculateHealthRate());
+                    //System.out.println("Health rate: " + calculateHealthRate());
                     if (health < maxHealth * 0.25){
                         Hitbox.updateSprite(this, Sprite.MAINTREE_SPRITE_5);
                     }
@@ -198,7 +199,7 @@ public class MainTree extends Plant {
                     }
                 }
             }
-            System.out.println("Species: " + species + " Weight: " + weight + " Count: " + count);
+            // System.out.println("Species: " + species + " Weight: " + weight + " Count: " + count);
             if (count >= checkThreshold) {
                 ecosystemHealthFactor -= 10;
             }
@@ -206,9 +207,9 @@ public class MainTree extends Plant {
 
 
         ecosystemHealthFactor = Math.max(ecosystemHealthFactor, -30); //cap overpopulation penalty 
-        System.out.println("ecosystemHealth: " + ecosystemHealthFactor);
-        System.out.println("plantWeightFactor: " + plantWeightFactor);
-        System.out.println("diversityFactor: " + diversityFactor);
+        // System.out.println("ecosystemHealth: " + ecosystemHealthFactor);
+        // System.out.println("plantWeightFactor: " + plantWeightFactor);
+        // System.out.println("diversityFactor: " + diversityFactor);
         return Math.min(ecosystemHealthFactor + plantWeightFactor + diversityFactor, 2); //forces health rate to cap at 2 for balance
 
     }

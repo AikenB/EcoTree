@@ -123,6 +123,12 @@ public class Item {
                 case "Dragonfruit Cactus":
                     imagePath = "src/images/dragonfruit_cactus_1.png";
                     break;
+                case "Moonflower":
+                    imagePath = "src/images/moonflowershopicon.png";
+                    break;
+                case "Hummingbird":
+                    imagePath = "src/images/hummingbird.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
@@ -222,8 +228,14 @@ public class Item {
             case "Dragonfruit Cactus":
                 this.species = Species.DRAGONFRUIT_CACTUS;
                 break;
+            case "Moonflower":
+                this.species = Species.MOONFLOWER;
+                break;
             case "Bee":
                 this.species = Species.BEE;
+                break;
+            case "Hummingbird":
+                this.species = Species.HUMMINGBIRD;
                 break;
             default:
                 this.species = null;

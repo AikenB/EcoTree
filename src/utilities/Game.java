@@ -17,11 +17,11 @@ import java.util.Map;
 public class Game {
     public static int timeElapsed = 0;
     public static int outbreakCooldown = 300;
-    public static int timePerInvasiveEvent = 90;
+    public static int timePerInvasiveEvent = 150;
     public static int invasiveCooldown = timePerInvasiveEvent; //TODO: change
 
     //for currency
-    public static double money = 100000; //TODO: change starting money when done testing
+    public static double money = 10000; //TODO: change starting money when done testing
     public static double maxCurrencyRate = 2.5;
     public static double change = 0;
     public static boolean atMaxRate = false;
@@ -38,29 +38,29 @@ public class Game {
         }
         double rate = 2.5;
 
-        if (tLevels[1] >= 10){
+        if (tLevels[1] >= 15){
             rate = 5;
         }
-        if (tLevels[1] >= 10 && tLevels[2] >= 10){
-            rate = 10;
+        if (tLevels[1] >= 15 && tLevels[2] >= 10 && biodiversity >= 4){
+            rate = 7.5;
+        } 
+        if (tLevels[1] >= 15 && tLevels[2] >= 25 && tLevels[3] >= 10 && biodiversity >= 5){
+            rate = 15;
         }
-        if (tLevels[1] >= 10 && tLevels[2] >= 10 && tLevels[3] >= 10){
+        if (tLevels[1] >= 35 && tLevels[2] >= 25 && tLevels[3] >= 25 && tLevels[4] >= 10 && biodiversity >= 6){
             rate = 20;
         }
-        if (tLevels[1] >= 10 && tLevels[2] >= 10 && tLevels[3] >= 10 && tLevels[4] >= 10){
-            rate = 25;
-        }
-        if (tLevels[1] >= 20 
-            && tLevels[2] >= 20
-            && tLevels[3] >= 20
+        if (tLevels[1] >= 75 
+            && tLevels[2] >= 50
+            && tLevels[3] >= 40
             && tLevels[4] >= 20 
             && tLevels[0] >= 10 
-            && Grid.speciesList.size() >= 7){
+            && biodiversity >= 7){
 
-            rate = 100;
+            rate = 50;
             maxCurrencyRate = rate;
         } else {
-            maxCurrencyRate = rate * (1 + (biodiversity - 2) * 0.05);
+            maxCurrencyRate = rate * (1 + (biodiversity - 2) * 0.04);
         }
         
         
@@ -234,6 +234,8 @@ public class Game {
         invasiveSpeciesCounts.put(Species.SCORPION, (int)(3.0/8 * area)); 
         invasiveSpeciesCounts.put(Species.BEETLE, (int)(3.0/4 * area)); 
         invasiveSpeciesCounts.put(Species.SNAKE, (int)(Math.min(area/6,(3.0/12 * area)))); 
+        invasiveSpeciesCounts.put(Species.BOBCAT, (int)(Math.min(area/8,(3.0/12 * area)))); 
+        invasiveSpeciesCounts.put(Species.DEER, (int)(Math.min(area/9,(3.0/12 * area))));
         invasiveSpeciesCounts.put(Species.FROG, (int)(3.0/16 * area));
         invasiveSpeciesCounts.put(Species.MOUSE, (int)(3.0/4 * area));
     

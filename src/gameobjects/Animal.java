@@ -14,8 +14,8 @@ import utilities.WeightVector;
 public class Animal extends Organism {
     
     
-    private ArrayList<Species> predators;
-    private ArrayList<Species> prey;
+    protected ArrayList<Species> predators;
+    protected ArrayList<Species> prey;
 
     protected double speed;
     protected double foodCapacity;
@@ -27,7 +27,7 @@ public class Animal extends Organism {
     /**
      * required fertility to reproduce
      */
-    private double rftr;
+    protected double rftr;
     
     // private Timer moveTimer;
 
@@ -62,7 +62,7 @@ public class Animal extends Organism {
                 speed = 1.0;
                 
                 thirstCapacity = 5.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER, Species.FROG, Species.BEAR));
+                predators = new ArrayList<Species>(Arrays.asList(Species.SPIDER, Species.FROG, Species.BEAR, Species.HUMMINGBIRD));
                 prey = new ArrayList<Species>(Arrays.asList(Species.FERN, Species.GRASS));
                 break;
             case SPIDER:
@@ -72,7 +72,7 @@ public class Animal extends Organism {
                 rftr = 40.0;
                 speed = 2;
                 thirstCapacity = 10.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.SCORPION));
+                predators = new ArrayList<Species>(Arrays.asList(Species.FROG, Species.SCORPION, Species.HUMMINGBIRD));
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.WORM, Species.GRASSHOPPER));
                 prey.add(Species.ANT);
                 break;
@@ -99,7 +99,7 @@ public class Animal extends Organism {
                 speed = 2.5;
                 thirstCapacity = 25.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT));
-                prey = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.MOUSE, Species.SCORPION));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.MOUSE, Species.SCORPION, Species.HUMMINGBIRD));
                 break;
             case WORM:
                 trophicLevel = 1;
@@ -160,8 +160,8 @@ public class Animal extends Organism {
                 height = 1;
                 speed = 2.5;
                 thirstCapacity = 10.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.BEAR));
-                prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS,Species.GRASSHOPPER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.WORM, Species.FLOWER));
+                predators = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.BEAR, Species.HUMMINGBIRD));
+                prey = new ArrayList<Species>(Arrays.asList(Species.GRASSHOPPER, Species.MOONFLOWER, Species.MOSS, Species.FERN, Species.GRASS, Species.SCORPION, Species.DRAGONFRUIT_CACTUS, Species.WORM, Species.FLOWER));
                 break;
             case BEE:
                 trophicLevel = 1;
@@ -185,7 +185,7 @@ public class Animal extends Organism {
                 speed = 3.0;
                 thirstCapacity = 30.0;
                 predators = new ArrayList<Species>();
-                prey = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.MOUSE, Species.SNAKE, Species.FROG));
+                prey = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.MOUSE, Species.SNAKE, Species.FROG, Species.HUMMINGBIRD));
                 break;
             case BEAR:
                 trophicLevel = 4;
@@ -209,7 +209,19 @@ public class Animal extends Organism {
                 speed = 2.5;
                 thirstCapacity = 30.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT));
-                prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS, Species.GRASS, Species.FERN, Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.MOSS, Species.BEETLE, Species.GRASSHOPPER));
+                prey = new ArrayList<Species>(Arrays.asList(Species.GRASS, Species.FERN, Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.MOSS, Species.BEETLE, Species.GRASSHOPPER, Species.DRAGONFRUIT_CACTUS));
+                break;
+            case HUMMINGBIRD:
+                trophicLevel = 1;
+                energy = 25; 
+                foodCapacity = 50;
+                rftr = 120.0; //TODO: change to 120
+                width = 1;
+                height = 1;
+                speed = 10;
+                thirstCapacity = 5.0;
+                predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT, Species.SNAKE));
+                prey = new ArrayList<Species>(Arrays.asList(Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.ANT, Species.SPIDER, Species.DRAGONFRUIT_CACTUS, Species.MOONFLOWER,   Species.BEETLE));
                 break;
              default:
                  trophicLevel = 1;
@@ -224,7 +236,7 @@ public class Animal extends Organism {
                  prey = new ArrayList<Species>();
 
         }
-        satiety = 0.5 * foodCapacity;
+        satiety = 0.55 * foodCapacity; //TODO: fix when done testing
         mass = width * height;
         if (species == Species.BOBCAT || species == Species.DEER){
             mass = 4;
@@ -254,11 +266,12 @@ public class Animal extends Organism {
     //====================EATING MECHANICS============================
                     if (contactingPrey() && isHungry()) {
                         Organism prey = getContactedPrey(this);
-                        if (prey != null && prey.getClass() == Animal.class) {
+                        if (prey != null && (prey.getClass() == Animal.class || prey.getClass() == FlyingAnimal.class) && this.species != Species.BEETLE) {
                             
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
                             kill(prey);
+                            System.out.println("ate prey " + prey.getSpecies());
                             Grid.updateSpeciesList();
                         } else if (prey != null && prey.getClass() == Plant.class && ((Plant) prey).hasProduce()) {
                             satiety += prey.energy;
@@ -274,7 +287,7 @@ public class Animal extends Organism {
     //=====================REPRODUCTION MECHANICS===========================             
                     else if (canReproduce()) {
                         int chance = (int) (Math.random() * 3);
-                        if (chance == 0) {
+                        if (chance == 0 && getMate() != null) {
                             reproduce(getMate());
                             fertility = 0;
                             getMate().fertility = 0;
@@ -409,12 +422,34 @@ public class Animal extends Organism {
 
     private int preySpotted() {
         Hitbox[][] viewfield = getViewField();
+        ArrayList<Organism> organismsInSight = new ArrayList<>();
         int count = 0;
         for (int i = 0; i < viewfield.length; i++) {
             for (int j = 0; j < viewfield[i].length; j++) {
                 if (viewfield[i][j] != null) {
                     Organism o = viewfield[i][j].getOrganism();
-                    if (o != null && prey.contains(o.getSpecies())) {
+                    if (o != null && prey.contains(o.getSpecies()) && isNewOrganism(organismsInSight, o)) {
+                        count++;
+                        organismsInSight.add(o);
+                    }
+                }
+                if (hasGroundedPrey(j, i) && isNewOrganism(organismsInSight, getGroundedPrey(j, i))) {
+                    count++;
+                    organismsInSight.add(getGroundedPrey(j, i));
+                }
+            }
+        }
+        return count;
+    }
+
+    public int sameSpeciesSpotted() {
+        Hitbox[][] viewfield = getViewField();
+        int count = 0;
+        for (int i = 0; i < viewfield.length; i++) {
+            for (int j = 0; j < viewfield[i].length; j++) {
+                if (viewfield[i][j] != null) {
+                    Organism o = viewfield[i][j].getOrganism();
+                    if (o != null && o != this &&o.getSpecies() == this.species) {
                         count++;
                     }
                 }
@@ -443,6 +478,26 @@ public class Animal extends Organism {
             }
         }
         return viewField;
+    }
+
+    private boolean hasGroundedPrey(int x, int y){
+        for (FlyingAnimal flyingAnimal : Grid.flyingAnimals) {
+            if (flyingAnimal.isGrounded() && prey.contains(flyingAnimal.getSpecies()) && flyingAnimal.getX() == x && flyingAnimal.getY() == y) {
+                //System.out.println("has grounded prey: ");
+                return true;
+            }
+        }
+        return false;
+
+    }
+    private Organism getGroundedPrey(int x, int y){
+        for (FlyingAnimal flyingAnimal : Grid.flyingAnimals) {
+            if (flyingAnimal.isGrounded() && prey.contains(flyingAnimal.getSpecies()) && flyingAnimal.getX() == x && flyingAnimal.getY() == y) {
+                return flyingAnimal;
+            }
+        }
+        return null;
+
     }
     /**
      * moves the organism. It will scan its surroundings and weigh in how much it will 
@@ -485,7 +540,7 @@ public class Animal extends Organism {
                     
                     /*formula for calculating the weight vector for each organism.
                     the impact of d can be tuned to prevent the organism from going in the middle of two prey*/
-                    if (predators.contains(o.getSpecies()) && d < 10.0) { //d<10 to prevent animals from running away when predator isnt that close
+                    if (predators.contains(o.getSpecies()) && d < 13.0) { //d<10 to prevent animals from running away when predator isnt that close
                         
                         weight = (double) (250.0 / Math.sqrt(d));
                         w.orient(x, y, weight);
@@ -499,8 +554,7 @@ public class Animal extends Organism {
                         // System.out.println("predator:" + o.getSpecies());
                         // System.out.println("predator: X: " + w.getX() + " Y: " + w.getY());
                         // System.out.println("-------------");
-                        //System.err.printf("  Predator %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, final angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
-                        movementVector = movementVector.add(w);
+                        
                     }
                     else if (prey.contains(o.getSpecies())) {
 
@@ -515,7 +569,7 @@ public class Animal extends Organism {
                                 //makes the animal less motivated to go towards plants that don't have produce
                                 int tendency = (int) (Math.random() * 2 * preySpotted());
                                 if (tendency == 0){
-                                    weight = (double) (o.energy / (Math.pow(d,4)));
+                                    weight = (double) ( 2 *o.energy / (Math.pow(d,4)));
                                     w.orient(x, y, weight);
                                 }
                             } else { //FOR DEALING WITH ANIMALS WHEN ANIMAL IS HUNGRY
@@ -529,25 +583,33 @@ public class Animal extends Organism {
                             //since this calculation will be done for each prey spotted, it will be scaled with the amount of prey spotted to prevent itself from constantly following prey
                             int tendency = (int) (Math.random() * 2 * preySpotted());
                             if (tendency == 0){
-                                weight = (double) (o.energy / (Math.pow(d,4)));
+                                weight = (double) (5 * o.energy / (Math.pow(d,4)));
                                 w.orient(x, y, weight);
                             }
                         }
-                        
                         //System.err.printf("  Prey %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
                     }
                     else if (!o.equals(this) && o.getSpecies() == this.getSpecies() && !this.isHungry()) {
                         //this is so that organisms will tend to stick with organisms of the same species
 
                         //this is to prevent the organisms from constantly following each other if there are no prey or predators around
-                        int tendency = (int) (Math.random() * 5) * ((preySpotted()+ 1) / 2);
+                        int tendency = (int) ((Math.random() * 5) * ((sameSpeciesSpotted()) / 2.0));
                         if (tendency == 0 && d <= 15){
                             weight = 5.0 / d;
                             w.orient(x, y, weight);
                         }
                         
-                        
-                        //System.err.printf("  Ally %s at rel pos (%d,%d), dist=%.2f, weight=%.2f, angle=%.2f%n", o.getSpecies(), x, y, d, weight, w.getTheta());
+                    }
+                    if (hasGroundedPrey(j, i)){
+                        Organism groundedPrey = getGroundedPrey(j, i);
+                         weight = (double) (groundedPrey.energy / (Math.pow(d,4)));
+                         w.orient(x, y, weight);
+                         movementVector = movementVector.add(w);
+                         if (weight > highestPreyWeight && prey.contains(groundedPrey.getSpecies())) {
+                            closestPreyVector = w;
+                            closestPreyDistance = d;
+                            highestPreyWeight = weight;
+                        }
                     }
                     if (weight > highestPreyWeight && prey.contains(o.getSpecies())) {
                         closestPreyVector = w;
@@ -696,19 +758,12 @@ public class Animal extends Organism {
      * 
      */
     private boolean canMove(){
-        for (int i = x; i < x + width; i++) {
-            for (int j = y; j < y + height; j++) {
-                //check all directions for each item in the hitbox
-                for (int k = 0; k < Grid.Direction.values().length; k++) {
-                    if (canMove(Grid.Direction.values()[k])) {
-                        return true;
-                }
-        }
+        for (int k = 0; k < Grid.Direction.values().length; k++) {
+            if (canMove(Grid.Direction.values()[k])) {
+                return true;
             }
         }
-        
         return false;
-
     }
     /**
      * checks if the animal can move in a specific given direction
@@ -811,6 +866,10 @@ public class Animal extends Organism {
                     if (o != null && prey.contains(o.getSpecies())) {
                         return true;
                     }
+                    if (hasGroundedPrey(i, j)) {
+                        System.out.println("contacting grounded prey");
+                        return true;
+                    }
                 }
             }
         }
@@ -832,6 +891,10 @@ public class Animal extends Organism {
                             return o;
                         }
                     }
+                    if (animal.hasGroundedPrey(i, j)) {
+                        //System.out.println("got contacting grounded prey");
+                        return animal.getGroundedPrey(i, j);
+                    }
                 }
             }
         }
@@ -840,12 +903,18 @@ public class Animal extends Organism {
 
     //TODO: tune this mechanic
     public boolean isHungry() {
+        //System.out.println("prey spotted: " + preySpotted());
         if (satiety < 0.9 * foodCapacity && preySpotted() >= 5) {
+            //System.out.println("case1: satiety = " + (satiety / foodCapacity));
             return true;
         } 
         else if (satiety < 0.85 * foodCapacity && preySpotted() >= 3) {
-            return false;
+            //System.out.println("case2: satiety = " + (satiety / foodCapacity));
+            return true;
+            
         } else {
+            //if (satiety < 0.8 * foodCapacity) 
+                //System.out.println("case3: satiety = " + (satiety / foodCapacity));
             return satiety < 0.8 * foodCapacity; 
         }
         
@@ -887,7 +956,7 @@ public class Animal extends Organism {
                     Hitbox hitbox = Grid.grid[i][j];
                     if (hitbox != null) {
                         Organism o = hitbox.getOrganism();
-                        if (o != null && o != this && o.getSpecies() == this.getSpecies()) {
+                        if (o != null && o != this && o.getSpecies() == this.getSpecies() && ((Animal) o).canReproduce()) {
                             return true;
                         }
                     }
@@ -904,7 +973,7 @@ public class Animal extends Organism {
                     Hitbox hitbox = Grid.grid[i][j];
                     if (hitbox != null) {
                         Organism o = hitbox.getOrganism();
-                        if (o != null && o != this && o.getSpecies() == this.getSpecies()) {
+                        if (o != null && o != this && o.getSpecies() == this.getSpecies() && ((Animal) o).canReproduce()) {
                             return (Animal) o;
                         }
                     }
