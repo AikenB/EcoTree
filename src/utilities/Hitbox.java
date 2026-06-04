@@ -110,6 +110,21 @@ public class Hitbox{
             case SCORPION:
                 imagePath = Sprite.SCORPION_SPRITE;
                 break;
+            case BOBCAT:
+                imagePath = Sprite.BOBCAT_SPRITE;
+                break;
+            case BEAR:
+                imagePath = Sprite.BEAR_SPRITE;
+                break;
+            case DEER:
+                imagePath = Sprite.DEER_SPRITE;
+                break;
+            case MOONFLOWER:
+                imagePath = Sprite.MOONFLOWER_SPRITE_0;
+                break;
+            case BALD_EAGLE:
+                imagePath = Sprite.BALD_EAGLE_SPRITE;
+                break;
             // case FLOWER:
             //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
             //     break;
@@ -143,10 +158,14 @@ public class Hitbox{
             case FLOWER:
                 imagePath = Sprite.FLOWER_SPRITE_0;
                 break;
-
-
+            case DRAGONFRUIT_CACTUS:
+                imagePath = Sprite.DRAGONFRUIT_CACTUS_SPRITE_0;
+                break;
+            case HUMMINGBIRD:
+                imagePath = Sprite.HUMMINGBIRD_SPRITE;
+                break;
             case MAINTREE:
-                imagePath = Sprite.APPLE_TREE_SPRITE_0;
+                imagePath = Sprite.MAINTREE_SPRITE_1;
                 break;    
             default:
                 imagePath = null;

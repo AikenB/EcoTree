@@ -1,9 +1,12 @@
 package terrain;
 
-import gui.Menu;
+import gui.DayNightCycle;
+import gui.Screen;
 import gui.StatsScreen;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import javax.swing.*;
 import utilities.Grid;
 import utilities.Sprite;
@@ -15,7 +18,7 @@ public class Map extends JPanel {
     // -320/-320 centers screen on start
     private static int deltaX = -440;
     private static int deltaY = -900;
-    private Menu m;
+    private Screen m;
     private StatsScreen statsScreen;
 
     private int tick = 0;
@@ -115,6 +118,7 @@ public class Map extends JPanel {
                 // draw each square in the grid
                 g2d.drawRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight);       
                 // setting colors using generation
+<<<<<<< HEAD
                 int r = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
                 int gre = Math.min(255, terrain.Generation.terrainValues()[j][i].getGreen() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
                 int b = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
@@ -126,37 +130,39 @@ public class Map extends JPanel {
                 }
                 
                 g2d.setColor(c);
+=======
+                g2d.setColor(darken(terrain.Generation.terrainValues()[j][i], (float) DayNightCycle.dayTimeLevel));
+>>>>>>> origin/main
                 g2d.fillRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight); 
 
             }
         }
 
-        
-        
-            if (Grid.sprites.size() > 0){
-
-                for (int i = 0; i < Grid.sprites.size(); i++){
-                    Sprite s = Grid.sprites.get(i);
+            if (Screen.gameRunning){
+            
+                // Render sprites with thread-safe iteration
+                for (Sprite s : Grid.sprites) {
                     if (s != null) {
-                        g2d.drawImage(s.getImage(), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
                     }
+                
                 }
+            
+                // Render bee sprites with thread-safe iteration
+                for (Sprite s : Grid.flyingAnimalSprites) {
+                    if (s != null) {
+                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                    }
+                
+                }
+             //Menu.dayNightLayer.repaint();
             }
-            if (Grid.beeSprites.size() > 0){
-
-                for (int i = 0; i < Grid.beeSprites.size(); i++){
-                    Sprite s = Grid.beeSprites.get(i);
-                    if (s != null) {
-                        g2d.drawImage(s.getImage(), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
-                    }
-                }
-             }
             //m.refresh();
         
 
     }
     // testing this by changing it to a constructor
-    public Map(Menu m)
+    public Map(Screen m)
     {
         this.m = m;
         this.statsScreen = new StatsScreen(this);
@@ -170,11 +176,10 @@ public class Map extends JPanel {
             }
         });
         
-        Timer timer = new Timer(100, e -> {
+        // Render at 60 FPS for smooth animation (16.67ms per frame)
+        Timer timer = new Timer(16, e -> {
             repaint();
-            revalidate();
-            //m.refresh();
-            //m.frame.setComponentZOrder(m.components.get(4),0);
+            // Removed revalidate() to reduce layout thrashing
         });
 
         timer.start();
@@ -188,6 +193,34 @@ public class Map extends JPanel {
         //statsScreen.setVisible(visible);
         statsScreen.canOpen = visible;
     }
+
+    public Color darken(Color color, float darknessFactor) {
+        float factor = 1 - darknessFactor; 
+        int r = Math.min(255, (int)(color.getRed()   * factor));
+        int g = Math.min(255, (int)(color.getGreen() * factor));
+        int b = Math.min(255, (int)(color.getBlue()  * factor));
+        return new Color(r, g, b);
+    }
+    // public BufferedImage darken(BufferedImage image, float darknessFactor) {
+    //     //float factor = 1 - darknessFactor; 
+    
+    //     BufferedImage darkened = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+    //     for (int y = 0; y < image.getHeight(); y++) {
+    //         for (int x = 0; x < image.getWidth(); x++) {
+    //             Color c = new Color(image.getRGB(x, y));
+                
+    //             Color newColor = darken(c, darknessFactor);
+    //             darkened.setRGB(x, y, newColor.getRGB());
+    //         }
+    //     }
+    //     return darkened;
+    // }
+    public BufferedImage darken(BufferedImage image, float darknessfactor) {
+        RescaleOp op = new RescaleOp(1 - darknessfactor, 0, null);
+        return op.filter(image, null);
+    }
+
+    
 }
 //BUG: holding a key and then switching directions halts movement
 //how to reproduce: 

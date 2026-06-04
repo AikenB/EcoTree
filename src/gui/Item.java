@@ -1,9 +1,15 @@
 package gui;
 
+import gameobjects.Organism;
 import gameobjects.Organism.Species;
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 public class Item {
     // public double price;
     // public String name;
@@ -11,6 +17,8 @@ public class Item {
 
     public JPanel panel;
     public JLabel name;
+    public JLabel preyList;
+    public JLabel predatorList;
     public JLabel imageLabel;
     public JLabel price;
     public JButton buyButton;
@@ -25,12 +33,30 @@ public class Item {
     public Item (String name, int number, double price) {
         panel = new JPanel();
         panel.setLayout(null);
+        panel.setBackground(new Color(139, 69, 19));
+        panel.setOpaque(true);
         this.name = new JLabel(name);
+        
+        this.name.setForeground(Color.BLACK);
         this.name.setHorizontalAlignment(JLabel.CENTER);
         this.price = new JLabel("Price: " + String.valueOf(price));
+        this.price.setForeground(Color.BLACK);
         this.priceNumber = price;
         this.buyButton = new JButton("buy");
         this.buyButton.setFocusable(false);
+        buyButton.setBackground(new Color(100, 150, 0));
+        buyButton.setForeground(Color.WHITE);
+        buyButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+        buyButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buyButton.setBorder(new LineBorder(Color.YELLOW, 2));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buyButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+            }
+        });
         panel.add(this.name);
         
         this.imageLabel = new JLabel();
@@ -45,6 +71,9 @@ public class Item {
                     break;
                 case "Fern":
                     imagePath = "EcoTree/src/images/fern_1.png";
+                    break;
+                case "Bear":
+                    imagePath = "src/images/bear.png";
                     break;
                 case "Ant":
                     imagePath = "EcoTree/src/images/ant.png";
@@ -85,11 +114,33 @@ public class Item {
                 case "Flower":
                     imagePath = "EcoTree/src/images/flower_1.png";
                     break;
+                case "Bobcat":
+                    imagePath = "src/images/bobcatshopicon.png";
+                    break;
+                case "Deer":
+                    imagePath = "src/images/deer.png";
+                    break;
+                case "Dragonfruit Cactus":
+                    imagePath = "src/images/dragonfruit_cactus_1.png";
+                    break;
+                case "Moonflower":
+                    imagePath = "src/images/moonflowershopicon.png";
+                    break;
+                case "Hummingbird":
+                    imagePath = "src/images/hummingbird.png";
+                    break;
+                case "Bald Eagle":
+                    imagePath = "src/images/bald_eagle.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
                 ImageIcon icon = new ImageIcon(imagePath);
-                Image scaledImage = icon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+                int width = 70;
+                // if (species == Species.BOBCAT){
+                //     width = 100;
+                // }
+                Image scaledImage = icon.getImage().getScaledInstance(width, 70, Image.SCALE_SMOOTH);
                 this.imageLabel.setIcon(new ImageIcon(scaledImage));
             }
         } catch (Exception e) {
@@ -103,6 +154,7 @@ public class Item {
         this.imageLabel.setBounds(90, 60, 70, 70);
         this.price.setBounds(50, 150, 150, 50);
         this.buyButton.setBounds(50, 200, 150, 50);
+        
         this.y = 280 * (number / 2); // does the integer division to determine which row. 
         // this.y = 200 +  280 * (number / 2); 
         this.x = (number % 2) * 250;
@@ -139,21 +191,13 @@ public class Item {
             case "Bush":
                 this.species = Species.BUSH;
                 break;
-            case "Rabbit":
-                this.species = Species.RABBIT;
-                break;
             case "Deer":
                 this.species = Species.DEER;
-                break;
-            case "Wolf":
-                this.species = Species.WOLF;
                 break;
             case "Bear":
                 this.species = Species.BEAR;
                 break;
-            case "Cow":
-                this.species = Species.COW;
-                break;
+            
             case "Snake":
                 this.species = Species.SNAKE;
                 break;
@@ -184,14 +228,37 @@ public class Item {
             case "Beetle":
                 this.species = Species.BEETLE;
                 break;
+            case "Dragonfruit Cactus":
+                this.species = Species.DRAGONFRUIT_CACTUS;
+                break;
+            case "Moonflower":
+                this.species = Species.MOONFLOWER;
+                break;
             case "Bee":
                 this.species = Species.BEE;
+                break;
+            case "Hummingbird":
+                this.species = Species.HUMMINGBIRD;
+                break;
+            case "Bald Eagle":
+                this.species = Species.BALD_EAGLE;
                 break;
             default:
                 this.species = null;
                 break;
         }
-       
+        preyList = new JLabel("<html>Prey: " + formatList(Organism.getPreyList(species)));
+        predatorList = new JLabel("<html>Predators: " + formatList(Organism.getPredatorList(species)));
+        this.preyList.setBounds(0, 50, 250, 20);
+        this.predatorList.setBounds(0, 30, 250, 30);
+        this.preyList.setFont(this.preyList.getFont().deriveFont(7f));
+        this.predatorList.setFont(this.predatorList.getFont().deriveFont(7f));
+        this.preyList.setHorizontalAlignment(JLabel.LEFT);
+        this.predatorList.setHorizontalAlignment(JLabel.LEFT);
+        preyList.setForeground(Color.BLACK);
+        predatorList.setForeground(Color.BLACK);
+        panel.add(this.preyList);
+        panel.add(this.predatorList);
 
 
     }
@@ -212,5 +279,32 @@ public class Item {
 
     public Species getSpecies() {
         return species;
+    }
+
+    private String formatList(ArrayList<Species> list) {
+        if (list == null || list.isEmpty()) {
+            return "None";
+        }
+        String result = "";
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Species species = list.get(i);
+            if (count >= 5){
+                result += "<br>";
+                count = 0;
+            }
+            if (i != list.size() -1){
+                result += species.toString() + ", ";
+            } else {
+                result += species.toString();
+            }
+            count++;
+        }
+        return result + "<html>";
+    }
+
+    public void setListsVisible(boolean visible) {
+        this.preyList.setVisible(visible);
+        this.predatorList.setVisible(visible);
     }
 }

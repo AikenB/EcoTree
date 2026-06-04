@@ -1,5 +1,6 @@
 package gameobjects;
-import gui.Menu;
+import gui.DayNightCycle;
+import gui.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -11,7 +12,7 @@ import utilities.Sprite;
 
 public class Plant extends Organism {
     
-    private double photosynthesisEfficiency;
+    protected  double photosynthesisEfficiency;
     private double cost;
     
     private int produce;
@@ -42,9 +43,12 @@ public class Plant extends Organism {
         this.species = species;
         produce = 0;
         hasProduce = false;
-        generateMutation();
+        
         configureSpecies(species);
-        initializeBehavior();
+        if (species != Species.MAINTREE){
+            generateMutation();
+        } 
+        //initializeBehavior();
         
         
 
@@ -107,20 +111,41 @@ public class Plant extends Organism {
                 energy = 10;
                 width = 1;
                 height = 1;
-                photosynthesisEfficiency = 0.3;
+                photosynthesisEfficiency = 1;
                 maxProduce = 2;
                 productionRarity = 50;
                 SPRITE_0 = Sprite.FLOWER_SPRITE_0;
                 SPRITE_1 = Sprite.FLOWER_SPRITE_1;
                 break;
+            case DRAGONFRUIT_CACTUS:
+                energy = 20;
+                width = 3;
+                height = 4;
+                photosynthesisEfficiency = 1.5;
+                maxProduce = 5;
+                productionRarity = 75;
+                SPRITE_0 = Sprite.DRAGONFRUIT_CACTUS_SPRITE_0;
+                SPRITE_1 = Sprite.DRAGONFRUIT_CACTUS_SPRITE_1;
+                break;
+            case MOONFLOWER:
+                energy = 10;
+                width = 2;
+                height = 1;
+                photosynthesisEfficiency = 0.75;
+                maxProduce = 6;
+                productionRarity = 75;
+                SPRITE_0 = Sprite.MOONFLOWER_SPRITE_0;
+                SPRITE_1 = Sprite.MOONFLOWER_SPRITE_1;
+                break;
             case MAINTREE:
-                energy = 1000;
+                health = 1000;
+                energy = 0;
                 width = 10;
                 height = 10;
                 photosynthesisEfficiency = 1;
                 maxProduce = 0;
                 productionRarity = 0;
-                SPRITE_0 = Sprite.APPLE_TREE_SPRITE_0;
+                SPRITE_0 = Sprite.APPLE_TREE_SPRITE_1;
                 SPRITE_1 = Sprite.APPLE_TREE_SPRITE_1;
                 break; 
         }
@@ -132,7 +157,7 @@ public class Plant extends Organism {
     /**
      * initializes the plant's behavior that will run while it's alive
      */
-    private void initializeBehavior() {
+    public void initializeBehavior() {
 
         /*creates a new thread for each animal created. This makes it so that each animal
          can move independently and can move at different speeds and perform different behaviors at different times*/
@@ -146,10 +171,28 @@ public class Plant extends Organism {
                     int dt = 1000;
                     // t++;
                     Thread.sleep(dt);
-                    Menu.updateMoney(photosynthesisEfficiency);
+                    if (species == Species.MOONFLOWER){
+                        if (!DayNightCycle.isDay){
+                            productionRarity = 25;
+                            photosynthesisEfficiency = 3;
+                        } else {
+                            productionRarity = 100000;
+                            photosynthesisEfficiency = 0.75;
+                        }
+                    }
+                    Screen.updateMoney(photosynthesisEfficiency);
+                    if (species == Species.DRAGONFRUIT_CACTUS){ //dragonfruit trees will produce more fruit at night
+                        if (!DayNightCycle.isDay){
+                            productionRarity = 25;
+                        } else {
+                            productionRarity = 85;
+                        }
+                    }
+                    
                     int chance = (int) (Math.random() * (int)(productionRarity));
                     if (chance == 0 && produce < maxProduce){
-                        produce++;
+                        produce+= (int) (Math.random() * 3 + 1);
+                        produce = Math.min(produce, maxProduce);
                         // System.out.println("produce made after " + t + " seconds");
                     }
                     if (produce > 0){
@@ -280,9 +323,15 @@ public class Plant extends Organism {
 
 
         public boolean canReproduce(){
-            for (int i = x - 3 * width; i < x + 3 * width; i++){
-                for (int j = y - 3 * height; j < y + 3 * height; j++){
-                    if (Grid.canFit(j, i,width,height)){
+            // Clamp search bounds to map dimensions (128x128)
+            int minI = Math.max(0, x - 3 * width);
+            int maxI = Math.min(128, x + 3 * width);
+            int minJ = Math.max(0, y - 3 * height);
+            int maxJ = Math.min(128, y + 3 * height);
+            
+            for (int i = minI; i < maxI; i++){
+                for (int j = minJ; j < maxJ; j++){
+                    if (Grid.canFit(j, i, width, height)){
                         return true;
                     }
                 }

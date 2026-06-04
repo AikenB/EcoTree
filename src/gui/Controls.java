@@ -18,7 +18,7 @@ public class Controls {
     static public int x;
     static public int y;
 
-    static Menu menu;
+    static Screen menu;
 
     // boolean array to check if each arrow key is pressed
     // indexes of boolean array
@@ -54,20 +54,20 @@ public class Controls {
                     // Calculate bounds based on actual map size and viewport size
                     int mapPixelWidth = Map.getMapWidth() * 20;
                     int mapPixelHeight = Map.getMapHeight() * 20;
-                    int viewportWidth = 1080;
-                    int viewportHeight = 540;
+                    int viewportWidth = 1080; //1080
+                    int viewportHeight = 540; //540
                     
                     //int deltaXMin = -(mapPixelWidth - viewportWidth);
                     //int deltaYMin = -(mapPixelHeight - viewportHeight);
-                    int deltaYMin = -(2560-1140);    
-                    int deltaXMin = -(2560-1420);
+                    int deltaYMin = -1840;
+                    int deltaXMin = -1780;
 
                     if (keysPressed[0] == true)
                     {
                         if (Map.getDeltaX()+keyMovements[0] <= 0)
                         {
                             Map.setDeltaX(Map.getDeltaX()+keyMovements[0]);
-                            System.out.println("deltaX: " + Map.getDeltaX());
+                            //System.out.println("deltaX: " + Map.getDeltaX());
                         }
                     }
                     if (keysPressed[1] == true)
@@ -75,7 +75,7 @@ public class Controls {
                         if (Map.getDeltaX()+keyMovements[1] >= deltaXMin)
                         {
                             Map.setDeltaX(Map.getDeltaX()+keyMovements[1]);
-                            System.out.println("deltaX: " + Map.getDeltaX());
+                            //System.out.println("deltaX: " + Map.getDeltaX());
                         }
                     }
                     if (keysPressed[2] == true)
@@ -83,7 +83,7 @@ public class Controls {
                         if (Map.getDeltaY()+keyMovements[2] <= 0)
                         {
                             Map.setDeltaY(Map.getDeltaY()+keyMovements[2]);
-                            System.out.println("deltaY: " + Map.getDeltaY());
+                            //System.out.println("deltaY: " + Map.getDeltaY());
                         }
                     }
                     if (keysPressed[3] == true)
@@ -91,7 +91,7 @@ public class Controls {
                         if (Map.getDeltaY()+keyMovements[3] >= deltaYMin)
                         {
                             Map.setDeltaY(Map.getDeltaY()+keyMovements[3]);
-                            System.out.println("deltaY: " + Map.getDeltaY());
+                            //System.out.println("deltaY: " + Map.getDeltaY());
                         }
                     }
 
@@ -121,7 +121,7 @@ public class Controls {
                         Game.createOutbreak();
                         keysPressed[6] = false;
                     }
-                    frame.repaint();
+                    // Repaint is now handled by Map's timer to avoid render conflicts
                     Thread.sleep(25);
                 }
                  catch (Exception e) {

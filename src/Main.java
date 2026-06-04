@@ -1,7 +1,7 @@
 
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
-import gui.Menu;
+import gui.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.Timer;
@@ -22,14 +22,18 @@ public class Main {
         // initialize terrain generation before drawing map
         terrain.Generation.initialize();
 
-        Menu menu = new Menu();
+        Screen menu = new Screen();
         
         //Map.loadMap();
         
         
 
-        Grid grid = new Grid();
-
+        //Grid grid = new Grid();
+        Grid.createPlant(Species.MAINTREE, 64,64);
+        // Grid.createPlant(Species.GRASS, 0, 0);
+        // Grid.createPlant(Species.GRASS, 0, Grid.grid.length - 1);
+        // Grid.createPlant(Species.GRASS, Grid.grid[0].length - 1, 0);
+        // Grid.createPlant(Species.GRASS, Grid.grid[0].length - 1, Grid.grid.length - 1);
         // tree gen
         ArrayList<int[]> treeLocs = terrain.Generation.getTreeLocations();
         System.out.println("SIZELOCS" + treeLocs.size());
@@ -44,15 +48,24 @@ public class Main {
         }
 
         // create main tree
-        Grid.createPlant(Species.MAINTREE, 64,64);
-        Grid.createPlant(Species.GRASS,Grid.grid[0].length,Grid.grid.length);
+        
+       //Grid.createPlant(Species.FERN,Grid.grid[0].length,Grid.grid.length);
 
         
         // for (int i = 10; i < 23; i++){
         //     for (int j = 10; j < 23; j++){
         //         if (Math.random() < 0.5){
-        //             Grid.createOrganism(Species.ANT, j, i);
-        //             Outbreak.mousecount++;
+        //             Grid.createOrganism(Species.GRASSHOPPER, j, i);
+                   
+        //         }
+        //     }
+        // }
+
+        // for (int i = 45; i < 58; i++){
+        //     for (int j = 45; j < 58; j++){
+        //         if (Math.random() < 0.1){
+        //             Grid.createOrganism(Species.FERN, j, i);
+                   
         //         }
         //     }
         // }
@@ -131,6 +144,12 @@ public class Main {
             } else {
                 Game.atMaxRate = false;
             }
+            // System.out.println("Active threads: " + Thread.activeCount());
+            // for (Thread t : Thread.getAllStackTraces().keySet()) {
+            //     if (t.getName().contains("pool")) {
+            //         System.out.println(t.getName() + ": " + t.getState());
+            //     }
+            // }
             
             Game.change = 0;
             Game.determineCurrencyRate();
@@ -162,6 +181,7 @@ public class Main {
                     ee.printStackTrace();
                 }
             }
+           
         });
         timer.start();
     }

@@ -1,7 +1,7 @@
 package gui;
 
 import gameobjects.Animal;
-import gameobjects.Bee;
+import gameobjects.FlyingAnimal;
 import gameobjects.Mutation;
 import gameobjects.Organism;
 import gameobjects.Plant;
@@ -19,6 +19,7 @@ public class StatsScreen extends JPopupMenu {
     private JLabel speciesLabel;
     private JLabel healthLabel;
     private JLabel energyLabel;
+    private JLabel trophicLevelLabel;
     private ArrayList<Mutation> mutationsList;
     private ArrayList<JLabel> mutationLabels;
     private ArrayList<JLabel> diseaseLabels;
@@ -42,6 +43,7 @@ public class StatsScreen extends JPopupMenu {
         speciesLabel = new JLabel("Species: ");
         healthLabel = new JLabel("Health: ");
         energyLabel = new JLabel("Energy: ");
+        trophicLevelLabel = new JLabel("Trophic Level: ");
         mutationsList = new ArrayList<>();
         mutationLabels = new ArrayList<>();
         diseaseLabels = new ArrayList<>();
@@ -49,6 +51,7 @@ public class StatsScreen extends JPopupMenu {
         add(speciesLabel);
         add(healthLabel);
         add(energyLabel);
+        add(trophicLevelLabel);
         add(new JLabel("MUTATIONS:"));
         
         
@@ -72,11 +75,12 @@ public class StatsScreen extends JPopupMenu {
         add(speciesLabel);
         add(healthLabel);
         add(energyLabel);
-        
+        add(trophicLevelLabel);
         
         speciesLabel.setText("Species: " + organism.getSpecies());
         healthLabel.setText("Health: " + (int) organism.getHealth());
         energyLabel.setText("Energy: " + (int) organism.getEnergy());
+        trophicLevelLabel.setText("Trophic Level: " + (organism.getTrophicLevel() + 1));
 
         if (organism.getClass() == Plant.class) {
             Plant plant = (Plant) organism;
@@ -90,9 +94,15 @@ public class StatsScreen extends JPopupMenu {
             Animal animal;
             if (organism.getClass() == Animal.class){
                 animal = (Animal) organism;
+                // add(new JLabel("id: " + ((Animal) organism).getUniqueID()));
+                // add(new JLabel("X: " + animal.getX()));
+                // add(new JLabel("Y: " + animal.getY()));
+                // add(new JLabel("wasBorn: " + animal.wasBorn));
+                // add(new JLabel("gaveBirth: " + animal.gaveBirth));
             }
             else{
-                animal = (Bee) organism;
+                animal = (FlyingAnimal) organism;
+                //add(new JLabel("id: " + ((FlyingAnimal) organism).getUniqueID()));
             }
                 
             foodCapacityLabel = new JLabel("Food Capacity: " + animal.getFoodCapacity());
@@ -184,7 +194,14 @@ public class StatsScreen extends JPopupMenu {
                 if (gridX >= 0 && gridX < Map.getMapWidth() && gridY >= 0 && gridY < Map.getMapHeight()) {
                     Hitbox hitbox = Grid.grid[gridY][gridX];
                     
-                    if (hitbox != null) {
+                    
+                    if (hoveringOverFlyingOrganism(gridX, gridY)) {
+                        currentOrganism = getFlyingOrganismAt(gridX, gridY);
+                        updateStats(currentOrganism);
+                        if (canOpen)
+                            statsScreen.show(mapPanel, e.getX(), e.getY());
+                    } 
+                    else if (hitbox != null) {
                         currentOrganism = hitbox.getOrganism();
                         updateStats(currentOrganism);
                         if (canOpen)
@@ -199,5 +216,24 @@ public class StatsScreen extends JPopupMenu {
                 }
             }
         });
+    }
+
+    private boolean hoveringOverFlyingOrganism(int x, int y) {
+        for (FlyingAnimal animal : Grid.flyingAnimals) {
+            if (animal.getX() == x && animal.getY() == y) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private Organism getFlyingOrganismAt(int x, int y) {
+        for (FlyingAnimal animal : Grid.flyingAnimals) {
+            if (animal.getX() == x && animal.getY() == y) {
+                return animal;
+            }
+        }
+        return null;
     }
 }

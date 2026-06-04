@@ -1,6 +1,7 @@
 package utilities;
 import gameobjects.Animal;
-import gameobjects.Bee;
+import gameobjects.FlyingAnimal;
+import gameobjects.MainTree;
 import gameobjects.Organism;
 import gameobjects.Organism.Species;
 import gameobjects.Plant;
@@ -11,8 +12,8 @@ public class Grid {
 
     public static Hitbox[][] grid = new Hitbox[128][128];
     public static CopyOnWriteArrayList<Hitbox> hitboxes = new CopyOnWriteArrayList<>();
-    public static CopyOnWriteArrayList<Bee> bees = new CopyOnWriteArrayList<>();
-    public static CopyOnWriteArrayList<Sprite> beeSprites = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<FlyingAnimal> flyingAnimals = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Sprite> flyingAnimalSprites = new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
     /** A list of all different species present in the grid */
     public static CopyOnWriteArrayList<Species> speciesList = new CopyOnWriteArrayList<>();
@@ -86,6 +87,8 @@ public class Grid {
             ((Animal) organism).stopBehavior();
         }
         
+            
+        
         synchronized (grid) {
             int x = hitbox.getX();
             int y = hitbox.getY();
@@ -111,39 +114,41 @@ public class Grid {
             Hitbox hitbox = new Hitbox(animal, x, y);
             addOrganism(hitbox);
             updateSpeciesList();
+            animal.initializeBehavior();
             return animal;
         }
         return null;
         
     }
 
-    public static Bee createBee(int x, int y) throws IOException {
+    public static FlyingAnimal createFlyingAnimal(Species species, int x, int y) throws IOException {
         //don't create a bee if one already exists there
-        for (Bee bee : bees) {
-            if (bee.getX() == x && bee.getY() == y) {
+        for (FlyingAnimal animal : flyingAnimals) {
+            if (animal.getX() == x && animal.getY() == y) {
                 return null;
             }
         }
-        Bee bee = new Bee();
+        FlyingAnimal animal = new FlyingAnimal(species);
         
-        Hitbox hitbox = new Hitbox(bee, x, y);
+        Hitbox hitbox = new Hitbox(animal, x, y);
         hitboxes.add(hitbox);
-        bees.add(bee);
+        flyingAnimals.add(animal);
             
         //sprites.add(hitbox.getSprite());
         addSprite(hitbox.getSprite());
         updateSpeciesList();
-        return bee;
+        animal.initializeBehavior();
+        return animal;
         
         
     }
 
-    public static void killBee(Bee bee) {
-        if (bee.getHitbox() != null) {
-            hitboxes.remove(bee.getHitbox());
-            bees.remove(bee);
-            beeSprites.remove(bee.getHitbox().getSprite());
-            bee.getHitbox().getOrganism().setHitbox(null); 
+    public static void killFlyingAnimal(FlyingAnimal animal) {
+        if (animal.getHitbox() != null) {
+            hitboxes.remove(animal.getHitbox());
+            flyingAnimals.remove(animal);
+            flyingAnimalSprites.remove(animal.getHitbox().getSprite());
+            animal.getHitbox().getOrganism().setHitbox(null); 
         }
     }
 
@@ -171,8 +176,6 @@ public class Grid {
                 return createPlant(species, x, y);
             case MAINTREE:
                 return createPlant(species, x, y);
-            case RABBIT:
-                return createAnimal(species, x, y);
             case DEER:
                 return createAnimal(species, x, y);
             case ANT:
@@ -185,13 +188,9 @@ public class Grid {
                 return createAnimal(species, x, y);
             case SPIDER:
                 return createAnimal(species, x, y);
-            case WOLF:
-                return createAnimal(species, x, y);
             case BEAR:
                 return createAnimal(species, x, y);
             case BOBCAT:
-                return createAnimal(species, x, y);
-            case COW:
                 return createAnimal(species, x, y);
             case MOUSE:
                 return createAnimal(species, x, y);
@@ -201,8 +200,16 @@ public class Grid {
                 return createAnimal(species, x, y);
             case BEETLE:
                 return createAnimal(species, x, y);
+            case DRAGONFRUIT_CACTUS:
+                return createPlant(species, x, y);
+            case MOONFLOWER:
+                return createPlant(species, x, y);
             case BEE:
-                return createBee(x, y);
+                return createFlyingAnimal(species, x, y);
+            case HUMMINGBIRD:
+                return createFlyingAnimal(species, x, y);
+            case BALD_EAGLE:
+                return createFlyingAnimal(species, x, y);
             default:
                 return null;
         }
@@ -214,10 +221,17 @@ public class Grid {
      */
     public static Plant createPlant(Species species, int x, int y) throws IOException {
         
-        Plant plant = new Plant(species);
+        Plant plant;
+        if (species == Species.MAINTREE) {
+            plant = new MainTree();
+        } else {
+            plant = new Plant(species);
+        }
+        
         if (Grid.canFit(plant, x, y)){
             Hitbox hitbox = new Hitbox(plant, x, y);
             addOrganism(hitbox);
+            plant.initializeBehavior();
             if (species != Species.MAINTREE){
                 updateSpeciesList();
             }
@@ -243,6 +257,10 @@ public class Grid {
     }
 
     public static boolean canFit(int x, int y, int width, int height) {
+        // Check bounds to prevent out-of-bounds access
+        if (x < 0 || y < 0 || x + width > grid[0].length || y + height > grid.length) {
+            return false;
+        }
         for (int i = y; i < y + height; i++) {
             for (int j = x; j < x + width; j++) {
                 if (i >= grid.length || j >= grid[0].length || grid[i][j] != null) {
@@ -268,9 +286,9 @@ public class Grid {
     // }
 
     public static void addSprite(Sprite sprite) {
-        if (sprite.getImagePath().equals(Sprite.BEE_SPRITE)) {
-            if (!beeSprites.contains(sprite)) {
-                beeSprites.add(sprite);
+        if (sprite.getImagePath().equals(Sprite.BEE_SPRITE) || sprite.getImagePath().equals(Sprite.HUMMINGBIRD_SPRITE)) {
+            if (!flyingAnimalSprites.contains(sprite)) {
+                flyingAnimalSprites.add(sprite);
             }
         } else {
             if (!sprites.contains(sprite)) {
@@ -289,6 +307,16 @@ public class Grid {
             }
         }
     }
+
+    // public static Direction[] getDirectionsList(){
+    //     Direction[] directions = new Direction[8];
+    //     int index = 0;
+    //     for (int i = 0; i < Direction.values().length; i++){
+    //         directions[index] = Direction.values()[i];
+    //         index++;
+    //     }
+    //     return directions;
+    // }
     
 
     

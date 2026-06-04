@@ -1,10 +1,15 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.imageio.ImageIO;
 
 import gameobjects.Organism.Species;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import terrain.Map;
 import utilities.Game;
 import utilities.Grid;
@@ -14,16 +19,30 @@ import java.util.ArrayList;
 import gui.Controls;
 import gameobjects.*;
 
-public class Menu {
+public class Screen {
 
-    public JPanel frame;
-    public JPanel frame2;
-    public JFrame mainframe;
+    //GUYS STOP MAKING THE UI COMPONENTS LOCAL VARIABLES ALL THE TIME
+    //-Aiken
+    private JPanel gamePanel; //used for map
+    private JPanel panel2;
+    private JFrame mainFrame;
+    private JPanel introPanel; //used for start screen
+    public DayNightCycle dayNightLayer;
+    private JLabel catalogLabel;
+    private JButton inventory;
+    private JPanel shopPanel;
+    public static JScrollPane scroll;
+    private JButton shopButton;
+    private JButton toggleListsVisibleButton;
+
+    public static boolean gameRunning = true;
+    
+    
     int width = 1920;
     int height = 1080;
     int introButtonWidth = 600;
     int introButtonHeight = 100;
-    int instrWidth = 1600;
+    int instrWidth = 1000;
     int instrHeight = 800;
 
     
@@ -32,6 +51,7 @@ public class Menu {
 
     static Map m;
     private static JLabel moneyLabel = new JLabel("Money: " + String.valueOf(Game.money));
+    
     public ArrayList<JComponent> components = new ArrayList<JComponent>();
     // the idea of the ArrayList is that references to different buttons and whatnot can be accessed...
     //... from the place where the buttons were initialized. This enables more modular programming, ...
@@ -44,30 +64,42 @@ public class Menu {
     // this is a parallel array to manage whether items are hidden or not.
 
     boolean waiting;
+    public boolean listsVisible = true; // for predator/prey lists on items in shop/inventory
     Item waitingItem; // the idea here is that this checks if we are waiting to recieve a click to place something.
 
-    public Menu () {
+    public Screen () {
        
 
-        mainframe = new JFrame("EcoTree");
-        mainframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        mainframe.setSize(width + 500, height);
+        mainFrame = new JFrame("EcoTree");
+        mainFrame.setIconImage(new ImageIcon("src/images/main_tree_1.png").getImage());
+        introPanel = createBackgroundPanel();
+        introPanel.setLayout(null);
+        
+        mainFrame.add(introPanel);
+        mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        mainFrame.setSize(width + 500, height);
         Color backgroundColor = new Color(238, 238, 238); // Dark green
-        mainframe.getContentPane().setBackground(backgroundColor);
-        mainframe.setVisible(true);
-        mainframe.setLayout(null);
+        mainFrame.getContentPane().setBackground(backgroundColor);
+        mainFrame.setVisible(true);
+        //mainframe.setLayout(null);
         // mainframe.add(frame);
         // mainframe.add(frame2);
         // frame2.setBounds(0,0, 500, 700);
         // frame.setBounds(500, 0, width, height);
-        frame = new JPanel(new BorderLayout());
-        frame.setFocusable(false);
-        frame2 = new JPanel(null);
-        mainframe.add(frame);
-        mainframe.add(frame2);
-        frame2.setBounds(0,0, 500, 900);
-        frame.setBounds(500, 0, width, height);
+        gamePanel = new JPanel(new BorderLayout());
+        
+        gamePanel.setFocusable(false);
+        panel2 = new JPanel(null);
+        panel2.setBackground(new Color(139, 69, 19));
+        panel2.setOpaque(true);
+        mainFrame.add(gamePanel);
+        mainFrame.add(panel2);
+        panel2.setBounds(0,0, 500, 900);
+        
+        moneyLabel.setForeground(Color.YELLOW);
+        gamePanel.setBounds(500, 0, width, height);
         setButtons();
+
 
         // frame2 = new JFrame("Shop");
         // frame2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -79,13 +111,13 @@ public class Menu {
         
         // initialize controls/ key listeners
         // focus screen - this is necessary in order for controls to work 
-        mainframe.setFocusable(true);
-        frame.requestFocusInWindow();
-        Controls.initializeControls(mainframe, frame);
+        mainFrame.setFocusable(true);
+        gamePanel.requestFocusInWindow();
+        Controls.initializeControls(mainFrame, gamePanel);
 
         // initialize movement
         Controls controls = new Controls();
-        controls.initializeControlsB(mainframe);
+        controls.initializeControlsB(mainFrame);
 
         Controls.menu = this;
 
@@ -93,22 +125,47 @@ public class Menu {
     }
     public void setButtons() {
 
+        // width adjusts based on screen size  
+        width = mainFrame.getContentPane().getWidth();
+
         JButton start = new JButton("Start");
         start.setBounds(width/2 - introButtonWidth/2, 50, introButtonWidth, introButtonHeight);
+        start.setBackground(new Color(34, 102, 34));
+        start.setForeground(Color.WHITE);
+        // start.setOpaque(true);
+        // start.setFocusPainted(false);
         components.add(start);
         componentsVisible.add(true);
-        frame.add(start);
+        introPanel.add(start);
         
         JButton instrButton = new JButton("Instructions");
         instrButton.setBounds(width/2 - introButtonWidth/2, 50*2 + introButtonHeight, introButtonWidth, introButtonHeight);
+        instrButton.setBackground(new Color(34, 102, 34));
+        instrButton.setForeground(Color.WHITE);
+        // instrButton.setOpaque(true);
+        // instrButton.setFocusPainted(false);
         components.add(instrButton);
         componentsVisible.add(true);
-        frame.add(instrButton);
+        introPanel.add(instrButton);
 
-        JLabel instr = new JLabel("This is a \n description of instructions\nto this game");
+        JLabel instr = new JLabel("<html> <br><br><br><br>INSTRUCTIONS:" +
+        "<br><br><br> - Use arrow keys to move around the map" +
+        "<br><br> - The goal of the game is to create a thriving ecosystem with biodiversity. This can be done by placing plants near the EcoTree and having various species of different trophic levels" +
+        "<br><br> - When animal species become overpopulated relative to the other animals in the ecosystem, your EcoTree will become unhealthy and lose health" +
+        "<br><br> - When your EcoTree's health reaches 0, the game is over" +
+        "<br><br> - Place organisms on the map by buying them and then selecting them from the inventory" +
+        "<br><br> - Organisms have different predators and prey depending on their species (plants have no prey)" +
+        "<br><br> - Earn more money by placing more plants. Plants with a higher photosynthesis rate produce more money" +
+        "<br><br> - The rate of money you can earn is capped based on the diversity of your ecosystem. Introduce more animals of different trophic levels to earn money faster!" +
+        "<br><br> - When animals become overpopulated in general (not relative to other animals in the ecosystem), outbreaks have the chance of occuring" +
+        "<br><br> - Animals can reproduce under certain conditions, such as being well fed and being near another member of their species" +
+        "<br><br> - Bees are special animals that will fly to other plants and help them reproduce"
+        );
         instr.setBounds(width/2 - instrWidth/2, 150, instrWidth, instrHeight);
         instr.setOpaque(true);
         instr.setBackground(new Color(200,220,225));
+        instr.setVerticalAlignment(JLabel.TOP);
+        instr.setHorizontalAlignment(JLabel.LEFT);
         // instr.setEditable(false);
         // instr.setOpaque(false);
         // instr.setFocusable(false);
@@ -117,8 +174,8 @@ public class Menu {
         //instr.setComponentZOrder(instr, 0);
         components.add(instr);
         componentsVisible.add(false);
-        frame.add(instr);
-        frame.setComponentZOrder(instr,0);
+        introPanel.add(instr);
+        introPanel.setComponentZOrder(instr,0);
 
         JButton closeInstr = new JButton("X");
         closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
@@ -128,8 +185,8 @@ public class Menu {
         //closeInstr.setComponentZOrder(instr, 0);
         components.add(closeInstr);
         componentsVisible.add(false);
-        frame.add(closeInstr);
-        frame.setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
+        introPanel.add(closeInstr);
+        introPanel.setComponentZOrder(closeInstr,0); //note: this is the way to reorder components
         //closeInstr.setBounds(width/2 - instrWidth/2, 150, 50, 50);
 
 
@@ -142,13 +199,17 @@ public class Menu {
             if (!componentsVisible.get(2)) {
                 componentsVisible.set(0, false);
                 componentsVisible.set(1,false);
+                mainFrame.remove(introPanel);
                 m = new Map(this);
                 m.setBounds(0,000,1920, 1080);
-                frame.add(m);
+                gamePanel.add(m);
                 //System.out.println("something");
-                frame.repaint();
+                
                 refresh();
                 setupGame();
+                dayNightLayer = new DayNightCycle(); //start daylight cycle
+                
+                
                 //Map.loadMap();
             }
 
@@ -168,7 +229,9 @@ public class Menu {
 
     public void refresh () {
         for (int i = 0; i < components.size(); i++) {
-            components.get(i).setVisible(componentsVisible.get(i));
+            if (components.get(i) != null) {
+                components.get(i).setVisible(componentsVisible.get(i));
+            }
             //frame.add(components.get()
         }
         //components.get(8).setText("Money: " + String.getValueOf);
@@ -181,10 +244,10 @@ public class Menu {
     public void recieveClick (int x, int y) {
         if (waiting) {
             //waiting = false;
-            m.setStatsScreenVisible(true);  // Show stats screen when placement completes
+            m.setStatsScreenVisible(false);  // Show stats screen when placement completes
             int xPos = (x - Map.getDeltaX()) / 20;
             int yPos = (y - Map.getDeltaY()) / 20;
-            System.out.println("(" + xPos + ", " + yPos + ")");
+            //System.out.println("(" + xPos + ", " + yPos + ")");
             try {
                 Organism o = Grid.createOrganism(waitingItem.getSpecies(), xPos, yPos);
                 if (o != null) {
@@ -196,7 +259,7 @@ public class Menu {
                 }
                 
             } catch (Exception e) {
-                System.out.println("thing");
+                //System.out.println("thing");
                 
                 waitingItem.quantity++;
                 waitingItem.price.setText("Quantity: " + waitingItem.quantity);
@@ -205,21 +268,25 @@ public class Menu {
     }
     public void setupGame() {
 
-        JPanel shopPanel = new JPanel();
-        JScrollPane scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        shopPanel = new JPanel();
+        scroll = new JScrollPane(shopPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setBackground(new Color(139, 69, 19));
+        scroll.getViewport().setBackground(new Color(139, 69, 19));
+            
         //JScrollBar bar = shopPanel.createVerticalScrollBar();
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
-        shopPanel.setPreferredSize(new Dimension(480, 2500));
+        shopPanel.setPreferredSize(new Dimension(480, 3600));
+        shopPanel.setBackground(new Color(139, 69, 19));
+        shopPanel.setOpaque(true);
         components.add(shopPanel);
         componentsVisible.add(true);
-        components.get(4).setOpaque(false);
         //frame2.add(shopPanel);
         
-        frame2.add(scroll,BorderLayout.CENTER);
-        frame2.setLayout(null);
+        panel2.add(scroll,BorderLayout.CENTER);
+        panel2.setLayout(null);
         scroll.setBounds(0, 150, 500, 900 - 150);
         
         // Increase scroll sensitivity and make scroll bar bigger
@@ -227,11 +294,22 @@ public class Menu {
         verticalScrollBar.setUnitIncrement(20); // Increase scroll sensitivity
         verticalScrollBar.setBlockIncrement(100); // Increase block scroll sensitivity
         verticalScrollBar.setPreferredSize(new Dimension(20, 0)); // Make scroll bar wider
-
+        // verticalScrollBar.setBackground(new Color(101, 50, 15));
+        // verticalScrollBar.setForeground(new Color(80, 40, 10));
+        verticalScrollBar.setBorder(null);
+        verticalScrollBar.setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(80, 40, 10);
+                this.trackColor = new Color(101, 50, 15);
+            }
+        });
         JPanel nonscroll = new JPanel(null);
-        frame2.add(nonscroll, BorderLayout.CENTER);
+        panel2.add(nonscroll, BorderLayout.CENTER);
         nonscroll.setBounds(0,0,500, 150);
         nonscroll.setVisible(true);
+        nonscroll.setBackground(new Color(139, 69, 19));
+        nonscroll.setOpaque(true);
         
         // JButton shop = new JButton("shop");
         // nonscroll.add(shop);
@@ -245,29 +323,52 @@ public class Menu {
         // shop.setBounds(100, 0, 100, 100);
         
         
-        JButton inventory = new JButton("inventory");
+        inventory = new JButton("Inventory");
         inventory.setFocusable(false);
         components.add(null);
         nonscroll.add(inventory);
+        inventory.setBackground(new Color(100, 150, 0));
+        inventory.setForeground(Color.WHITE);
+        
         //shopPanel.setComponentZOrder(shop,0);
         componentsVisible.add(true);
         inventory.setBounds(200, 50, 100, 50);
 
         
-
-        JLabel label = new JLabel("Shop");
-        label.setFocusable(false);
-        components.add(label);
+        
+        //shopPanel.setComponentZOrder(shop,0);
         componentsVisible.add(true);
-        nonscroll.add(label);
+        inventory.setBounds(200, 50, 100, 50);
+        
+
+        catalogLabel = new JLabel("Shop");
+        catalogLabel.setForeground(Color.WHITE);
+        // label.setForeground(new Color(100, 150, 0));
+        catalogLabel.setFocusable(false);
+        components.add(catalogLabel);
+        componentsVisible.add(true);
+        nonscroll.add(catalogLabel);
         components.get(7).setBounds(0, 100, 500, 50);   
 
-        JButton shop = new JButton("shop");
-        nonscroll.add(shop);
-        shop.setFocusable(false);
-        shop.setBounds(50,50,100,50);
-        shop.setVisible(true);
+        shopButton = new JButton("Shop");
+        shopButton.setBackground(new Color(100, 150, 0));
+        shopButton.setForeground(Color.WHITE);
+        nonscroll.add(shopButton);
+        shopButton.setFocusable(false);
+        shopButton.setBounds(50,50,100,50);
+        shopButton.setVisible(true);
         
+        toggleListsVisibleButton = new JButton("Toggle Predator/Prey Lists");
+        toggleListsVisibleButton.setFocusable(false);
+        components.add(null);
+        nonscroll.add(toggleListsVisibleButton);
+        toggleListsVisibleButton.setBackground(new Color(100, 150, 0));
+        toggleListsVisibleButton.setForeground(Color.WHITE);
+        toggleListsVisibleButton.setFont(toggleListsVisibleButton.getFont().deriveFont(8f));
+        componentsVisible.add(true);
+        toggleListsVisibleButton.setBounds(200, 120, 150, 20);
+
+
         //nonscroll.setComponentZOrder(test, 0);
         // test.setLayout(null);
         // nonscroll.setLayout(null);
@@ -279,8 +380,8 @@ public class Menu {
         
         components.add(moneyLabel);
         componentsVisible.add(true);
-        shopPanel.add(moneyLabel);
-        components.get(8).setBounds(250, 0, 250, 50);
+        nonscroll.add(moneyLabel);
+        moneyLabel.setBounds(310, 50, 180, 50);
         moneyLabel.setFocusable(false);
 
         Item[] items = {
@@ -292,14 +393,21 @@ public class Menu {
             new Item("Spider", 5, 50.0),
             new Item("Flower", 6, 50.0),
             new Item("Grasshopper", 7, 75.0),
-            new Item("Apple Tree", 8, 100.0),
-            new Item("Mouse", 9, 100.0),
-            new Item("Berry Bush", 10, 125.0),
-            new Item("Scorpion", 11, 125.0),
-            new Item("Beetle", 12, 150.0),
-            new Item("Frog", 13, 150.0),
-            new Item("Snake", 14, 200.0),
-            new Item("Bee", 15, 200.0)
+            new Item("Moonflower", 8, 75.0),
+            new Item("Apple Tree", 9, 100.0),
+            new Item("Mouse", 10, 100.0),
+            new Item("Berry Bush", 11, 125.0),
+            new Item("Scorpion", 12, 125.0),
+            new Item("Beetle", 13, 150.0),
+            new Item("Hummingbird", 14, 150.0),
+            new Item("Frog", 15, 150.0),
+            new Item("Deer", 16, 175.0),
+            new Item("Dragonfruit Cactus", 17, 175.0),
+            new Item("Snake", 18, 200.0),
+            new Item("Bee", 19, 200.0),
+            new Item("Bobcat", 20, 200.0),
+            new Item("Bear", 21, 250.0),
+            new Item("Bald Eagle", 22, 300)
         };
         
 
@@ -314,12 +422,13 @@ public class Menu {
             // we should fix it later to make it less inconvinient (though a ton of copy-pasting is possible)
 
              items[i].buyButton.addActionListener(e -> {
-                System.out.println("is shop- " + items[index].isShop);
+                //System.out.println("is shop- " + items[index].isShop);
                 if (items[index].isShop) {
                   if (Game.money - (items[index]).priceNumber >= 0) {
                       Game.money -= items[index].priceNumber;
                       items[index].quantity++;
-                      moneyLabel.setText(String.valueOf(Game.money));
+                      String moneyText = String.valueOf((int) Math.floor(Game.money));
+                      moneyLabel.setText("Money: " + moneyText);
                   }
                 } else if (items[index].quantity > 0) {
                     waiting = true;
@@ -331,20 +440,27 @@ public class Menu {
          //}
         
 
-        shop.addActionListener(e -> {
+        shopButton.addActionListener(e -> {
             waiting = false;
-            label.setText("Shop");
+            catalogLabel.setText("Shop");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForShop();
             }
-            frame.requestFocus();
+            gamePanel.requestFocus();
         });
 
         inventory.addActionListener(e -> {
             waiting = false;
-            label.setText("Inventory");
+            catalogLabel.setText("Inventory");
             for (int i = 0; i < items.length; i++) {
                 items[i].setupForInventory();
+            }
+        });
+
+        toggleListsVisibleButton.addActionListener(e -> {
+            listsVisible = !listsVisible;
+            for (int i = 0; i < items.length; i++) {
+                items[i].setListsVisible(listsVisible);
             }
         });
 
@@ -364,7 +480,33 @@ public class Menu {
             Game.money += amount;
             
         } 
-        moneyLabel.setText(String.valueOf(Math.floor(Game.money)));
+        String moneyText = String.valueOf((int) Math.floor(Game.money));
+        moneyLabel.setText("Money: " + moneyText);
         
+    }
+
+    private JPanel createBackgroundPanel() {
+        return new JPanel() {
+            private BufferedImage backgroundImage;
+            private BufferedImage backgroundLogo;
+
+            {
+                try {
+                    backgroundImage = ImageIO.read(new File("src/images/background.png"));
+                    backgroundLogo = ImageIO.read(new File("src/images/introLogo.png"));
+                } catch (IOException e) {
+                    System.err.println("Error loading background image: " + e.getMessage());
+                }
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backgroundImage != null) {
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                    g.drawImage(backgroundLogo, getWidth() / 2 - backgroundLogo.getWidth() / 2, 0, this);
+                }
+            }
+        };
     }
 }
