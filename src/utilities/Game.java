@@ -21,7 +21,7 @@ public class Game {
     public static int invasiveCooldown = timePerInvasiveEvent; //TODO: change
 
     //for currency
-    public static double money = 100000; //TODO: change starting money when done testing
+    public static double money = 100; //TODO: change starting money when done testing
     public static double maxCurrencyRate = 2.5;
     public static double change = 0;
     public static boolean atMaxRate = false;

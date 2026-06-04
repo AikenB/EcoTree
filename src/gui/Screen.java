@@ -31,9 +31,11 @@ public class Screen {
     private JLabel catalogLabel;
     private JButton inventory;
     private JPanel shopPanel;
-    private JScrollPane scroll;
+    public static JScrollPane scroll;
     private JButton shopButton;
     private JButton toggleListsVisibleButton;
+
+    public static boolean gameRunning = true;
     
     
     int width = 1920;
@@ -242,7 +244,7 @@ public class Screen {
     public void recieveClick (int x, int y) {
         if (waiting) {
             //waiting = false;
-            m.setStatsScreenVisible(true);  // Show stats screen when placement completes
+            m.setStatsScreenVisible(false);  // Show stats screen when placement completes
             int xPos = (x - Map.getDeltaX()) / 20;
             int yPos = (y - Map.getDeltaY()) / 20;
             //System.out.println("(" + xPos + ", " + yPos + ")");

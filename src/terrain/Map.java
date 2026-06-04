@@ -106,23 +106,25 @@ public class Map extends JPanel {
             }
         }
 
-        
-        
-            // Render sprites with thread-safe iteration
-            for (Sprite s : Grid.sprites) {
-                if (s != null) {
-                    g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
-                }
-            }
+            if (Screen.gameRunning){
             
-            // Render bee sprites with thread-safe iteration
-            for (Sprite s : Grid.flyingAnimalSprites) {
-                if (s != null) {
-                    g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                // Render sprites with thread-safe iteration
+                for (Sprite s : Grid.sprites) {
+                    if (s != null) {
+                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                    }
+                
                 }
-            }
+            
+                // Render bee sprites with thread-safe iteration
+                for (Sprite s : Grid.flyingAnimalSprites) {
+                    if (s != null) {
+                        g2d.drawImage(darken(s.getImage(), (float) (DayNightCycle.dayTimeLevel * 0.5)), s.getGridX(), s.getGridY(), s.getGridWidth(), s.getGridHeight(), null);
+                    }
+                
+                }
              //Menu.dayNightLayer.repaint();
-             
+            }
             //m.refresh();
         
 

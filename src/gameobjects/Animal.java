@@ -345,13 +345,13 @@ public class Animal extends Organism {
                     fertility += 0.5;
                     fertility = Math.min(fertility, rftr);
                     if (satiety == 0) {
-                        System.out.println("starved to death for id " + uniqueID);
+                        //System.out.println("starved to death for id " + uniqueID);
                         //animal dies if it reaches 0 satiety
                         kill(this);
                         Grid.updateSpeciesList();
                         stopBehavior();
                     } else if (health <= 0) {
-                        System.out.println("health depleted for id " + uniqueID);
+                        //System.out.println("health depleted for id " + uniqueID);
                         //animal dies if it reaches 0 health
                         kill(this);
                         Grid.updateSpeciesList();
@@ -361,7 +361,7 @@ public class Animal extends Organism {
                     
                 } catch (InterruptedException e) {
                     // Thread was interrupted, exit the loop gracefully
-                    System.err.println("thread interruped for id " + uniqueID);
+                    //System.err.println("thread interruped for id " + uniqueID);
                     Thread.currentThread().interrupt();
                     break;
                 } catch (Exception e) {
@@ -464,6 +464,7 @@ public class Animal extends Organism {
 
     private int preySpotted() {
         Hitbox[][] viewfield = getViewField();
+        
         ArrayList<Organism> organismsInSight = new ArrayList<>();
         int count = 0;
         for (int i = 0; i < viewfield.length; i++) {
@@ -474,10 +475,12 @@ public class Animal extends Organism {
                         count++;
                         organismsInSight.add(o);
                     }
-                } //FIXME: hasGroundedPrey needs to take in x and y coordinates not indices of the array
-                if (hasGroundedPrey(j, i) && isNewOrganism(organismsInSight, getGroundedPrey(j, i))) {
+                } 
+                int x = this.x - 17 + j;
+                int y = this.y - 17 + i;
+                if (hasGroundedPrey(x, y) && isNewOrganism(organismsInSight, getGroundedPrey(x, y))) {
                     count++;
-                    organismsInSight.add(getGroundedPrey(j, i));
+                    organismsInSight.add(getGroundedPrey(x, y));
                 }
             }
         }
@@ -522,6 +525,23 @@ public class Animal extends Organism {
         return viewField;
     }
 
+    // /**
+    //  * returns the viewfield of the animal for flying animals that are grounded. The viewfield is a coordinate grid of hitboxes relative to the animal, with the animal at the center. Used for move() method.
+    //  */
+    // private FlyingAnimal[][] getViewField_groundedAnimals() {
+    //     FlyingAnimal[][] viewField = new FlyingAnimal[35][35];
+    //     synchronized (Grid.grid) {
+    //         for (int i = 0; i < viewField.length; i++) {
+    //             for (int j = 0; j < viewField[i].length; j++) {
+    //                 int x = this.x - 17 + j;
+    //                 int y = this.y - 17 + i;
+    //                 viewField[i][j] = getGroundedPrey(x, y);
+    //             }
+    //         }
+    //     }
+    //     return viewField;
+    // }
+
     private boolean hasGroundedPrey(int x, int y){
         for (FlyingAnimal flyingAnimal : Grid.flyingAnimals) {
             if (flyingAnimal.isGrounded() && prey.contains(flyingAnimal.getSpecies()) && flyingAnimal.getX() == x && flyingAnimal.getY() == y) {
@@ -532,7 +552,7 @@ public class Animal extends Organism {
         return false;
 
     }
-    private Organism getGroundedPrey(int x, int y){
+    private FlyingAnimal getGroundedPrey(int x, int y){
         for (FlyingAnimal flyingAnimal : Grid.flyingAnimals) {
             if (flyingAnimal.isGrounded() && prey.contains(flyingAnimal.getSpecies()) && flyingAnimal.getX() == x && flyingAnimal.getY() == y) {
                 return flyingAnimal;
@@ -642,8 +662,10 @@ public class Animal extends Organism {
                         }
                         
                     }
+                    int absoluteX = this.x - 17 + j;
+                    int absoluteY = this.y - 17 + i;
                     if (hasGroundedPrey(j, i)){
-                        Organism groundedPrey = getGroundedPrey(j, i);
+                        Organism groundedPrey = getGroundedPrey(absoluteX, absoluteY);
                          weight = (double) (groundedPrey.energy / (Math.pow(d,4)));
                          w.orient(x, y, weight);
                          movementVector = movementVector.add(w);
@@ -909,7 +931,7 @@ public class Animal extends Organism {
                         return true;
                     }
                     if (hasGroundedPrey(i, j)) {
-                        System.out.println("contacting grounded prey");
+                        //System.out.println("contacting grounded prey");
                         return true;
                     }
                 }

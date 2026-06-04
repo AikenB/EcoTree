@@ -553,6 +553,8 @@ public class FlyingAnimal extends Animal{
             }
             targetMate = null;
         }
+        if (species == Species.BALD_EAGLE)
+            health -= 0.2; //for balance purposes since it will be very hard for bald eagles to die as long as they have food
 
 
         satiety -= 0.1 * mass;

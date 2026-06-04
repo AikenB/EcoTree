@@ -94,15 +94,15 @@ public class StatsScreen extends JPopupMenu {
             Animal animal;
             if (organism.getClass() == Animal.class){
                 animal = (Animal) organism;
-                add(new JLabel("id: " + ((Animal) organism).getUniqueID()));
-                add(new JLabel("X: " + animal.getX()));
-                add(new JLabel("Y: " + animal.getY()));
-                add(new JLabel("wasBorn: " + animal.wasBorn));
-                add(new JLabel("gaveBirth: " + animal.gaveBirth));
+                // add(new JLabel("id: " + ((Animal) organism).getUniqueID()));
+                // add(new JLabel("X: " + animal.getX()));
+                // add(new JLabel("Y: " + animal.getY()));
+                // add(new JLabel("wasBorn: " + animal.wasBorn));
+                // add(new JLabel("gaveBirth: " + animal.gaveBirth));
             }
             else{
                 animal = (FlyingAnimal) organism;
-                add(new JLabel("id: " + ((FlyingAnimal) organism).getUniqueID()));
+                //add(new JLabel("id: " + ((FlyingAnimal) organism).getUniqueID()));
             }
                 
             foodCapacityLabel = new JLabel("Food Capacity: " + animal.getFoodCapacity());

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.JOptionPane;
 import utilities.Grid;
 import utilities.Hitbox;
 import utilities.Sprite;
@@ -13,7 +14,8 @@ import utilities.Sprite;
 public class MainTree extends Plant {
     
     private ExecutorService executor;
-    double maxHealth;
+    private double maxHealth;
+    private static int endX = 0;
 
 
     public MainTree()
@@ -44,7 +46,8 @@ public class MainTree extends Plant {
                     int dt = 1000;
                     // t++;
                     Thread.sleep(dt);
-                    Screen.updateMoney(photosynthesisEfficiency);
+                    if (Screen.gameRunning)
+                        Screen.updateMoney(photosynthesisEfficiency);
                     health += calculateHealthRate();
                     if (health > maxHealth) {
                         health = maxHealth;
@@ -74,6 +77,19 @@ public class MainTree extends Plant {
                         kill(this);
                         Grid.updateSpeciesList();
                         stopBehavior();
+                        Grid.hitboxes.clear();
+                        Grid.sprites.clear();
+                        Grid.flyingAnimals.clear();
+                        Grid.grid = null;
+                        Grid.flyingAnimalSprites.clear();
+                        Grid.speciesList.clear();
+                        Screen.scroll.setVisible(false);
+                        endX++;
+                        Screen.gameRunning = false;
+                        if (endX == 1){
+                            JOptionPane.showMessageDialog(null, "YOU LOST");
+                        }
+                        
                     }
 
                     
@@ -270,6 +286,8 @@ public class MainTree extends Plant {
         }
         return speciesCounts;
     }
+
+    
 
 }
 
