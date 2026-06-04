@@ -118,7 +118,6 @@ public class Map extends JPanel {
                 // draw each square in the grid
                 g2d.drawRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight);       
                 // setting colors using generation
-<<<<<<< HEAD
                 int r = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
                 int gre = Math.min(255, terrain.Generation.terrainValues()[j][i].getGreen() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
                 int b = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
@@ -130,9 +129,6 @@ public class Map extends JPanel {
                 }
                 
                 g2d.setColor(c);
-=======
-                g2d.setColor(darken(terrain.Generation.terrainValues()[j][i], (float) DayNightCycle.dayTimeLevel));
->>>>>>> origin/main
                 g2d.fillRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight); 
 
             }
