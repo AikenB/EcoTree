@@ -25,7 +25,7 @@ public class MainTree extends Plant {
 
         maxHealth = health;
         super.stopBehavior();
-        initializeBehavior();
+        //initializeBehavior();
 
     }
 

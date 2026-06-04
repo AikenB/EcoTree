@@ -150,7 +150,7 @@ public class Main {
             //         System.out.println(t.getName() + ": " + t.getState());
             //     }
             // }
-    
+            
             Game.change = 0;
             Game.determineCurrencyRate();
             //System.out.println("***" + Game.maxCurrencyRate);
