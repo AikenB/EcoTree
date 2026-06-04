@@ -114,6 +114,7 @@ public class Grid {
             Hitbox hitbox = new Hitbox(animal, x, y);
             addOrganism(hitbox);
             updateSpeciesList();
+            animal.initializeBehavior();
             return animal;
         }
         return null;
@@ -136,6 +137,7 @@ public class Grid {
         //sprites.add(hitbox.getSprite());
         addSprite(hitbox.getSprite());
         updateSpeciesList();
+        animal.initializeBehavior();
         return animal;
         
         
@@ -203,9 +205,11 @@ public class Grid {
             case MOONFLOWER:
                 return createPlant(species, x, y);
             case BEE:
-                return createFlyingAnimal(Species.BEE, x, y);
+                return createFlyingAnimal(species, x, y);
             case HUMMINGBIRD:
-                return createFlyingAnimal(Species.HUMMINGBIRD, x, y);
+                return createFlyingAnimal(species, x, y);
+            case BALD_EAGLE:
+                return createFlyingAnimal(species, x, y);
             default:
                 return null;
         }
@@ -227,6 +231,7 @@ public class Grid {
         if (Grid.canFit(plant, x, y)){
             Hitbox hitbox = new Hitbox(plant, x, y);
             addOrganism(hitbox);
+            plant.initializeBehavior();
             if (species != Species.MAINTREE){
                 updateSpeciesList();
             }

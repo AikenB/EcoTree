@@ -48,7 +48,7 @@ public class Plant extends Organism {
         if (species != Species.MAINTREE){
             generateMutation();
         } 
-        initializeBehavior();
+        //initializeBehavior();
         
         
 
@@ -157,7 +157,7 @@ public class Plant extends Organism {
     /**
      * initializes the plant's behavior that will run while it's alive
      */
-    private void initializeBehavior() {
+    public void initializeBehavior() {
 
         /*creates a new thread for each animal created. This makes it so that each animal
          can move independently and can move at different speeds and perform different behaviors at different times*/
@@ -191,7 +191,8 @@ public class Plant extends Organism {
                     
                     int chance = (int) (Math.random() * (int)(productionRarity));
                     if (chance == 0 && produce < maxProduce){
-                        produce++;
+                        produce+= (int) (Math.random() * 3 + 1);
+                        produce = Math.min(produce, maxProduce);
                         // System.out.println("produce made after " + t + " seconds");
                     }
                     if (produce > 0){

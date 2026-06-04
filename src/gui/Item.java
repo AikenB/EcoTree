@@ -129,6 +129,9 @@ public class Item {
                 case "Hummingbird":
                     imagePath = "src/images/hummingbird.png";
                     break;
+                case "Bald Eagle":
+                    imagePath = "src/images/bald_eagle.png";
+                    break;
             }
             
             if (imagePath != null && new File(imagePath).exists()) {
@@ -236,6 +239,9 @@ public class Item {
                 break;
             case "Hummingbird":
                 this.species = Species.HUMMINGBIRD;
+                break;
+            case "Bald Eagle":
+                this.species = Species.BALD_EAGLE;
                 break;
             default:
                 this.species = null;

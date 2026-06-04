@@ -56,6 +56,7 @@ public class Sprite {
     public static final String MOONFLOWER_SPRITE_0 = "src/images/moonflower_0.png";
     public static final String MOONFLOWER_SPRITE_1 = "src/images/moonflower_1.png";
     public static final String HUMMINGBIRD_SPRITE = "src/images/hummingbird.png";
+    public static final String BALD_EAGLE_SPRITE = "src/images/bald_eagle.png";
 
     private BufferedImage image;
     public Sprite(int x, int y, int width, int height, String imagePath) throws IOException {

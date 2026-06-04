@@ -122,6 +122,9 @@ public class Hitbox{
             case MOONFLOWER:
                 imagePath = Sprite.MOONFLOWER_SPRITE_0;
                 break;
+            case BALD_EAGLE:
+                imagePath = Sprite.BALD_EAGLE_SPRITE;
+                break;
             // case FLOWER:
             //     imagePath = Sprite.APPLE_TREE_SPRITE_0;
             //     break;

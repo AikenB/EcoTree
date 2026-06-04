@@ -22,6 +22,10 @@ public class FlyingAnimal extends Animal{
     HashMap<Organism, Double> plantWeights;
     private double cooldown;
     private Species species;
+    private double totalSpeed;
+    double kP;
+    double maxSpeedBonus;
+    double kPDistance; // used for acceleration mechanism
 
     private static final double groundedRadius = 5.7;
 
@@ -42,8 +46,10 @@ public class FlyingAnimal extends Animal{
     public FlyingAnimal(Species species){
         uniqueID = id;
         id++;
+        
         this.species = species;
         super(species);
+        totalSpeed = speed;
         super.stopBehavior();
         if (species == Species.BEE){
             contactedPlants = new ArrayList<Plant>();
@@ -55,11 +61,21 @@ public class FlyingAnimal extends Animal{
             targetLocation = determineTargetLocation();
             targetMate = null;
             targetPrey = null;
+            if (species == Species.HUMMINGBIRD){
+                kP = 0.4;
+                maxSpeedBonus = 1.5;
+                kPDistance = 12;
+            }
+            if (species == Species.BALD_EAGLE){
+                kP = 0.5;
+                maxSpeedBonus = 6;
+                kPDistance = -2;
+            }
             
         }
         fertility = 0;
-        satiety = 0.45 * foodCapacity;
-        initializeBehavior();
+        //satiety = 0.5 * foodCapacity; //TODO: fix when done testing
+        //initializeBehavior();
         
         
     }
@@ -69,7 +85,7 @@ public class FlyingAnimal extends Animal{
         beeExecuter.submit(() -> {
             while (energy > 0) {
                 try {
-                    int dt = (int)(4000/speed);
+                    int dt = (int)(4000/totalSpeed);
                     Thread.sleep(dt); 
                     if (species == Species.BEE){
                         beeBehavior(dt);
@@ -483,9 +499,11 @@ public class FlyingAnimal extends Animal{
         if (xi == this.x && yi == this.y){
            System.out.println("froze - id: " + uniqueID);
         }
-        if (isGrounded()){
-            System.out.println("grounded - id: " + uniqueID);
-        }
+        // if (isGrounded()){
+        //     System.out.println("grounded - id: " + uniqueID);
+        // }
+        totalSpeed = calculateTotalSpeed();
+
 
         if (targetPrey != null && targetPrey instanceof Plant && ((Plant) targetPrey).getProduce() == 0){ //if the prey is a plant and has no produce left then stop targeting it
             targetPrey = findPrey(); //find new prey if plant has no produce anymore
@@ -502,6 +520,7 @@ public class FlyingAnimal extends Animal{
                     ((Plant) targetPrey).updateHealth(-(Math.random()*10 + 15));
                 }
             } else {
+                System.out.println("ate prey " + targetPrey.getSpecies());
                 kill(targetPrey);
                 Grid.updateSpeciesList();
             }
@@ -621,6 +640,17 @@ public class FlyingAnimal extends Animal{
         } else{
             double d = Math.hypot(groundedLocation[0] - this.x, groundedLocation[1] - this.y);
             return d < groundedRadius;
+        }
+    }
+
+    private double calculateTotalSpeed(){
+        if (groundedLocation == null){
+            return speed;
+        } else {
+            double d = Math.hypot(groundedLocation[0] - this.x, groundedLocation[1] - this.y);
+            //use concept of PID from robotics to make flying animls speed up and then slow down as they approach their prey
+            //System.out.println("Total speed: " + Math.min(speed * maxSpeedBonus, speed + kP * (d-12)));
+            return Math.min(speed * maxSpeedBonus, speed + kP * (d-kPDistance));
         }
     }
 

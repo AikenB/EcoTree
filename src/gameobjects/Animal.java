@@ -32,12 +32,18 @@ public class Animal extends Organism {
     // private Timer moveTimer;
 
     private ExecutorService executor;
-    
+    //FOR TESTING PURPOSES
+    public static int id = 1;
+    private int uniqueID;
     
 
     public Animal(Species species) {
         super(species);
+        
         fertility = 0;
+        uniqueID = id;
+        id++;
+        System.out.println("created animal species " + species + " with id " + uniqueID);
         
         
         configureSpecies(species);
@@ -46,7 +52,7 @@ public class Animal extends Organism {
         maxHealth = health;
         // moveTimer = new Timer((int) (4000/speed), e -> move());
         // moveTimer.start();
-        initializeBehavior();
+        //initializeBehavior();
     }
 
     /**
@@ -86,7 +92,7 @@ public class Animal extends Organism {
                 speed = 2;
                 
                 thirstCapacity = 20.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT, Species.BEAR));
+                predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT, Species.BEAR, Species.BALD_EAGLE));
                 prey = new ArrayList<Species>(Arrays.asList(Species.ANT, Species.SPIDER, Species.BEETLE));
                 break;
             case SNAKE:
@@ -98,7 +104,7 @@ public class Animal extends Organism {
                 height = 2;
                 speed = 2.5;
                 thirstCapacity = 25.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT));
+                predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT, Species.BALD_EAGLE));
                 prey = new ArrayList<Species>(Arrays.asList(Species.DEER, Species.FROG, Species.MOUSE, Species.SCORPION, Species.HUMMINGBIRD));
                 break;
             case WORM:
@@ -122,7 +128,7 @@ public class Animal extends Organism {
                 height = 1;
                 speed = 2;
                 thirstCapacity = 15.0;
-                predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT, Species.BEAR));
+                predators = new ArrayList<Species>(Arrays.asList(Species.SNAKE, Species.BOBCAT, Species.BEAR, Species.BALD_EAGLE));
                 prey = new ArrayList<Species>(Arrays.asList(Species.DRAGONFRUIT_CACTUS, Species.BERRY_BUSH, Species.FERN, Species.APPLE_TREE, Species.SCORPION));
                 break;
             case GRASSHOPPER:
@@ -221,7 +227,19 @@ public class Animal extends Organism {
                 speed = 10;
                 thirstCapacity = 5.0;
                 predators = new ArrayList<Species>(Arrays.asList(Species.BOBCAT, Species.SNAKE));
-                prey = new ArrayList<Species>(Arrays.asList(Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.ANT, Species.SPIDER, Species.DRAGONFRUIT_CACTUS, Species.MOONFLOWER,   Species.BEETLE));
+                prey = new ArrayList<Species>(Arrays.asList(Species.FLOWER, Species.BERRY_BUSH, Species.APPLE_TREE, Species.ANT, Species.SPIDER, Species.DRAGONFRUIT_CACTUS, Species.MOONFLOWER, Species.BEETLE));
+                break;
+            case BALD_EAGLE:
+                trophicLevel = 4;
+                energy = 50;
+                foodCapacity = 150;
+                rftr = 300;
+                width = 1;
+                height = 1;
+                speed = 12;
+                thirstCapacity = 40.0;
+                predators = new ArrayList<Species>();
+                prey = new ArrayList<Species>(Arrays.asList(Species.MOUSE, Species.SNAKE, Species.FROG));
                 break;
              default:
                  trophicLevel = 1;
@@ -234,9 +252,10 @@ public class Animal extends Organism {
                  thirstCapacity = 10.0;
                  predators = new ArrayList<Species>();
                  prey = new ArrayList<Species>();
+            break;
 
         }
-        satiety = 0.55 * foodCapacity; //TODO: fix when done testing
+        satiety = 0.9 * foodCapacity; //TODO: fix when done testing
         mass = width * height;
         if (species == Species.BOBCAT || species == Species.DEER){
             mass = 4;
@@ -248,7 +267,7 @@ public class Animal extends Organism {
     /**
      * initializes the animal's behavior that will run while it's alive. This method is also where the animal's behavior mechanics runs
      */
-    private void initializeBehavior() {
+    public void initializeBehavior() {
 
         /*creates a new thread for each animal created. This makes it so that each animal
          can move independently and can move at different speeds and perform different behaviors at different times*/
@@ -265,8 +284,9 @@ public class Animal extends Organism {
                 try {
     //====================EATING MECHANICS============================
                     if (contactingPrey() && isHungry()) {
+                        //System.out.println("contacting prey for id " + uniqueID);
                         Organism prey = getContactedPrey(this);
-                        if (prey != null && (prey.getClass() == Animal.class || prey.getClass() == FlyingAnimal.class) && this.species != Species.BEETLE) {
+                        if (prey != null && (prey.getClass() == Animal.class || prey.getClass() == FlyingAnimal.class)) {
                             
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
@@ -301,8 +321,14 @@ public class Animal extends Organism {
                     }
                     //movement
                     int dt = (int)(4000/(speed * speedboost));
+                    
                     Thread.sleep(dt);
+                    int xi = this.x;
+                    int yi = this.y;
                     move();
+                    if (xi == this.x && yi == this.y){
+                        System.out.println("froze - id: " + uniqueID);
+                    }
                     //hunger + fertility updating
                     //TODO: tune the rate of hunger and fertility increase for each species
                     satiety -= 0.1 * mass;
@@ -310,11 +336,13 @@ public class Animal extends Organism {
                     fertility += 0.5;
                     fertility = Math.min(fertility, rftr);
                     if (satiety == 0) {
+                        System.out.println("starved to death for id " + uniqueID);
                         //animal dies if it reaches 0 satiety
                         kill(this);
                         Grid.updateSpeciesList();
                         stopBehavior();
                     } else if (health <= 0) {
+                        System.out.println("health depleted for id " + uniqueID);
                         //animal dies if it reaches 0 health
                         kill(this);
                         Grid.updateSpeciesList();
@@ -324,6 +352,7 @@ public class Animal extends Organism {
                     
                 } catch (InterruptedException e) {
                     // Thread was interrupted, exit the loop gracefully
+                    System.out.println("thread interruped for id " + uniqueID);
                     Thread.currentThread().interrupt();
                     break;
                 } catch (Exception e) {
@@ -340,6 +369,7 @@ public class Animal extends Organism {
      * stops the animal's behavior thread
      */
     public void stopBehavior() {
+        System.out.println("stopping behavior for id " + uniqueID);
         if (executor != null) {
         executor.shutdownNow();  // Interrupt the thread immediately
         try {
@@ -944,7 +974,7 @@ public class Animal extends Organism {
         if (offspring.canMove()){
             Direction d = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
             offspring.safeMove(d);
-            Grid.addOrganism(hitbox);
+            Grid.createAnimal(offspring.species, offspring.x, offspring.y);
         }
         
     }
@@ -1003,6 +1033,13 @@ public class Animal extends Organism {
         return  rftr;
     }
 
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+
     public double getFertility() {
         return  fertility;
     }
@@ -1036,6 +1073,10 @@ public class Animal extends Organism {
     }
     public ArrayList<Species> getPrey() {
         return prey;
+    }
+
+    public int getUniqueID() {
+        return uniqueID;
     }
     
 

@@ -94,6 +94,9 @@ public class StatsScreen extends JPopupMenu {
             Animal animal;
             if (organism.getClass() == Animal.class){
                 animal = (Animal) organism;
+                add(new JLabel("id: " + ((Animal) organism).getUniqueID()));
+                add(new JLabel("X: " + animal.getX()));
+                add(new JLabel("Y: " + animal.getY()));
             }
             else{
                 animal = (FlyingAnimal) organism;

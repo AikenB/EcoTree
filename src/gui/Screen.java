@@ -276,7 +276,7 @@ public class Screen {
        // shopPanel.setVerticalScrollBar(bar);
         //bar.setVisible(true);
         shopPanel.setLayout(null);
-        shopPanel.setPreferredSize(new Dimension(480, 3000));
+        shopPanel.setPreferredSize(new Dimension(480, 3600));
         shopPanel.setBackground(new Color(139, 69, 19));
         shopPanel.setOpaque(true);
         components.add(shopPanel);
@@ -404,7 +404,8 @@ public class Screen {
             new Item("Snake", 18, 200.0),
             new Item("Bee", 19, 200.0),
             new Item("Bobcat", 20, 200.0),
-            new Item("Bear", 21, 250.0)
+            new Item("Bear", 21, 250.0),
+            new Item("Bald Eagle", 22, 300)
         };
         
 

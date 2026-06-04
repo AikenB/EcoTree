@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import utilities.Grid;
 import utilities.Hitbox;
+import utilities.OrganismInfo;
 
 public class Organism {
     protected ArrayList<Mutation> mutations;
@@ -47,6 +48,7 @@ public class Organism {
         BEETLE,
         BEE,
         HUMMINGBIRD,
+        BALD_EAGLE,
 
         GRASS,
         FLOWER,
@@ -211,19 +213,22 @@ public class Organism {
     }
 
     public static void kill(Organism organism) {
-        if (organism instanceof Animal) {
-            ((Animal) organism).stopBehavior();
-        }
-        if (organism instanceof Plant) {
-            ((Plant) organism).stopBehavior();
-        }
+
         if (organism instanceof FlyingAnimal) {
+            System.out.println("killed flying animal");
             ((FlyingAnimal) organism).stopBehavior();
             trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
             Grid.killFlyingAnimal((FlyingAnimal) organism);
             organism.hitbox = null; // Clear hitbox reference to help GC
             return;
+        } else if (organism instanceof Animal) {
+            System.out.println("killed animal");
+            ((Animal) organism).stopBehavior();
+        } else if (organism instanceof Plant) {
+            System.out.println("killed plant");
+            ((Plant) organism).stopBehavior();
         }
+        
         
         trophicLevels.set(organism.trophicLevel, trophicLevels.get(organism.trophicLevel) - 1);
         Grid.killOrganism(organism.getHitbox());
@@ -306,7 +311,7 @@ public class Organism {
         } else if (species == Species.FLOWER){
             return new ArrayList<Species>(Arrays.asList(Species.BEE, Species.BEETLE, Species.DEER));
         } else if (species == Species.APPLE_TREE){
-            return new ArrayList<Species>(Arrays.asList(Species.BEE,Species.DEER, Species.GRASSHOPPER, Species.MOUSE, Species.WORM));
+            return new ArrayList<Species>(Arrays.asList(Species.BEE,Species.DEER, Species.GRASSHOPPER, Species.HUMMINGBIRD,Species.MOUSE, Species.WORM));
         } else if (species == Species.FERN){
             return new ArrayList<Species>(Arrays.asList(Species.ANT, Species.BEETLE, Species.DEER, Species.GRASSHOPPER, Species.MOUSE));
         } else if (species == Species.BERRY_BUSH){
@@ -314,19 +319,21 @@ public class Organism {
         } else if (species == Species.MOSS){
             return new ArrayList<Species>(Arrays.asList(Species.BEETLE, Species.DEER));
         } else if (species == Species.DRAGONFRUIT_CACTUS){
-            return new ArrayList<Species>(Arrays.asList(Species.BEE, Species.BEETLE, Species.DEER, Species.GRASSHOPPER, Species.MOUSE));
+            return new ArrayList<Species>(Arrays.asList(Species.BEE, Species.BEETLE, Species.DEER, Species.HUMMINGBIRD, Species.GRASSHOPPER, Species.MOUSE));
         } else if (species == Species.MOONFLOWER){
-            return new ArrayList<Species>(Arrays.asList(Species.BEETLE));
+            return new ArrayList<Species>(Arrays.asList(Species.BEETLE, Species.HUMMINGBIRD));
         } else {
-            Animal temp = new Animal(species);
-            temp.stopBehavior();
+            OrganismInfo temp = new OrganismInfo(species);
+            Animal.id = 0;
+            // temp.stopBehavior();
             return temp.getPredators();
         }
     }
 
     public static ArrayList<Species> getPreyList(Species species){
-        Animal temp = new Animal(species);
-        temp.stopBehavior();
+        OrganismInfo temp = new OrganismInfo(species);
+        Animal.id = 0;
+        // temp.stopBehavior();
         return temp.getPrey();
     }
     

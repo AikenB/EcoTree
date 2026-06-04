@@ -21,7 +21,7 @@ public class Game {
     public static int invasiveCooldown = timePerInvasiveEvent; //TODO: change
 
     //for currency
-    public static double money = 10000; //TODO: change starting money when done testing
+    public static double money = 100000; //TODO: change starting money when done testing
     public static double maxCurrencyRate = 2.5;
     public static double change = 0;
     public static boolean atMaxRate = false;
@@ -186,10 +186,11 @@ public class Game {
         //System.out.println(species);
         int count = invasiveSpeciesCounts.get(species);
         //System.out.println(count);
-        Animal testAnimal = new Animal(species);
+        OrganismInfo testAnimal = new OrganismInfo(species);
+        //System.out.println("test1");
         int animalWidth = testAnimal.getWidth();
         int animalHeight = testAnimal.getHeight();
-        testAnimal.stopBehavior(); //this animal is just used to get width and height
+        //testAnimal.stopBehavior(); //this animal is just used to get width and height
         //int possibleTries = width * height;
         while (count > 0){
             //xx represents x position of the animal to be spawned, yy represents y position
