@@ -144,12 +144,13 @@ public class Main {
             } else {
                 Game.atMaxRate = false;
             }
-            System.out.println("Active threads: " + Thread.activeCount());
-            for (Thread t : Thread.getAllStackTraces().keySet()) {
-                if (t.getName().contains("pool")) {
-                    System.out.println(t.getName() + ": " + t.getState());
-                }
-}
+            // System.out.println("Active threads: " + Thread.activeCount());
+            // for (Thread t : Thread.getAllStackTraces().keySet()) {
+            //     if (t.getName().contains("pool")) {
+            //         System.out.println(t.getName() + ": " + t.getState());
+            //     }
+            // }
+    
             Game.change = 0;
             Game.determineCurrencyRate();
             //System.out.println("***" + Game.maxCurrencyRate);

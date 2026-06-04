@@ -35,15 +35,19 @@ public class Animal extends Organism {
     //FOR TESTING PURPOSES
     public static int id = 1;
     private int uniqueID;
+    public boolean wasBorn;
+    public boolean gaveBirth;
     
 
     public Animal(Species species) {
+        wasBorn = false;
+        gaveBirth = false;
         super(species);
         
         fertility = 0;
         uniqueID = id;
         id++;
-        System.out.println("created animal species " + species + " with id " + uniqueID);
+        
         
         
         configureSpecies(species);
@@ -282,18 +286,21 @@ public class Animal extends Organism {
             
             while (!Thread.currentThread().isInterrupted()) {
                 try {
+                    
     //====================EATING MECHANICS============================
                     if (contactingPrey() && isHungry()) {
-                        //System.out.println("contacting prey for id " + uniqueID);
+                        
                         Organism prey = getContactedPrey(this);
                         if (prey != null && (prey.getClass() == Animal.class || prey.getClass() == FlyingAnimal.class)) {
                             
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
                             kill(prey);
-                            System.out.println("ate prey " + prey.getSpecies());
+                            
                             Grid.updateSpeciesList();
                         } else if (prey != null && prey.getClass() == Plant.class && ((Plant) prey).hasProduce()) {
+                            
+                            
                             satiety += prey.energy;
                             fertility += prey.energy * 0.8;
                             ((Plant) prey).updateProduce(-1);
@@ -306,6 +313,7 @@ public class Animal extends Organism {
                     } 
     //=====================REPRODUCTION MECHANICS===========================             
                     else if (canReproduce()) {
+                        
                         int chance = (int) (Math.random() * 3);
                         if (chance == 0 && getMate() != null) {
                             reproduce(getMate());
@@ -322,13 +330,14 @@ public class Animal extends Organism {
                     //movement
                     int dt = (int)(4000/(speed * speedboost));
                     
-                    Thread.sleep(dt);
+                    
                     int xi = this.x;
                     int yi = this.y;
                     move();
                     if (xi == this.x && yi == this.y){
                         System.out.println("froze - id: " + uniqueID);
                     }
+                    Thread.sleep(dt);
                     //hunger + fertility updating
                     //TODO: tune the rate of hunger and fertility increase for each species
                     satiety -= 0.1 * mass;
@@ -352,13 +361,16 @@ public class Animal extends Organism {
                     
                 } catch (InterruptedException e) {
                     // Thread was interrupted, exit the loop gracefully
-                    System.out.println("thread interruped for id " + uniqueID);
+                    System.err.println("thread interruped for id " + uniqueID);
                     Thread.currentThread().interrupt();
                     break;
                 } catch (Exception e) {
                     System.err.println("Error in move() for " + species + ": " + e.getMessage());
                     e.printStackTrace();
                     
+                } catch (Throwable e) {  // change Exception to Throwable
+                    System.err.println("FATAL error for id " + uniqueID + ": " + e.getClass().getName() + ": " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -369,17 +381,17 @@ public class Animal extends Organism {
      * stops the animal's behavior thread
      */
     public void stopBehavior() {
-        System.out.println("stopping behavior for id " + uniqueID);
+        //System.out.println("stopping behavior for id " + uniqueID);
         if (executor != null) {
         executor.shutdownNow();  // Interrupt the thread immediately
-        try {
-            if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            executor.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
+        // try {
+        //     if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
+        //         executor.shutdownNow();
+        //     }
+        // } catch (InterruptedException e) {
+        //     executor.shutdownNow();
+        //     Thread.currentThread().interrupt();
+        // }
     }
     }
     /**
@@ -462,7 +474,7 @@ public class Animal extends Organism {
                         count++;
                         organismsInSight.add(o);
                     }
-                }
+                } //FIXME: hasGroundedPrey needs to take in x and y coordinates not indices of the array
                 if (hasGroundedPrey(j, i) && isNewOrganism(organismsInSight, getGroundedPrey(j, i))) {
                     count++;
                     organismsInSight.add(getGroundedPrey(j, i));
@@ -952,31 +964,90 @@ public class Animal extends Organism {
 
     //#region REPRODUCTION
     
+    // public void reproduce(Animal parent) throws IOException {
+    //     // Create offspring of the same species as parent1
+    //     Animal offspring = new Animal(this.species);
+        
+    //     // Combine mutations from both parents into a gene pool
+    //     ArrayList<Mutation> genePool = new ArrayList<>();
+    //     genePool.addAll(this.getMutations());
+    //     genePool.addAll(parent.getMutations());
+        
+    //     // Randomly inherit half of the mutations from the gene pool
+    //     int inheritCount = genePool.size() / 2;
+    //     for (int i = 0; i < inheritCount; i++) {
+    //         int randomIndex = (int) (Math.random() * genePool.size());
+    //         Mutation inheritedMutation = genePool.get(randomIndex);
+    //         offspring.addMutation(inheritedMutation);
+    //         genePool.remove(randomIndex);  // Remove to avoid inheriting twice
+    //     }
+
+    //     Hitbox hitbox = new Hitbox(offspring, this.x, this.y);
+    //     if (offspring.canMove()){
+    //         Direction d = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
+    //         offspring.safeMove(d);
+            
+    //         Grid.createAnimal(offspring.species, offspring.x, offspring.y);
+    //         offspring.wasBorn = true;
+    //         this.gaveBirth = true;
+    //     }
+        
+    // }
+
+
     public void reproduce(Animal parent) throws IOException {
-        // Create offspring of the same species as parent1
-        Animal offspring = new Animal(this.species);
-        
-        // Combine mutations from both parents into a gene pool
-        ArrayList<Mutation> genePool = new ArrayList<>();
-        genePool.addAll(this.getMutations());
-        genePool.addAll(parent.getMutations());
-        
-        // Randomly inherit half of the mutations from the gene pool
-        int inheritCount = genePool.size() / 2;
-        for (int i = 0; i < inheritCount; i++) {
-            int randomIndex = (int) (Math.random() * genePool.size());
-            Mutation inheritedMutation = genePool.get(randomIndex);
-            offspring.addMutation(inheritedMutation);
-            genePool.remove(randomIndex);  // Remove to avoid inheriting twice
+        // build and shuffle direction list
+        Direction[] dirs = Grid.Direction.values().clone();
+        for (int i = dirs.length - 1; i > 0; i--) {
+            int j = (int)(Math.random() * (i + 1));
+            Direction tmp = dirs[i]; dirs[i] = dirs[j]; dirs[j] = tmp;
         }
 
-        Hitbox hitbox = new Hitbox(offspring, this.x, this.y);
-        if (offspring.canMove()){
-            Direction d = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
-            offspring.safeMove(d);
-            Grid.createAnimal(offspring.species, offspring.x, offspring.y);
+        for (Direction d : dirs) {
+            int newX = this.x, newY = this.y;
+            switch (d) {
+                case UP:         
+                    newY--; break;
+                case DOWN:       
+                    newY++; break;
+                case LEFT:       
+                    newX--; break;
+                case RIGHT:      
+                    newX++; break;
+                case UP_LEFT:    
+                    newX--; 
+                    newY--; 
+                    break;
+                case UP_RIGHT:   
+                    newX++; 
+                    newY--; 
+                    break;
+                case DOWN_LEFT:  
+                    newX--; 
+                    newY++; 
+                    break;
+                case DOWN_RIGHT: 
+                    newX++; 
+                    newY++; 
+                    break;
+            }
+        Animal offspring = Grid.createAnimal(this.species, newX, newY);
+        if (offspring != null) {
+            // inherit mutations
+            ArrayList<Mutation> genePool = new ArrayList<>();
+            genePool.addAll(this.getMutations());
+            genePool.addAll(parent.getMutations());
+            int inheritCount = genePool.size() / 2;
+            for (int i = 0; i < inheritCount; i++) {
+                int idx = (int)(Math.random() * genePool.size());
+                offspring.addMutation(genePool.get(idx));
+                genePool.remove(idx);
+            }
+            return;
         }
         
+    }
+    // no free adjacent space, reproduction fails
     }
 
     public boolean foundPotentialMate(){
@@ -1020,8 +1091,7 @@ public class Animal extends Organism {
         } else {
             return fertility >= rftr 
             && satiety >= 0.9 * foodCapacity 
-            && health >= 0.5 * maxHealth
-            && foundPotentialMate();
+            && health >= 0.5 * maxHealth;
         }
         
     }

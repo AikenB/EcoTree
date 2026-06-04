@@ -50,7 +50,7 @@ public class FlyingAnimal extends Animal{
         this.species = species;
         super(species);
         totalSpeed = speed;
-        super.stopBehavior();
+        //super.stopBehavior();
         if (species == Species.BEE){
             contactedPlants = new ArrayList<Plant>();
             targetPlant = null;
@@ -68,8 +68,8 @@ public class FlyingAnimal extends Animal{
             }
             if (species == Species.BALD_EAGLE){
                 kP = 0.5;
-                maxSpeedBonus = 6;
-                kPDistance = -2;
+                maxSpeedBonus = 7.5;
+                kPDistance = -10;
             }
             
         }
@@ -185,14 +185,14 @@ public class FlyingAnimal extends Animal{
     public void stopBehavior() {
         if (beeExecuter != null) {
         beeExecuter.shutdownNow();  // Interrupt the thread immediately
-        try {
-            if (!beeExecuter.awaitTermination(1, TimeUnit.SECONDS)) {
-                beeExecuter.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            beeExecuter.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
+        // try {
+        //     if (!beeExecuter.awaitTermination(1, TimeUnit.SECONDS)) {
+        //         beeExecuter.shutdownNow();
+        //     }
+        // } catch (InterruptedException e) {
+        //     beeExecuter.shutdownNow();
+        //     Thread.currentThread().interrupt();
+        // }
     }
     }
 
@@ -825,36 +825,91 @@ public class FlyingAnimal extends Animal{
         return null;
     }
 
-    public void reproduce_nonbee(FlyingAnimal parent) throws IOException {
-        //System.out.println("reproducing - id: " + uniqueID);
-        // Create offspring of the same species as parent1
-        FlyingAnimal offspring = new FlyingAnimal(this.species);
-        offspring.stopBehavior();
+    // public void reproduce_nonbee(FlyingAnimal parent) throws IOException {
+    //     //System.out.println("reproducing - id: " + uniqueID);
+    //     // Create offspring of the same species as parent1
+    //     FlyingAnimal offspring = new FlyingAnimal(this.species);
+    //     offspring.stopBehavior();
         
-        // Combine mutations from both parents into a gene pool
-        ArrayList<Mutation> genePool = new ArrayList<>();
-        genePool.addAll(this.getMutations());
-        genePool.addAll(parent.getMutations());
+    //     // Combine mutations from both parents into a gene pool
+    //     ArrayList<Mutation> genePool = new ArrayList<>();
+    //     genePool.addAll(this.getMutations());
+    //     genePool.addAll(parent.getMutations());
         
-        // Randomly inherit half of the mutations from the gene pool
-        int inheritCount = genePool.size() / 2;
-        for (int i = 0; i < inheritCount; i++) {
-            int randomIndex = (int) (Math.random() * genePool.size());
-            Mutation inheritedMutation = genePool.get(randomIndex);
-            offspring.addMutation(inheritedMutation);
-            genePool.remove(randomIndex);  // Remove to avoid inheriting twice
-        }
+    //     // Randomly inherit half of the mutations from the gene pool
+    //     int inheritCount = genePool.size() / 2;
+    //     for (int i = 0; i < inheritCount; i++) {
+    //         int randomIndex = (int) (Math.random() * genePool.size());
+    //         Mutation inheritedMutation = genePool.get(randomIndex);
+    //         offspring.addMutation(inheritedMutation);
+    //         genePool.remove(randomIndex);  // Remove to avoid inheriting twice
+    //     }
 
-        Hitbox hitbox = new Hitbox(offspring, this.x, this.y);
-        if (offspring.canMove()){
-            //System.out.println("offspring can be placed - id: " + uniqueID);
-            Direction d = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
-            offspring.safeMove(d);
-            Grid.createFlyingAnimal(offspring.species, offspring.x, offspring.y);
+    //     Hitbox hitbox = new Hitbox(offspring, this.x, this.y);
+    //     if (offspring.canMove()){
+    //         //System.out.println("offspring can be placed - id: " + uniqueID);
+    //         Direction d = Grid.Direction.values()[(int) (Math.random() * Grid.Direction.values().length)];
+    //         offspring.safeMove(d);
+    //         Grid.createFlyingAnimal(offspring.species, offspring.x, offspring.y);
             
 
+    //     }
+        
+    // }
+
+    public void reproduce_nonbee(FlyingAnimal parent) throws IOException {
+        // build and shuffle direction list
+        Direction[] dirs = Grid.Direction.values().clone();
+        for (int i = dirs.length - 1; i > 0; i--) {
+            int j = (int)(Math.random() * (i + 1));
+            Direction tmp = dirs[i]; dirs[i] = dirs[j]; dirs[j] = tmp;
+        }
+
+        for (Direction d : dirs) {
+            int newX = this.x, newY = this.y;
+            switch (d) {
+                case UP:         
+                    newY--; break;
+                case DOWN:       
+                    newY++; break;
+                case LEFT:       
+                    newX--; break;
+                case RIGHT:      
+                    newX++; break;
+                case UP_LEFT:    
+                    newX--; 
+                    newY--; 
+                    break;
+                case UP_RIGHT:   
+                    newX++; 
+                    newY--; 
+                    break;
+                case DOWN_LEFT:  
+                    newX--; 
+                    newY++; 
+                    break;
+                case DOWN_RIGHT: 
+                    newX++; 
+                    newY++; 
+                    break;
+            }
+        FlyingAnimal offspring = Grid.createFlyingAnimal(this.species, newX, newY);
+        if (offspring != null) {
+            // inherit mutations
+            ArrayList<Mutation> genePool = new ArrayList<>();
+            genePool.addAll(this.getMutations());
+            genePool.addAll(parent.getMutations());
+            int inheritCount = genePool.size() / 2;
+            for (int i = 0; i < inheritCount; i++) {
+                int idx = (int)(Math.random() * genePool.size());
+                offspring.addMutation(genePool.get(idx));
+                genePool.remove(idx);
+            }
+            return;
         }
         
+    }
+    // no free adjacent space, reproduction fails
     }
 
     public boolean withinProximityOfMate(){
