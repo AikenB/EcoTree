@@ -43,6 +43,20 @@ public class Sprite {
     public static final String BEE_SPRITE = "EcoTree/src/images/bee.png";
     public static final String FLOWER_SPRITE_0 = "EcoTree/src/images/flower_0.png";
     public static final String FLOWER_SPRITE_1 = "EcoTree/src/images/flower_1.png";
+    public static final String BOBCAT_SPRITE = "src/images/bobcat.png";
+    public static final String BEAR_SPRITE = "src/images/bear.png";
+    public static final String DEER_SPRITE = "src/images/deer.png";
+    public static final String MAINTREE_SPRITE_1 = "src/images/main_tree_1.png";
+    public static final String MAINTREE_SPRITE_2 = "src/images/main_tree_2.png";
+    public static final String MAINTREE_SPRITE_3 = "src/images/main_tree_3.png";
+    public static final String MAINTREE_SPRITE_4 = "src/images/main_tree_4.png";
+    public static final String MAINTREE_SPRITE_5 = "src/images/main_tree_5.png";
+    public static final String DRAGONFRUIT_CACTUS_SPRITE_0 = "src/images/dragonfruit_cactus_0.png";
+    public static final String DRAGONFRUIT_CACTUS_SPRITE_1 = "src/images/dragonfruit_cactus_1.png";
+    public static final String MOONFLOWER_SPRITE_0 = "src/images/moonflower_0.png";
+    public static final String MOONFLOWER_SPRITE_1 = "src/images/moonflower_1.png";
+    public static final String HUMMINGBIRD_SPRITE = "src/images/hummingbird.png";
+    public static final String BALD_EAGLE_SPRITE = "src/images/bald_eagle.png";
     
 
     private BufferedImage image;
