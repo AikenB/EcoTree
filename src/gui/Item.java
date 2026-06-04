@@ -64,55 +64,55 @@ public class Item {
             String imagePath = null;
             switch (name) {
                 case "Grass":
-                    imagePath = "EcoTree/src/images/grass_1.png";
+                    imagePath = "src/images/grass_1.png";
                     break;
                 case "Apple Tree":
-                    imagePath = "EcoTree/src/images/apple_tree_1.png";
+                    imagePath = "src/images/apple_tree_1.png";
                     break;
                 case "Fern":
-                    imagePath = "EcoTree/src/images/fern_1.png";
+                    imagePath = "src/images/fern_1.png";
                     break;
                 case "Bear":
                     imagePath = "src/images/bear.png";
                     break;
                 case "Ant":
-                    imagePath = "EcoTree/src/images/ant.png";
+                    imagePath = "src/images/ant.png";
                     break;
                 case "Spider":
-                    imagePath = "EcoTree/src/images/spider.png";
+                    imagePath = "src/images/spider.png";
                     break;
                 case "Frog":
-                    imagePath = "EcoTree/src/images/frog.png";
+                    imagePath = "src/images/frog.png";
                     break;
                 case "Snake":
-                    imagePath = "EcoTree/src/images/snake.png";
+                    imagePath = "src/images/snake.png";
                     break;
                 case "Worm":
-                    imagePath = "EcoTree/src/images/worm.png";
+                    imagePath = "src/images/worm.png";
                     break;
                 case "Berry Bush":
-                    imagePath = "EcoTree/src/images/berry_bush_1.png";
+                    imagePath = "src/images/berry_bush_1.png";
                     break;
                 case "Moss":
-                    imagePath = "EcoTree/src/images/moss_1.png";
+                    imagePath = "src/images/moss_1.png";
                     break;
                 case "Mouse":
-                    imagePath = "EcoTree/src/images/mouse.png";
+                    imagePath = "src/images/mouse.png";
                     break;
                 case "Grasshopper":
-                    imagePath = "EcoTree/src/images/grasshopper.png";
+                    imagePath = "src/images/grasshopper.png";
                     break;
                 case "Scorpion":
-                    imagePath = "EcoTree/src/images/scorpion.png";
+                    imagePath = "src/images/scorpion.png";
                     break;
                 case "Beetle":
-                    imagePath = "EcoTree/src/images/beetle.png";
+                    imagePath = "src/images/beetle.png";
                     break;
                 case "Bee":
-                    imagePath = "EcoTree/src/images/bee.png";
+                    imagePath = "src/images/bee.png";
                     break;
                 case "Flower":
-                    imagePath = "EcoTree/src/images/flower_1.png";
+                    imagePath = "src/images/flower_1.png";
                     break;
                 case "Bobcat":
                     imagePath = "src/images/bobcatshopicon.png";

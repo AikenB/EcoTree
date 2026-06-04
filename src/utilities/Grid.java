@@ -286,7 +286,7 @@ public class Grid {
     // }
 
     public static void addSprite(Sprite sprite) {
-        if (sprite.getImagePath().equals(Sprite.BEE_SPRITE) || sprite.getImagePath().equals(Sprite.HUMMINGBIRD_SPRITE)) {
+        if (sprite.getImagePath().equals(Sprite.BEE_SPRITE) || sprite.getImagePath().equals(Sprite.HUMMINGBIRD_SPRITE) || sprite.getImagePath().equals(Sprite.BALD_EAGLE_SPRITE)) {
             if (!flyingAnimalSprites.contains(sprite)) {
                 flyingAnimalSprites.add(sprite);
             }

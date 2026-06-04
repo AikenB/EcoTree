@@ -34,8 +34,10 @@ public class Screen {
     public static JScrollPane scroll;
     private JButton shopButton;
     private JButton toggleListsVisibleButton;
+    private JButton toggleCloudsButton;
 
     public static boolean gameRunning = true;
+    public static boolean cloudsVisible = true;
     
     
     int width = 1920;
@@ -244,7 +246,7 @@ public class Screen {
     public void recieveClick (int x, int y) {
         if (waiting) {
             //waiting = false;
-            m.setStatsScreenVisible(false);  // Show stats screen when placement completes
+            m.setStatsScreenVisible(true);  // Show stats screen when placement completes
             int xPos = (x - Map.getDeltaX()) / 20;
             int yPos = (y - Map.getDeltaY()) / 20;
             //System.out.println("(" + xPos + ", " + yPos + ")");
@@ -368,6 +370,16 @@ public class Screen {
         componentsVisible.add(true);
         toggleListsVisibleButton.setBounds(200, 120, 150, 20);
 
+        toggleCloudsButton = new JButton("Toggle Clouds");
+        toggleCloudsButton.setFocusable(false);
+        components.add(null);
+        nonscroll.add(toggleCloudsButton);
+        toggleCloudsButton.setBackground(new Color(100, 150, 0));
+        toggleCloudsButton.setForeground(Color.WHITE);
+        toggleCloudsButton.setFont(toggleCloudsButton.getFont().deriveFont(8f));
+        componentsVisible.add(true);
+        toggleCloudsButton.setBounds(75, 120, 100, 20);
+
 
         //nonscroll.setComponentZOrder(test, 0);
         // test.setLayout(null);
@@ -462,6 +474,10 @@ public class Screen {
             for (int i = 0; i < items.length; i++) {
                 items[i].setListsVisible(listsVisible);
             }
+        });
+
+        toggleCloudsButton.addActionListener(e -> {
+            cloudsVisible = !cloudsVisible;
         });
 
 

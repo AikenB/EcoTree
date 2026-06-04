@@ -8,9 +8,9 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import javax.swing.*;
+import utilities.Game;
 import utilities.Grid;
 import utilities.Sprite;
-import utilities.Game;
 
 public class Map extends JPanel {
 
@@ -118,17 +118,22 @@ public class Map extends JPanel {
                 // draw each square in the grid
                 g2d.drawRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight);       
                 // setting colors using generation
-                int r = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
-                int gre = Math.min(255, terrain.Generation.terrainValues()[j][i].getGreen() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
-                int b = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
                 Color c;
-                if ((int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]) != 0) {
-                    c = new Color(gre - 50, gre, gre - 50);
+                if (Screen.cloudsVisible) {
+                    int r = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
+                    int gre = Math.min(255, terrain.Generation.terrainValues()[j][i].getGreen() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
+                    int b = Math.min(255, terrain.Generation.terrainValues()[j][i].getRed() + (int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]));
+                    
+                    if ((int) (terrain.Generation.cloudValues()[(int) Generation.getSkyRow() + i][(int) Generation.getSkyColumn() + j]) != 0) {
+                        c = new Color(gre - 50, gre, gre - 50);
+                    } else {
+                        c = new Color(r, gre, b);
+                    }
                 } else {
-                    c = new Color(r, gre, b);
+                    c = terrain.Generation.terrainValues()[j][i];
                 }
                 
-                g2d.setColor(c);
+                g2d.setColor(darken(c, (float) (DayNightCycle.dayTimeLevel)));
                 g2d.fillRect(0+(squareWidth*i), 0+(squareHeight*j), squareWidth, squareHeight); 
 
             }
