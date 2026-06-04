@@ -12,9 +12,12 @@ import terrain.Noise;
 import java.util.ArrayList;
 public class Generation {
     public static Color[][] land;
+    public static Color[][] initialLand;
     public static double[][] sky;
     public static boolean initialized = false;
     private static boolean terrainGenerated = false;
+    private static int skyRow = terrain.Map.getMapHeight() * 11 / 2;
+    private static int skyColumn= terrain.Map.getMapWidth() * 19 / 2;
 
     private static ArrayList<int[]> treeLocations = new ArrayList<int[]>();
     
@@ -26,7 +29,7 @@ public class Generation {
             initialized = true;
 
             land = new Color[terrain.Map.getMapHeight()][terrain.Map.getMapWidth()];
-            sky = new double[terrain.Map.getMapHeight()][terrain.Map.getMapWidth()];
+            sky = new double[terrain.Map.getMapHeight() * 11][terrain.Map.getMapWidth() * 19];
         // test
         for (int i = 0; i < land.length; i++)
         {
@@ -97,33 +100,39 @@ public class Generation {
                 }
             }
         }
-        int[][] skyOutput = Noise.octaveNoiseLayer(sky.length,sky[0].length);
+        int[][] skyOutput = Noise.octaveNoiseLayerSmallRegion(sky[0].length, sky.length);
 
-        // for (int i = 0; i < sky.length; i++) {
-        //     for (int j = 0; j < sky[0].length; j++) {
-        //         System.out.print("("+land[i][j].getRed() + (int) sky[i][j]+ "," + land[i][j].getGreen() + (int) sky[i][j] + "," + land[i][j].getBlue() + (int) sky[i][j]+ ")");
-        //         //sky[i][j] = skyOutput[i][j];
-        //         //land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], land[i][j].getGreen() + (int) sky[i][j], land[i][j].getBlue() + (int) sky[i][j]);
-        //     }
-        //     System.out.println();
-        // }
-        
         for (int i = 0; i < sky.length; i++) {
             for (int j = 0; j < sky[0].length; j++) {
-                sky[i][j] = skyOutput[i][j];
-                System.out.print("("+(land[i][j].getRed() + (int) sky[i][j])+ "," + (land[i][j].getGreen() + (int) sky[i][j]) + "," + (land[i][j].getBlue() + (int) sky[i][j])+ ")");
-                int green = 0;
-                if (land[i][j].getGreen() + (int) sky[i][j] <= 255) {
-                    green = land[i][j].getGreen() + (int) sky[i][j];
-                } else {
-                    green = 255;
+                //System.out.print("("+land[i][j].getRed() + (int) sky[i][j]+ "," + land[i][j].getGreen() + (int) sky[i][j] + "," + land[i][j].getBlue() + (int) sky[i][j]+ ")");
+                if (skyOutput[i][j] < 110) {
+                    sky[i][j] = skyOutput[i][j];
                 }
-                if ((int) sky[i][j] < 120) {
-                    land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], green, land[i][j].getBlue() + (int) sky[i][j]);
-                }
+                //System.out.println(i* sky[0].length + j+ " " + sky[i][j]);
+                //System.out.println(i* skyOutput[0].length + j+ " " + skyOutput[i][j]);
+                //System.out.println(skyOutput[i][j]);
+                //land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], land[i][j].getGreen() + (int) sky[i][j], land[i][j].getBlue() + (int) sky[i][j]);
             }
             System.out.println();
         }
+        
+        // for (int i = 0; i < sky.length; i++) {
+        //     for (int j = 0; j < sky[0].length; j++) {
+        //         // sky[i][j] = skyOutput[i][j];
+        //         // System.out.print("("+(land[i][j].getRed() + (int) sky[i][j])+ "," + (land[i][j].getGreen() + (int) sky[i][j]) + "," + (land[i][j].getBlue() + (int) sky[i][j])+ ")");
+        //         // int green = 0;
+        //         // if (land[i][j].getGreen() + (int) sky[i][j] <= 255) {
+        //         //     green = land[i][j].getGreen() + (int) sky[i][j];
+        //         // } else {
+        //         //     green = 255;
+        //         // }
+        //         // if ((int) sky[i][j] < 120) {
+        //         //     //land[i][j] = new Color(land[i][j].getRed() + (int) sky[i][j], green, land[i][j].getBlue() + (int) sky[i][j]);
+        //         // }
+        //         land[i][j] =
+        //     }
+        //     System.out.println();
+        // }
         
 
 
@@ -138,6 +147,21 @@ public class Generation {
     public static Color[][] terrainValues()
     {
         return land;
+    }
+    public static double[][] cloudValues() {
+        return sky;
+    }
+    public static double getSkyRow() {
+        return skyRow;
+    }
+    public static double getSkyColumn() {
+        return skyColumn;
+    }
+    public static void changeSkyRow(int change) {
+        skyRow += change;
+    }
+    public static void changeSkyColumn(int change) {
+        skyColumn += change;
     }
 }
 
